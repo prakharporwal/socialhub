@@ -1,12 +1,15 @@
 package linkedin
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"net/url"
-	"socialhub-server/model/cache"
+	"socialhub-server/api/auth"
+	models "socialhub-server/model/sqlc"
+	"socialhub-server/model/store"
+	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"time"
 )
@@ -28,7 +31,7 @@ func FetchAuthCode(ctx *gin.Context) {
 
 	responseType := "code"
 	clientId := "77270lc9p0hmuz"
-	redirectURI := "https://api.yogveda.live/oauth/callback"
+	redirectURI := "https://api.yogveda.live/app/linkedin/oauth/access/callback"
 
 	scopeForPosting := "w_member_social"
 	scopeForProfileInfo := "r_liteprofile"
@@ -70,8 +73,9 @@ const LINKEDIN_ACCESS_TOKEN_REQUEST_URL = "https://www.linkedin.com/oauth/v2/acc
 
 const state = "foobar" // todo: could be randomly generated for each request
 
-// GetAuthenticateToken
-func AuthenticateCallback(ctx *gin.Context) {
+// GetAccessToken
+// use the authorization code to get the access code
+func GetAccessToken(ctx *gin.Context) {
 	//code, clientID, clientSecret, redirectURI string, grant_type,
 	//set up the HTTP POST request to exchange the authorization code for an access token
 
@@ -97,7 +101,7 @@ func AuthenticateCallback(ctx *gin.Context) {
 	//TODO : Make secret storage more secure using hashing, HMAC, or some other algo
 	clientSecret := "2SOSGddMxfUL8vlZ"
 	// redirectURI := "https://www.yogveda.live"
-	redirectURI := "https://api.yogveda.live/oauth/callback"
+	redirectURI := "https://api.yogveda.live/app/linkedin/oauth/access/callback"
 
 	postData := url.Values{}
 	postData.Set("grant_type", "authorization_code")
@@ -136,6 +140,7 @@ func AuthenticateCallback(ctx *gin.Context) {
 	//		"expires_in": 5183999,
 	//		"scope": "r_liteprofile,w_member_social"
 	//}
+
 	var tokenResp struct {
 		AccessToken string `json:"access_token"`
 		ExpiresIn   int64  `json:"expires_in"`
@@ -149,12 +154,24 @@ func AuthenticateCallback(ctx *gin.Context) {
 		return
 	}
 
-	val := tokenResp.AccessToken
-
 	// store token in database or redis
+	// encrypt linkedin access token
+	encryptedToken, err := bcrypt.GenerateFromPassword([]byte(tokenResp.AccessToken), 15)
 
-	cache.Conn().Set(context.Background(), "user-num", val, time.Duration(tokenResp.ExpiresIn)*time.Millisecond)
-	plogger.Info()
+	args := models.SaveLinkedinAccessTokenParams{
+		OrganisationGroupID: "org_yogveda",
+		UserEmail:           auth.GetCurrentUser(),
+		AccessToken:         string(encryptedToken),
+		Scope:               tokenResp.Scope,
+		ExpiresAt:           time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Millisecond),
+	}
 
-	ctx.JSON(http.StatusOK, tokenResp)
+	row, err := store.GetInstance().SaveLinkedinAccessToken(ctx, args)
+	if err != nil {
+		plogger.Error("Failed Saving the access token!", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
 }

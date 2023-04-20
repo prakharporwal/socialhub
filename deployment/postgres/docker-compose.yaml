@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  database:
+    image: 'postgres:14-alpine'
+    container_name: postgres14
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: socialhub
+
+    # The `volumes` tag allows us to share a folder with our container.
+    # Its syntax is as follows: [folder path on our machine]:[folder path to retrieve in the container]
+    volumes:
+      # In this example, we share the folder `db-data` in our root repository, with the default PostgreSQL data path.
+      # It means that every time the repository is modifying the data inside
+      # of `/var/lib/postgresql/data/`, automatically the change will appear in `db-data`.
+      # You don't need to create the `db-data` folder. Docker Compose will do it for you.
+      - ~/postgres/data:/var/lib/postgresql/data
