@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>SocialHub</title>
+</head>
+<body>
+<div class="post-area">
+    <h3>Your Post</h3>
+    <textarea id="post-input" title="Your Post" placeholder="The day is awesome!"></textarea>
+    <button id="post-button">LinkedIn Post</button>
+</div>
+<h1>{{.PageTitle}}</h1>
+<ul>
+    {{range .Todos}}
+        {{if .Done}}
+            <li class="done">{{.Title}}</li>
+        {{else}}
+            <li>{{.Title}}</li>
+        {{end}}
+    {{end}}
+</ul>
+
+<div class="form login">
+    <h3>Login</h3>
+    <input type="email" title="email" placeholder="email"></input>
+    <input type="password" title="password" placeholder="password"></input>
+    <button></button>
+</div>
+
+<div class="form signup">
+    <h3>Signup</h3>
+    <input type="text" placeholder="username"></input>
+    <input type="email" title="email" placeholder="email"></input>
+    <input type="password" title="password" placeholder="password"></input>
+</div>
+
+<script src="./static/app.js"></script>
+</body>
+</html>
