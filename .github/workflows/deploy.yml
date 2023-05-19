@@ -1,0 +1,49 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.17.0'
+        run: go version
+
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Deploy to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "."  # Path to the code to be copied
+          target: "~/github/socialhub"  # Destination path on the EC2 instance
+
+      - name: SSH into EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            cd ~/github/socialhub
+            cd src
+            GOOS=linux go build -o build/socialhub        
+            echo "Build is ready"
+            cd ~/github/socialhub
+            cd deployment
+            chmod u+x deploy-script.sh
+            ./deploy-script.sh
+            # Run any additional commands or setup steps on the EC2 instance after code deployment

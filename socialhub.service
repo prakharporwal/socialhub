@@ -1,9 +1,11 @@
 [Unit]
-Description=Bank Server Service
+Description=SocialHub Server Service
 
 [Service]
-Type=simple
-ExecStart=/home/ubuntu/bank-server/bank-server
+User=ubuntu
+WorkingDirectory=/home/ubuntu/github/socialhub/src/build/socialhub
+ExecStart=/home/ubuntu/github/socialhub/src/build/socialhub
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
