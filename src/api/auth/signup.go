@@ -55,6 +55,7 @@ func SignUp(ctx *gin.Context) {
 			if pqErr.Code.Name() == "unique_violation" {
 				plogger.Error("unique_key_violation ", "User with this email or username already exists!")
 			}
+			plogger.Error(err)
 			ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		}
 		return
