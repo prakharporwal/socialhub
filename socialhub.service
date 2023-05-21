@@ -2,10 +2,11 @@
 Description=SocialHub Server Service
 
 [Service]
+Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/github/socialhub/src
-ExecStart=go run /home/ubuntu/github/socialhub/src/main.go
+ExecStart=/usr/local/go/bin/go run /home/ubuntu/github/socialhub/src/main.go
 Restart=always
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
