@@ -179,7 +179,7 @@ func GetAccessToken(ctx *gin.Context) {
 	//encryptedToken, err := bcrypt.GenerateFromPassword([]byte(tokenResp.AccessToken), 15)
 
 	args := models.SaveLinkedinAccessTokenParams{
-		OrganisationGroupID: jwtInfo.OrganisationGroupID,
+		OrganisationGroupID: "org_yogveda",
 		UserEmail:           jwtInfo.Username,
 		AccessToken:         tokenResp.AccessToken,
 		Scope:               tokenResp.Scope,
