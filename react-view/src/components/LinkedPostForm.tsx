@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Progress,
   Box,
@@ -25,118 +25,227 @@ import {
   Spacer,
   Text,
   Center,
+  SelectField,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react";
 import { FaLinkedin } from "react-icons/fa";
 import { SiLinkedin } from "react-icons/si";
+import { Navigate, Outlet, useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 
-const  LinkedinPostForm: React.FunctionComponent<any> = ()=> {
+const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
-  const [step, setStep] = useState(1);
+  const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
-  const [progress, setProgress] = useState(33.33);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [pollOptions, setPollOptions] = useState([
+    { value: "monday" , id:1},
+    { value: "tuesday", id: 2},
+  ]);
+
+  const handleSubmitPost = () => {
+    setIsSubmitting(true);
+    if (content === "" || type === "") {
+      setIsSubmitting(false);
+      if (!toast.isActive("post-submit-error")) {
+        toast({
+          id: "post-submit-error",
+          status: "error",
+          title: "Form Empty",
+          description: "Content and type cannot be empty",
+        });
+      }
+
+      return;
+    }
+
+    fetch("https://api.yogveda.live/v1/linkedin/post", {
+      method: "POST",
+      body: JSON.stringify({ content, type }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        console.log(res.text);
+        throw new Error("creating post request failed!");
+      })
+      .then((data) => {
+        if (!toast.isActive("post-submit-api-success")) {
+          toast({
+            id: "post-submit-api-success",
+            status: "success",
+            title: "Submitted Post to Linkedin",
+            description: "Posting now depends on linkedin",
+          });
+        }
+      })
+      .catch((err) => {
+        if (!toast.isActive("post-submit-api-error")) {
+          toast({
+            id: "post-submit-api-error",
+            status: "error",
+            title: "Posting Failed",
+            description: "Try again sometime later!",
+          });
+        }
+      })
+      .finally(() => {
+        console.log(content, type);
+        setIsSubmitting(false);
+      });
+
+    return;
+  };
+
   return (
-    <>
-      <Box
-        borderWidth="1px"
-        rounded="lg"
-        shadow="1px 1px 3px rgba(0,0,0,0.3)"
-        maxWidth={800}
-        bg={useColorModeValue("white", "gray.900")}
-        p={6}
-        m="10px auto"
-        as="form"
-      >
-        <Heading w="100%" textAlign={"center"} fontWeight="normal">
-          Social Post
-        </Heading>
-        <SimpleGrid columns={1} spacing={6}>
-          <FormControl as={GridItem} colSpan={[3, 2]}>
-            <FormLabel
-              fontSize="sm"
-              fontWeight="md"
-              color="gray.700"
-              _dark={{
-                color: "gray.50",
-              }}
-            >
-              Type
-            </FormLabel>
-            <InputGroup size="sm">
-              {/* <InputLeftAddon
-                bg="gray.50"
+    <Flex minH={"80vh"} align={"center"} justify={"center"}>
+      <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Box
+          borderWidth="2px"
+          rounded="lg"
+          shadow="2px 2px 3px rgba(0,0,0,0.3)"
+          maxWidth={800}
+          bg={useColorModeValue("white", "gray.700")}
+          p={8}
+          m="10px auto"
+          as="form"
+        >
+          <Heading w="100%" textAlign={"center"} py={4} fontWeight="normal">
+            Schedule Post
+          </Heading>
+          <SimpleGrid columns={1} spacing={6}>
+            <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
+              <FormLabel
+                fontSize="sm"
+                fontWeight="md"
+                color="gray.700"
                 _dark={{
-                  bg: "gray.800",
+                  color: "gray.50",
                 }}
-                color="gray.500"
-                rounded="md"
               >
-                Type
-              </InputLeftAddon>
-              <Input
-                type="tel"
-                placeholder="www.example.com"
-                focusBorderColor="brand.400"
-                rounded="md"
-              /> */}
-              <Select placeholder="Select Post Type">
+                Post Type
+              </FormLabel>
+              <Select
+                placeholder="Select post type"
+                value={type}
+                variant="outline"
+                w={"auto"}
+                onChange={(e) => {
+                  setType(e.currentTarget.value);
+                }}
+              >
                 <option value="image">Image</option>
+                <option value="poll">Create a Poll</option>
                 <option value="text">Text</option>
               </Select>
-            </InputGroup>
-          </FormControl>
+            </FormControl>
 
-          <FormControl id="email" mt={1}>
-            <FormLabel
-              fontSize="sm"
-              fontWeight="md"
-              color="gray.700"
-              _dark={{
-                color: "gray.50",
-              }}
-            >
-              About
-            </FormLabel>
-            <Textarea
-              placeholder="you@example.com"
-              rows={3}
-              shadow="sm"
-              focusBorderColor="brand.400"
-              fontSize={{
-                sm: "sm",
-              }}
-              onChange={(e)=>{
-                setContent(e.currentTarget.value)
-              }}
-            />
-            {/* <FormHelperText>
-              Brief description for your profile. URLs are hyperlinked.
-            </FormHelperText> */}
-            <Stack spacing={10}>
-              <Spacer />
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
-                colorScheme={"linkedin"}
-                w={"full"}
-                maxW={"md"}
-                leftIcon={<SiLinkedin />}
-                onClick={()=>{
-                    console.log()
-                }}
-              >
-                <Center>
-                  <Text>Send to Linkedin</Text>
-                </Center>
-              </Button>
-            </Stack>
-          </FormControl>
-        </SimpleGrid>
-      </Box>
-    </>
+            {type === "poll" ? (
+              <>
+                <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
+                  <FormLabel
+                    fontSize="sm"
+                    fontWeight="md"
+                    color="gray.700"
+                    _dark={{
+                      color: "white",
+                    }}
+                  >
+                    Question
+                  </FormLabel>
+                  <Input
+                    p={2}
+                    placeholder="Hey guys I just started using Socialhub"
+                    shadow="sm"
+                    focusBorderColor="brand.400"
+                    fontSize={{
+                      sm: "sm",
+                    }}
+                    value={content}
+                    onChange={(e) => {
+                      setContent(e.currentTarget.value);
+                    }}
+                  ></Input>
+                </FormControl>
+                <FormControl mt={2} as={GridItem} colSpan={[3, 2]}>
+                  <RadioGroup value={"1"} onChange={() => {}}>
+                    <Stack direction="column">
+                      {pollOptions.map((item) => (
+                        <Radio key={item.id} value={item.value} textTransform="capitalize">
+                          {item.value}
+                        </Radio>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+                  <FormHelperText>
+                  Brief description for your profile. URLs are hyperlinked.
+                </FormHelperText>
+                </FormControl>
+              </>
+            ) : (
+              <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "white",
+                  }}
+                >
+                  Content
+                </FormLabel>
+                <Textarea
+                  p={2}
+                  placeholder="Hey guys I just started using Socialhub"
+                  rows={10}
+                  shadow="sm"
+                  focusBorderColor="brand.400"
+                  fontSize={{
+                    sm: "sm",
+                  }}
+                  value={content}
+                  onChange={(e) => {
+                    setContent(e.currentTarget.value);
+                  }}
+                ></Textarea>
+
+                <FormHelperText>
+                  Brief description for your profile. URLs are hyperlinked.
+                </FormHelperText>
+              </FormControl>
+            )}
+
+            <FormControl>
+              <Stack spacing={10}>
+                <Spacer />
+                <Button
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                  colorScheme={"linkedin"}
+                  w={"full"}
+                  maxW={"md"}
+                  leftIcon={<SiLinkedin />}
+                  isLoading={isSubmitting}
+                  onClick={handleSubmitPost}
+                >
+                  <Center>
+                    <Text>Send to Linkedin</Text>
+                  </Center>
+                </Button>
+              </Stack>
+            </FormControl>
+          </SimpleGrid>
+        </Box>
+      </Stack>
+    </Flex>
   );
-}
+};
 
-export default LinkedinPostForm;
+export default withAuthenticationRequired(LinkedinPostForm);

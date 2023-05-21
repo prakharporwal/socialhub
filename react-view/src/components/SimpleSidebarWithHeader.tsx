@@ -23,7 +23,7 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 
-import { Link as ReactRouterLink } from "react-router-dom"
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom"
 
 import {
   FiHome,
@@ -56,11 +56,11 @@ const LinkItems: Array<LinkItemProps> = [
 export default function SidebarWithHeader({
   children,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.800')}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -159,6 +159,8 @@ interface MobileProps extends FlexProps {
   user: any;
 }
 const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
+  let navigate = useNavigate(); 
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -183,7 +185,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
         fontSize="2xl"
         fontFamily="monospace"
         fontWeight="bold">
-        Logo
+        Socialhub
       </Text>
 
       <HStack spacing={{ base: '0', md: '6' }}>
@@ -227,9 +229,13 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <Link as={ReactRouterLink} to='/signin'>
-                <MenuItem>Sign out</MenuItem>
-              </Link>
+                <MenuItem onClick={()=>{
+                    window.localStorage.setItem('authenticated','false');
+                    window.localStorage.setItem('access_token','false');
+                    document.cookie = `access_token=''`
+                    navigate("/signin");
+                }}>Sign out</MenuItem>
+              
             </MenuList>
           </Menu>
         </Flex>

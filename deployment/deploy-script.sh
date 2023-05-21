@@ -12,7 +12,6 @@ sudo cp -ar ../view/. /var/www/html
 sudo cp nginx/default /etc/nginx/sites-enabled/default
 sudo cp ../socialhub.service /etc/systemd/system/
 
-sudo systemctl enable socialhub.service
 sudo systemctl restart socialhub.service
 
 sudo service nginx restart

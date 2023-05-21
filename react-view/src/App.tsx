@@ -13,10 +13,11 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Logo } from "./Logo"
 import SimpleSidebar from "./components/SimpleSidebarWithHeader"
 import LinkedinButton from "./components/buttons/LinkedinButton"
-import LinkedinPostForm from "./components/LinkedPostForm"
 import SidebarWithHeader from "./components/SimpleSidebarWithHeader"
-import { Route, Router, Routes } from "react-router"
+import { Navigate, Route, Routes } from "react-router"
 import SignInForm from "./components/SignInForm"
+import ProtectedRoute from "./components/authenticated/ProtectedRoute"
+import LinkedPostForm from "./components/LinkedPostForm"
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -45,14 +46,15 @@ import SignInForm from "./components/SignInForm"
 
 export const App = ()=>{
   return <>
-  <Box height={"100vh"}>
-    <SidebarWithHeader>
+      <SidebarWithHeader>
       <Routes>
-      <Route path="/"></Route>
-      <Route path="/post" element={<LinkedinPostForm/>} ></Route>
-      <Route path="/signin" element={<SignInForm/>} ></Route>
+      <Route path="/">
+      <Route path="/post" element={<LinkedPostForm/>}></Route>
+      <Route path="/signin" element={<SignInForm/>}></Route>
+      </Route>
       </Routes>
-    </SidebarWithHeader>
-  </Box>
+      </SidebarWithHeader>
   </>
 }
+
+
