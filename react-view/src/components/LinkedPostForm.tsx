@@ -63,7 +63,37 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       return;
     }
 
-    debugger;
+    // debugger;
+    // await fetch("https://api.yogveda.live/app/linkedin/post", {
+    //   headers: {
+    //     "access-token": window.localStorage.getItem("access_token") || "",
+    //   },
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     content_type: type,
+    //     text: "Hello",
+    //     data: {
+    //       author: "",
+    //       commentary: "",
+    //       visibility: "PUBLIC",
+    //       distribution: {
+    //         feedDistribution: "MAIN_FEED",
+    //         targetEntities: [],
+    //         thirdPartyDistributionChannels: [],
+    //       },
+    //       lifecycleState: "PUBLISHED",
+    //       isReshareDisabledByAuthor: false,
+    //     },
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+    //   .catch()
+    //   .finally();
+    debugger
+
     await fetch("https://api.yogveda.live/app/linkedin/post", {
       headers: {
         "access-token": window.localStorage.getItem("access_token") || "",
@@ -86,48 +116,37 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         },
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        console.log(res.text);
+        throw new Error("creating post request failed!");
       })
-      .catch()
-      .finally();
-
-    // fetch("https://api.yogveda.live/v1/linkedin/post", {
-    //   method: "POST",
-    //   body: JSON.stringify({ content, type }),
-    // })
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       return res.json();
-    //     }
-    //     console.log(res.text);
-    //     throw new Error("creating post request failed!");
-    //   })
-    //   .then((data) => {
-    //     if (!toast.isActive("post-submit-api-success")) {
-    //       toast({
-    //         id: "post-submit-api-success",
-    //         status: "success",
-    //         title: "Submitted Post to Linkedin",
-    //         description: "Posting now depends on linkedin",
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     if (!toast.isActive("post-submit-api-error")) {
-    //       toast({
-    //         id: "post-submit-api-error",
-    //         status: "error",
-    //         title: "Posting Failed",
-    //         description: "Try again sometime later!",
-    //       });
-    //     }
-    //   })
-    //   .finally(() => {
-    //     console.log(content, type);
-    //     setIsSubmitting(false);
-    //   });
+      .then((data) => {
+        if (!toast.isActive("post-submit-api-success")) {
+          toast({
+            id: "post-submit-api-success",
+            status: "success",
+            title: "Submitted Post to Linkedin",
+            description: "Posting now depends on linkedin",
+          });
+        }
+      })
+      .catch((err) => {
+        if (!toast.isActive("post-submit-api-error")) {
+          toast({
+            id: "post-submit-api-error",
+            status: "error",
+            title: "Posting Failed",
+            description: "Try again sometime later!",
+          });
+        }
+      })
+      .finally(() => {
+        console.log(content, type);
+        setIsSubmitting(false);
+      });
 
     return;
   };
@@ -146,7 +165,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       })
       .then((data) => {
         console.log("data",data);
-        // window.location.replace(data.redirect_uri)
+        window.location.replace(data.redirect_uri)
       });
   }
 
