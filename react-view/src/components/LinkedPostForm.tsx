@@ -101,10 +101,10 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       method: "POST",
       body: JSON.stringify({
         content_type: type,
-        text: "Hello",
+        text: content,
         data: {
           author: "",
-          commentary: "",
+          commentary: content,
           visibility: "PUBLIC",
           distribution: {
             feedDistribution: "MAIN_FEED",

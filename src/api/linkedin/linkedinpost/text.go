@@ -12,21 +12,24 @@ import (
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/services/linkedinservice"
-	"time"
 )
 
 var serviceLinkedin = linkedinservice.ServiceImpl{}
 
 type linkedInFeedPostRequest struct {
-	ContentType linkedin.LinkedinContentType `json:"content_type" binding:"required,oneof=text poll"`
-	Text        string                       `json:"text"`
-	Data        interface{}                  `json:"data" binding:"required"`
+	ContentType linkedin.LinkedinContentType       `json:"content_type" binding:"required,oneof=text poll"`
+	Text        string                             `json:"text"`
+	Data        models.LinkedInFeedPostContentPoll `json:"data" binding:"required"`
 }
 
 func CreatePostForFeed(ctx *gin.Context) {
 	reqBody := linkedInFeedPostRequest{}
 	err := ctx.ShouldBindJSON(&reqBody)
-
+	if err != nil {
+		plogger.Error("Invalid request body ", err)
+		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
+		return
+	}
 	// get current user id and get current user password
 	token, err := fetchLinkedinAccountAccessToken(ctx)
 	if err != nil {
@@ -42,11 +45,12 @@ func CreatePostForFeed(ctx *gin.Context) {
 	out := ""
 	switch reqBody.ContentType {
 	case linkedin.TEXT:
-		content := reqBody.Data.(models.LinkedInFeedPostContent)
-		out, err = serviceLinkedin.CreateALinkedinTextPost(token, content)
+		content := reqBody.Data
+		content.Commentary = reqBody.Text
+		out, err = serviceLinkedin.CreateALinkedinTextPost(token, &content)
 		break
 	case linkedin.POLL:
-		content := reqBody.Data.(models.LinkedInFeedPostContentPoll)
+		content := reqBody.Data
 		out, err = serviceLinkedin.CreateALinkedinPoll(token, content)
 		break
 	default:
@@ -76,11 +80,11 @@ func fetchLinkedinAccountAccessToken(ctx context.Context) (string, error) {
 		plogger.Error("Error getting access token for linkedin!", err)
 		return ",", ErrNotFound
 	}
-
-	if row.ExpiresAt.Before(time.Now()) {
-
-		return "", ErrTokenExpired
-	}
+	//
+	//if row.ExpiresAt.Before(time.Now()) {
+	//
+	//	return "", ErrTokenExpired
+	//}
 
 	return row.AccessToken, nil
 }

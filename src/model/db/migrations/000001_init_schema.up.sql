@@ -130,12 +130,12 @@ CREATE TABLE IF NOT EXISTS socialhub.linkedin_account_access_tokens
 (
     organisation_group_id varchar     NOT NULL,
     user_email            varchar     NOT NULL,
+    linkedin_urn          varchar     NOT NULL DEFAULT '',
     access_token          varchar     NOT NULL,
     scope                 varchar     NOT NULL,
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),
-
     PRIMARY KEY (organisation_group_id, user_email)
     );
 

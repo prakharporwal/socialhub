@@ -1,14 +1,12 @@
 package models
 
-import "socialhub-server/model/models/linkedin"
-
 type LinkedInFeedPostContent struct {
-	Author                    string                     `json:"author"`
-	Commentary                string                     `json:"commentary"`
-	Visibility                linkedin.ContentVisibility `json:"visibility"`
-	Distribution              ContentDistribution        `json:"distribution"`
-	LifecycleState            string                     `json:"lifecycleState"`
-	IsReshareDisabledByAuthor bool                       `json:"isReshareDisabledByAuthor"`
+	Author                    string              `json:"author"`
+	Commentary                string              `json:"commentary"`
+	Visibility                string              `json:"visibility"`
+	Distribution              ContentDistribution `json:"distribution"`
+	LifecycleState            string              `json:"lifecycleState"`
+	IsReshareDisabledByAuthor bool                `json:"isReshareDisabledByAuthor"`
 }
 
 type LinkedInFeedPostContentPoll struct {
@@ -17,9 +15,9 @@ type LinkedInFeedPostContentPoll struct {
 }
 
 type ContentDistribution struct {
-	FeedDistribution               string        `json:"feedDistribution"`
-	TargetEntities                 []interface{} `json:"targetEntities"`
-	ThirdPartyDistributionChannels []interface{} `json:"thirdPartyDistributionChannels"`
+	FeedDistribution               string   `json:"feedDistribution"`
+	TargetEntities                 []string `json:"targetEntities"`
+	ThirdPartyDistributionChannels []string `json:"thirdPartyDistributionChannels"`
 }
 
 type PostContent struct {
