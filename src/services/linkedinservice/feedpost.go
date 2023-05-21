@@ -65,6 +65,7 @@ func fetchLinkedinAccountURN(accessToken string) string {
 	req, err := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
+	plogger.Info(req.Header)
 	// Send the HTTP request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
