@@ -131,6 +131,8 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 
 	plogger.Debug(req.Header.Get("Authorization"))
 
+	plogger.Debug(req.Header.Get("Authorization"))
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		plogger.Error("Error getting the account URN! ", err)
