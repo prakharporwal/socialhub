@@ -8,6 +8,7 @@ import (
 
 func init() {
 	gin.SetMode(gin.ReleaseMode)
+	plogger.Info("Starting app ....")
 }
 
 func main() {

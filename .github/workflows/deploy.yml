@@ -37,11 +37,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/github/socialhub
-            cd src
-            go version
-            GOOS=linux go build -o build/socialhub        
-            echo "Build is ready"
-            cd ~/github/socialhub
             cd deployment
             chmod u+x deploy-script.sh
             ./deploy-script.sh

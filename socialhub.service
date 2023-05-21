@@ -3,8 +3,8 @@ Description=SocialHub Server Service
 
 [Service]
 User=ubuntu
-WorkingDirectory=/home/ubuntu/github/socialhub/src/build/socialhub
-ExecStart=/home/ubuntu/github/socialhub/src/build/socialhub
+WorkingDirectory=/home/ubuntu/github/socialhub/src
+ExecStart=./build/socialhub
 Restart=always
 
 [Install]
