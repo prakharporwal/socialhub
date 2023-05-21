@@ -1,0 +1,30 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.post-area{
+    top:500rem;
+    height: 40vh;
+    display: grid;
+    place-items: center;
+}
+
+#post-input{
+    height: 10rem;
+    width: 25rem;
+    padding: 4px;
+    text-align: justify;
+}
+
+.form{
+    padding: 10px;
+    height: 10rem;
+    border: 2px solid green;
+    display: flex;
+    flex-direction: column;
+    width: 50rem;
+    align-self: center;
+    align-items: center;
+    justify-content: space-between;
+}
