@@ -6,5 +6,5 @@ import (
 )
 
 func HealthCheck(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{"message": "healthy and running"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "healthy and running server 😀"})
 }

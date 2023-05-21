@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
 	plogger.Info("Starting app ....")
 }
 
