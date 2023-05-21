@@ -4,7 +4,7 @@ Description=SocialHub Server Service
 [Service]
 User=ubuntu
 WorkingDirectory=/home/ubuntu/github/socialhub/src
-ExecStart=/home/ubuntu/github/socialhub/src/build/socialhub
+ExecStart=go run /home/ubuntu/github/socialhub/src/main.go
 Restart=always
 
 [Install]
