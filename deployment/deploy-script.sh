@@ -1,10 +1,11 @@
 echo "Deploying from bash script!"
 
-go version
-cd ~/github/socialhub/src
-go build -o build/socialhub .
-echo "Build is ready"
+#go version
+#cd ~/github/socialhub/src
+#go build -o build/socialhub .
+echo "Build is present"
 
+cd ~/github/socialhub/deployment
 chmod u+x ~/github/socialhub/src/build/socialhub
 
 sudo cp -ar ../view/. /var/www/html
