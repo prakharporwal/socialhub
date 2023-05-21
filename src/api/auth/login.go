@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const TokenAgeInSeconds = 120
+const TokenAgeInSeconds = 5 * 60 * 60
 
 type loginRequest struct {
 	UserId   string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
