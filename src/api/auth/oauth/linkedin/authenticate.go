@@ -194,6 +194,6 @@ func GetAccessToken(ctx *gin.Context) {
 		return
 	}
 	plogger.Debug(row.UserEmail, " ", row.Scope)
-	ctx.Redirect(http.StatusOK, "https://www.yogveda.live")
+	ctx.Redirect(http.StatusContinue, "https://www.yogveda.live")
 	//ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
 }
