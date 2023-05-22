@@ -39,6 +39,7 @@ import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import ColorModeToggle from './buttons/ColorModeToggleButton';
 import ColorModeToggleButton from './buttons/ColorModeToggleButton';
+import { FaListOl } from 'react-icons/fa';
 
 interface LinkItemProps {
   name: string;
@@ -46,8 +47,8 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, linkTo: "/post"},
-  { name: 'Trending', icon: FiTrendingUp, linkTo: "/trending"},
+  { name: 'Home', icon: FiHome, linkTo: "/post/create"},
+  { name: 'Your Post', icon: FaListOl, linkTo: "/posts/all"},
   { name: 'Explore', icon: FiCompass, linkTo: "/explore" },
   { name: 'Favourites', icon: FiStar, linkTo: "/favourites" },
   { name: 'Settings', icon: FiSettings, linkTo: "settings" },

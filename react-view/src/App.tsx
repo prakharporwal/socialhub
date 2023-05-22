@@ -18,6 +18,7 @@ import { Navigate, Route, Routes } from "react-router"
 import SignInForm from "./components/SignInForm"
 import ProtectedRoute from "./components/authenticated/ProtectedRoute"
 import LinkedPostForm from "./components/LinkedPostForm"
+import PostingHistoryList from "./components/PostingHistoryList"
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -49,7 +50,8 @@ export const App = ()=>{
       <SidebarWithHeader>
       <Routes>
       <Route path="/">
-      <Route path="/post" element={<LinkedPostForm/>}></Route>
+      <Route path="/post/create" element={<LinkedPostForm/>}></Route>
+      <Route path="/posts/all" element={<PostingHistoryList/>}></Route>
       <Route path="/signin" element={<SignInForm/>}></Route>
       </Route>
       </Routes>

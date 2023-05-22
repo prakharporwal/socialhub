@@ -15,6 +15,7 @@ type Querier interface {
 	BlockSessionFamily(ctx context.Context, email string) (Session, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error)
+	FetchAllPosts(ctx context.Context, createdBy string) ([]SocialhubLinkedinScheduledUserPost, error)
 	FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLinkedinURNbyAccountIdParams) (string, error)
 	FetchPostsToBePublished(ctx context.Context, limit int32) ([]FetchPostsToBePublishedRow, error)
 	FindLinkedInAccountAccessToken(ctx context.Context, arg FindLinkedInAccountAccessTokenParams) (SocialhubLinkedinAccountAccessToken, error)

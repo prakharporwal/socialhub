@@ -1,7 +1,7 @@
 import { Navigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
-const withAuthenticationRequired = (Ele:React.FunctionComponent)=>{
+const withAuthenticationRequired = (Ele:React.FunctionComponent<any>)=>{
     return function(props:any){
         const authValue = useAuth();
          return (<>
