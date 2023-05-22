@@ -95,8 +95,8 @@ const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
   return (
     <ListItem>
       <Card padding={8} margin={4}>
-        <Heading size="xs" textTransform="uppercase">
-          <Text>{JSON.parse(post.post_json_string).commentary}</Text>
+        <Heading size="xs" textTransform="uppercase">   
+          <Text>{post.post_json_string}</Text>
         </Heading>
         <CardBody>
           Content
