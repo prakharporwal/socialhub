@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Flex,
   Box,
@@ -13,8 +14,8 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Outlet, redirect, useNavigate } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function SignInForm() {
   const [email, setEmail] = useState<string>("");
@@ -49,7 +50,12 @@ export default function SignInForm() {
       method: "POST",
       body: JSON.stringify({ user_id: email, password }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("failed to login");
+      })
       .then((data) => {
         console.log(data.access_token);
         window.localStorage.setItem("access_token", data.access_token);
@@ -66,7 +72,9 @@ export default function SignInForm() {
 
         navigate("/posts");
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.log(err);
+      })
       .finally(() => {
         setIsLoggingIn(false);
       });

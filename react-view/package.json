@@ -27,6 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "copy": "npm run build && rm -rf ../view/* && cp -r build/ ../view/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
