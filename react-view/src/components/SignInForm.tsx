@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import './signin.css'
 
 export default function SignInForm() {
   const [email, setEmail] = useState<string>("");
@@ -82,7 +83,7 @@ export default function SignInForm() {
 
   return (
     <>
-      <Flex minH={"80vh"} align={"center"} justify={"center"}>
+      <Flex className='signin-background' h={"100vh"} align={"center"} justify={"center"}>
         <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"}>Sign in to your account</Heading>

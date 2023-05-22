@@ -19,6 +19,7 @@ import SignInForm from "./components/SignInForm";
 import ProtectedRoute from "./components/authenticated/ProtectedRoute";
 import LinkedPostForm from "./components/LinkedPostForm";
 import PostingHistoryList from "./components/PostingHistoryList";
+import MarketingPage from "./MarketingPage";
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -48,15 +49,13 @@ import PostingHistoryList from "./components/PostingHistoryList";
 export const App = () => {
   return (
     <>
-      <SidebarWithHeader>
-        <Routes>
-          <Route path="/">
-            <Route path="/create/new" element={<LinkedPostForm />}></Route>
-            <Route path="/posts" element={<PostingHistoryList />}></Route>
-            <Route path="/signin" element={<SignInForm />}></Route>
-          </Route>
-        </Routes>
-      </SidebarWithHeader>
+      <Routes>
+        <Route path="/" element={<MarketingPage />}></Route>
+
+        <Route path="/create/new" element={<LinkedPostForm />}></Route>
+        <Route path="/posts" element={<PostingHistoryList />}></Route>
+        <Route path="/signin" element={<SignInForm />}></Route>
+      </Routes>
     </>
   );
 };

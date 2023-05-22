@@ -193,6 +193,7 @@ func GetAccessToken(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
+	plogger.Debug(row.UserEmail, " ", row.Scope)
+	ctx.Redirect(http.StatusOK, "/signin")
+	//ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
 }
