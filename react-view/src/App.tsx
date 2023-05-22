@@ -51,8 +51,8 @@ export const App = () => {
       <SidebarWithHeader>
         <Routes>
           <Route path="/">
-            <Route path="/post/create" element={<LinkedPostForm />}></Route>
-            <Route path="/posts/all" element={<PostingHistoryList />}></Route>
+            <Route path="/create/new" element={<LinkedPostForm />}></Route>
+            <Route path="/posts" element={<PostingHistoryList />}></Route>
             <Route path="/signin" element={<SignInForm />}></Route>
           </Route>
         </Routes>

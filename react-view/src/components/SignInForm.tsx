@@ -64,7 +64,7 @@ export default function SignInForm() {
           isClosable: true,
         });
 
-        navigate("/posts/all");
+        navigate("/posts");
       })
       .catch(() => {})
       .finally(() => {
