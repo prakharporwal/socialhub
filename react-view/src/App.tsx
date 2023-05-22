@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   ChakraProvider,
   Box,
@@ -8,17 +8,17 @@ import {
   Code,
   Grid,
   theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
-import SimpleSidebar from "./components/SimpleSidebarWithHeader"
-import LinkedinButton from "./components/buttons/LinkedinButton"
-import SidebarWithHeader from "./components/SimpleSidebarWithHeader"
-import { Navigate, Route, Routes } from "react-router"
-import SignInForm from "./components/SignInForm"
-import ProtectedRoute from "./components/authenticated/ProtectedRoute"
-import LinkedPostForm from "./components/LinkedPostForm"
-import PostingHistoryList from "./components/PostingHistoryList"
+} from "@chakra-ui/react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { Logo } from "./Logo";
+import SimpleSidebar from "./components/SimpleSidebarWithHeader";
+import LinkedinButton from "./components/buttons/LinkedinButton";
+import SidebarWithHeader from "./components/SimpleSidebarWithHeader";
+import { Navigate, Route, Routes } from "react-router";
+import SignInForm from "./components/SignInForm";
+import ProtectedRoute from "./components/authenticated/ProtectedRoute";
+import LinkedPostForm from "./components/LinkedPostForm";
+import PostingHistoryList from "./components/PostingHistoryList";
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -45,18 +45,18 @@ import PostingHistoryList from "./components/PostingHistoryList"
 //   </ChakraProvider>
 // )
 
-export const App = ()=>{
-  return <>
+export const App = () => {
+  return (
+    <>
       <SidebarWithHeader>
-      <Routes>
-      <Route path="/">
-      <Route path="/post/create" element={<LinkedPostForm/>}></Route>
-      <Route path="/posts/all" element={<PostingHistoryList/>}></Route>
-      <Route path="/signin" element={<SignInForm/>}></Route>
-      </Route>
-      </Routes>
+        <Routes>
+          <Route path="/">
+            <Route path="/post/create" element={<LinkedPostForm />}></Route>
+            <Route path="/posts/all" element={<PostingHistoryList />}></Route>
+            <Route path="/signin" element={<SignInForm />}></Route>
+          </Route>
+        </Routes>
       </SidebarWithHeader>
-  </>
-}
-
-
+    </>
+  );
+};

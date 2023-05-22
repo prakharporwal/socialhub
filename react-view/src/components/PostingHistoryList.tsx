@@ -78,7 +78,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
 
   return (
     <Flex height={"80vh"} align={"center"} justify={"center"}>
-      <List>
+      <List overflowY={'auto'}>
         {posts.map((item, idx) => {
           return <PostHistory key={item.scheduled_post_id} post={item} />;
         })}
@@ -94,9 +94,9 @@ interface IPHprops {
 const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
   return (
     <ListItem>
-      <Card padding={8}>
+      <Card padding={8} margin={4}>
         <Heading size="xs" textTransform="uppercase">
-          <Text>{post.scheduled_post_id}</Text>
+          <Text>{JSON.parse(post.post_json_string).commentary}</Text>
         </Heading>
         <CardBody>
           Content
