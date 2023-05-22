@@ -28,7 +28,7 @@ func PublishPostsToLinkedin() {
 	if err != nil {
 		plogger.Error("Scheduling Cron Job failed! ", err)
 	}
-	plogger.Info("Scheduled Cron Id:", entryId)
+	plogger.Info("Scheduled Cron Id: ", entryId)
 	c.Start()
 }
 

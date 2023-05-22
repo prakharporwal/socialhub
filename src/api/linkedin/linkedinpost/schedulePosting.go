@@ -14,8 +14,9 @@ import (
 )
 
 type schedulePostRequest struct {
-	PostType string      `json:"post_type" binding:"required"`
-	PostJson interface{} `json:"post_json" binding:"required"`
+	PostType    string      `json:"post_type" binding:"required"`
+	PostJson    interface{} `json:"post_json" binding:"required"`
+	ScheduledAt time.Time   `json:"scheduled_at" binding:"required"`
 }
 
 func SchedulePost(ctx *gin.Context) {

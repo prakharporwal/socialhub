@@ -29,23 +29,30 @@ import {
   RadioGroup,
   Radio,
 } from "@chakra-ui/react";
-import { FaLinkedin } from "react-icons/fa";
+import { FaClock, FaLinkedin } from "react-icons/fa";
 import { SiLinkedin } from "react-icons/si";
 import { Navigate, Outlet, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import { getCookie } from "../utils/cookieUtils";
+import { FiSend } from "react-icons/fi";
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingScheduled, setIsSubmittingScheduled] = useState(false);
+  const [scheduledTime, setScheduledTime] = useState((new Date()).toISOString().substring(0,16))
 
   const [pollOptions, setPollOptions] = useState([
     { value: "monday", id: 1 },
     { value: "tuesday", id: 2 },
   ]);
+
+  useEffect(()=>{
+    console.log(scheduledTime)
+  },[scheduledTime])
 
   const handleSubmitPost = async () => {
     setIsSubmitting(true);
@@ -92,7 +99,6 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     //   })
     //   .catch()
     //   .finally();
-    debugger
 
     await fetch("https://api.yogveda.live/app/linkedin/post", {
       headers: {
@@ -167,6 +173,41 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         console.log("data",data);
         window.location.replace(data.redirect_uri)
       });
+  }
+
+
+  function handleSubmitSchedulePost(){
+    setIsSubmittingScheduled(true)
+
+    fetch("https://api.yogveda.live"+"/app/linkedin/schedule/post",{
+      method: "POST",
+      headers: {
+       "access-token": window.localStorage.getItem("access_token") || ""
+      },
+      body: JSON.stringify({
+        post_type: type,
+        post_json: {
+          author: "",
+          commentary: content,
+          visibility: "PUBLIC",
+          distribution: {
+            feedDistribution: "MAIN_FEED",
+            targetEntities: [],
+            thirdPartyDistributionChannels: [],
+          },
+          lifecycleState: "PUBLISHED",
+          isReshareDisabledByAuthor: false,
+        },
+        scheduled_at: scheduledTime
+      })
+    })
+    .then(res=>res.json())
+    .then(data => {
+      console.log(data)})
+    .catch(()=>{})
+    .finally(()=>{
+      setIsSubmittingScheduled(false)
+    })
   }
 
   return (
@@ -312,10 +353,10 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
               <Stack spacing={10}>
                 <Spacer />
                 <Button
-                  bg={"blue.400"}
+                  // bg={"blue.400"}
                   color={"white"}
                   _hover={{
-                    bg: "blue.500",
+                    bg: "blue.600",
                   }}
                   colorScheme={"linkedin"}
                   w={"full"}
@@ -326,6 +367,37 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                 >
                   <Center>
                     <Text>Send to Linkedin</Text>
+                  </Center>
+                </Button>
+
+                <Input type={'datetime-local'} value={scheduledTime}
+                onChange={(e)=>{
+                  console.log(e.currentTarget.value); 
+                  setScheduledTime(e.currentTarget.value)
+                }}
+                ></Input>
+
+                <Select>
+                  <option value={"15min"}  selected>15 min</option>
+                  <option value={"30min"}>30 min</option>
+                  <option value={"1hr"}>1 hour</option>
+                  <option value={"Tomorrow"}>Tomorrow</option>
+                </Select>
+                <Button
+                  _hover={{
+                    bg: "blue.600",
+                    color: "white",
+                  }}
+                  colorScheme={"linkedin"}
+                  variant={"outline"}
+                  // w={"full"}
+                  // maxW={"md"}
+                  leftIcon={<FaClock />}
+                  isLoading={isSubmittingScheduled}
+                  onClick={handleSubmitSchedulePost}
+                >
+                  <Center>
+                    <Text>Schedule for Later</Text>
                   </Center>
                 </Button>
               </Stack>
