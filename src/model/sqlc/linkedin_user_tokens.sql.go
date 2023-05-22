@@ -10,6 +10,23 @@ import (
 	"time"
 )
 
+const fetchLinkedinURNbyAccountId = `-- name: FetchLinkedinURNbyAccountId :one
+SELECT linkedin_urn FROM socialhub.linkedin_account_access_tokens
+WHERE organisation_group_id=($1) and user_email=($2)
+`
+
+type FetchLinkedinURNbyAccountIdParams struct {
+	OrganisationGroupID string `json:"organisation_group_id"`
+	UserEmail           string `json:"user_email"`
+}
+
+func (q *Queries) FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLinkedinURNbyAccountIdParams) (string, error) {
+	row := q.db.QueryRowContext(ctx, fetchLinkedinURNbyAccountId, arg.OrganisationGroupID, arg.UserEmail)
+	var linkedin_urn string
+	err := row.Scan(&linkedin_urn)
+	return linkedin_urn, err
+}
+
 const findLinkedInAccountAccessToken = `-- name: FindLinkedInAccountAccessToken :one
 SELECT organisation_group_id, user_email, linkedin_urn, access_token, scope, expires_at, created_at, updated_at FROM socialhub.linkedin_account_access_tokens
 WHERE organisation_group_id=($1) and user_email=($2)

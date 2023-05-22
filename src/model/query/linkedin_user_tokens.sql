@@ -21,3 +21,7 @@ UPDATE socialhub.linkedin_account_access_tokens
 SET linkedin_urn=($1)
 WHERE organisation_group_id=($2) and user_email=($3)
 RETURNING linkedin_urn, scope;
+
+-- name: FetchLinkedinURNbyAccountId :one
+SELECT linkedin_urn FROM socialhub.linkedin_account_access_tokens
+WHERE organisation_group_id=($1) and user_email=($2);

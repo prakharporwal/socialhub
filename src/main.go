@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"socialhub-server/jobs/crons"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/server"
 )
@@ -9,6 +10,9 @@ import (
 func init() {
 	gin.SetMode(gin.ReleaseMode)
 	plogger.Info("Starting app ....")
+
+	plogger.Info("Setting Up Cron")
+	crons.PublishPostsToLinkedin()
 }
 
 func main() {

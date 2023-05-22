@@ -9,6 +9,7 @@ import (
 	"socialhub-server/api/auth"
 	"socialhub-server/api/auth/oauth/linkedin"
 	"socialhub-server/api/linkedin/linkedinpost"
+	"socialhub-server/pkg/plogger"
 	"socialhub-server/server/middleware"
 )
 
@@ -65,20 +66,27 @@ func InitRouter() *gin.Engine {
 			},
 		}
 
-		tmpl.Execute(context.Writer, data)
+		err := tmpl.Execute(context.Writer, data)
+		if err != nil {
+			plogger.Error(err)
+			_, _ = context.Writer.Write([]byte("Failed to generate template!"))
+		}
 	})
 
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))
 
-	auth := router.Group("/app")
+	protected := router.Group("/app")
 
-	auth.Use(middleware.CORSMiddleware())
-	auth.Use(middleware.AuthMiddleware())
+	protected.Use(middleware.CORSMiddleware())
+	protected.Use(middleware.AuthMiddleware())
 
-	auth.GET("/linkedin/oauth/access/initiate", linkedin.FetchAuthCode)
+	protected.GET("/linkedin/oauth/access/initiate", linkedin.FetchAuthCode)
+
 	public.GET("/linkedin/oauth/access/callback", linkedin.GetAccessToken)
-	auth.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
+
+	protected.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
+	protected.POST("/linkedin/schedule/post", linkedinpost.SchedulePost)
 
 	return router
 }

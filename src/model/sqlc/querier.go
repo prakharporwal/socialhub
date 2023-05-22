@@ -15,12 +15,15 @@ type Querier interface {
 	BlockSessionFamily(ctx context.Context, email string) (Session, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error)
+	FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLinkedinURNbyAccountIdParams) (string, error)
+	FetchPostsToBePublished(ctx context.Context, limit int32) ([]FetchPostsToBePublishedRow, error)
 	FindLinkedInAccountAccessToken(ctx context.Context, arg FindLinkedInAccountAccessTokenParams) (SocialhubLinkedinAccountAccessToken, error)
 	GetSession(ctx context.Context, sessionID uuid.UUID) (Session, error)
 	GetUserDetails(ctx context.Context, userEmail string) (GetUserDetailsRow, error)
-	LinkedinScheduleUserPost(ctx context.Context, arg LinkedinScheduleUserPostParams) (LinkedinScheduleUserPostRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
+	ScheduleAUserPostOnLinkedin(ctx context.Context, arg ScheduleAUserPostOnLinkedinParams) (ScheduleAUserPostOnLinkedinRow, error)
+	UpdatePostStatus(ctx context.Context, arg UpdatePostStatusParams) (UpdatePostStatusRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

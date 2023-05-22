@@ -49,12 +49,13 @@ CREATE TABLE IF NOT EXISTS socialhub.user_role
     updated_at            timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS socialhub.linkedin_scheduled_user_posts
-(
+CREATE TABLE IF NOT EXISTS socialhub.linkedin_scheduled_user_posts(
     scheduled_post_id varchar PRIMARY KEY,
     account_id        BIGSERIAL   NOT NULL,
-    linkedin_urn      varchar     NOT NULL,
-    post_id           varchar     NOT NULL,
+    author_urn        varchar     NOT NULL,
+    post_id_on_linkedin  varchar     NOT NULL,
+    post_json_string  varchar     NOT NULL,
+    post_type         varchar     NOT NULL,
     scheduled_time    timestamptz NOT NULL,
     status            varchar     NOT NULL,
     created_by        varchar     NOT NULL,
@@ -62,6 +63,12 @@ CREATE TABLE IF NOT EXISTS socialhub.linkedin_scheduled_user_posts
     updated_at        timestamptz NOT NULL DEFAULT now()
 );
 
+-- setting trigger to update timestamp accounts table
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.linkedin_scheduled_user_posts
+    FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 CREATE INDEX ON socialhub.accounts ("owner_email");
 
@@ -110,13 +117,6 @@ CREATE TRIGGER set_timestamp
     FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
-
--- setting trigger to update timestamp accounts table
-CREATE TRIGGER set_timestamp
-    BEFORE UPDATE
-    ON socialhub.linkedin_scheduled_user_posts
-    FOR EACH ROW
-EXECUTE PROCEDURE trigger_set_timestamp();
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp

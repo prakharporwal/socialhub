@@ -43,15 +43,17 @@ type SocialhubLinkedinAccountAccessToken struct {
 }
 
 type SocialhubLinkedinScheduledUserPost struct {
-	ScheduledPostID string    `json:"scheduled_post_id"`
-	AccountID       int64     `json:"account_id"`
-	LinkedinUrn     string    `json:"linkedin_urn"`
-	PostID          string    `json:"post_id"`
-	ScheduledTime   time.Time `json:"scheduled_time"`
-	Status          string    `json:"status"`
-	CreatedBy       string    `json:"created_by"`
-	CreatedAt       time.Time `json:"created_at"`
-	UpdatedAt       time.Time `json:"updated_at"`
+	ScheduledPostID  string    `json:"scheduled_post_id"`
+	AccountID        int64     `json:"account_id"`
+	AuthorUrn        string    `json:"author_urn"`
+	PostIDOnLinkedin string    `json:"post_id_on_linkedin"`
+	PostJsonString   string    `json:"post_json_string"`
+	PostType         string    `json:"post_type"`
+	ScheduledTime    time.Time `json:"scheduled_time"`
+	Status           string    `json:"status"`
+	CreatedBy        string    `json:"created_by"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }
 
 type SocialhubOrganisationGroup struct {
