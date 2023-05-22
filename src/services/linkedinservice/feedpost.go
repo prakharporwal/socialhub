@@ -40,7 +40,7 @@ func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent models.Li
 
 	requestBody := pollContent
 	body, _ := json.Marshal(requestBody)
-
+	plogger.Debug(string(body))
 	resp, err := http.Post(postOnFeedURN, "application/json", strings.NewReader(string(body)))
 	if err != nil {
 		plogger.Error("Error getting the account URN!", err)
@@ -65,7 +65,6 @@ func fetchLinkedinAccountURN(accessToken string) string {
 	req, err := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
-	plogger.Info(req.Header)
 	// Send the HTTP request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
