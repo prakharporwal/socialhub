@@ -38,10 +38,13 @@ func Login(ctx *gin.Context) {
 	// convert provided password and username to hash with salt
 	// check for the hash string match or not
 	user, err := store.GetInstance().GetUserDetails(ctx, request.UserId)
-	if err != nil && err == sql.ErrNoRows {
-		plogger.Error("User doesn't exist!", err)
-		ctx.JSON(http.StatusUnauthorized, gin.H{apierror.MESSAGE: "Incorrect user or password"})
-		return
+	if err != nil {
+		plogger.Error("User fetching failed ", err)
+		if err == sql.ErrNoRows {
+			plogger.Error("User doesn't exist!", err)
+			ctx.JSON(http.StatusUnauthorized, gin.H{apierror.MESSAGE: "Incorrect user or password"})
+			return
+		}
 	}
 	plogger.Debug(user.UserEmail, " ", user.Username, " is retrieve from db!")
 
