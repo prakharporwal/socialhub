@@ -11,15 +11,16 @@ import (
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
 )
 
 var serviceLinkedin = linkedinservice.ServiceImpl{}
 
 type linkedInFeedPostRequest struct {
-	ContentType linkedin.LinkedinContentType       `json:"content_type" binding:"required,oneof=text poll"`
-	Text        string                             `json:"text"`
-	Data        models.LinkedInFeedPostContentPoll `json:"data" binding:"required"`
+	ContentType linkedin.LinkedinContentType `json:"content_type" binding:"required,oneof=text poll"`
+	Text        string                       `json:"text"`
+	Data        interface{}                  `json:"data" binding:"required"`
 }
 
 func CreatePostForFeed(ctx *gin.Context) {
@@ -30,6 +31,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
 		return
 	}
+
 	// get current user id and get current user password
 	token, err := fetchLinkedinAccountAccessToken(ctx)
 	if err != nil {
@@ -45,13 +47,16 @@ func CreatePostForFeed(ctx *gin.Context) {
 	out := ""
 	switch reqBody.ContentType {
 	case linkedin.TEXT:
-		content := reqBody.Data
+		var content models.LinkedInFeedPostContent
+		_ = utils.JsonToStruct(reqBody.Data, &content)
 		content.Commentary = reqBody.Text
 		out, err = serviceLinkedin.CreateALinkedinTextPost(token, &content)
 		break
 	case linkedin.POLL:
-		content := reqBody.Data
-		out, err = serviceLinkedin.CreateALinkedinPoll(token, content)
+		var content models.LinkedInFeedPostContentPoll
+		_ = utils.JsonToStruct(reqBody.Data, &content)
+		content.Commentary = reqBody.Text
+		out, err = serviceLinkedin.CreateALinkedinPoll(token, &content)
 		break
 	default:
 		break

@@ -30,7 +30,7 @@ type linkedInFeedPostRequest struct {
 	Data        interface{}                  `json:"data" binding:"required"`
 }
 
-func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.LinkedInFeedPostContentPoll) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	plogger.Debug("urn fetched from", urn)
@@ -100,7 +100,7 @@ var responseBody struct {
 	LocalisedFirstName string      `json:"localizedFirstName"`
 }
 
-func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := db.SaveLinkedinURNParams{
