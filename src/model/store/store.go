@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	dbSource = "postgres://admin:password@localhost:5432/postgres?sslmode=disable"
+	dbSource = "postgres://admin:w#t58qSwh&yDe62Mf@localhost:5432/postgres?sslmode=disable"
 	dbDriver = "postgres"
 )
 

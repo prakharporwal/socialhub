@@ -4,10 +4,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbSource = "postgresql://admin:password@localhost:5432/default_db?sslmode=disable"
-	dbDriver = "postgres"
-)
+//const (
+//	dbSource = "postgresql://admin:password@localhost:5432/default_db?sslmode=disable"
+//	dbDriver = "postgres"
+//)
 
 var testQueries *Queries
 
