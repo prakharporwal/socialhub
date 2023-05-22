@@ -55,8 +55,6 @@ export default function SignInForm() {
         window.localStorage.setItem("access_token", data.access_token);
         window.localStorage.setItem("authenticated", "true");
         document.cookie = "access_token=" + data.access_token;
-        setIsLoggingIn(false);
-
         toast({
           // todo add the user name here
           title: "Login successful",
@@ -67,6 +65,10 @@ export default function SignInForm() {
         });
 
         navigate("/post");
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoggingIn(false);
       });
   }
 

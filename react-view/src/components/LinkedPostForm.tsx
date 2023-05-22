@@ -172,7 +172,9 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       .then((data) => {
         console.log("data",data);
         window.location.replace(data.redirect_uri)
-      });
+      }).finally(()=>{
+        
+      })
   }
 
 

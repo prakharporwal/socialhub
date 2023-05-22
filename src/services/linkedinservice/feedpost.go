@@ -127,6 +127,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 	req.Header.Set("LinkedIn-Version", "202304")
+	req.Header.Set("X-Restli-Protocol-Version", "2.0.0")
 
 	plogger.Debug(req.Header.Get("Authorization"))
 
