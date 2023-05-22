@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box,
   Divider,
   Flex,
   Heading,
   List,
   ListItem,
-  OrderedList,
   Text,
 } from "@chakra-ui/layout";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import { Card, CardBody, CardFooter, CardHeader } from "@chakra-ui/card";
+import { Card, CardBody, CardFooter } from "@chakra-ui/card";
 import { Button, ButtonGroup } from "@chakra-ui/button";
 import { Textarea } from "@chakra-ui/textarea";
 // {
