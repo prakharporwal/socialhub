@@ -43,6 +43,7 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{apierror.MESSAGE: "Incorrect user or password"})
 		return
 	}
+	plogger.Debug(user.UserEmail, " ", user.Username, " is retrieve from db!")
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(request.Password))
 	if err != nil {
