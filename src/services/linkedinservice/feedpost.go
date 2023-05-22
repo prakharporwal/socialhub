@@ -30,7 +30,7 @@ type linkedInFeedPostRequest struct {
 	Data        interface{}                  `json:"data" binding:"required"`
 }
 
-func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.LinkedInFeedPostContentPoll) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	plogger.Debug("urn fetched from", urn)
@@ -65,6 +65,7 @@ func fetchLinkedinAccountURN(accessToken string) string {
 	req, err := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
+	plogger.Info(req.Header)
 	// Send the HTTP request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -99,7 +100,7 @@ var responseBody struct {
 	LocalisedFirstName string      `json:"localizedFirstName"`
 }
 
-func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := db.SaveLinkedinURNParams{
@@ -127,6 +128,8 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 	req.Header.Set("LinkedIn-Version", "202304")
 	req.Header.Set("X-Restli-Protocol-Version", "2.0.0")
+
+	plogger.Debug(req.Header.Get("Authorization"))
 
 	plogger.Debug(req.Header.Get("Authorization"))
 

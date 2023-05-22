@@ -2,24 +2,29 @@ package linkedinpost
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"net/http"
+	"socialhub-server/api/auth"
 	"socialhub-server/model/models"
 	"socialhub-server/model/models/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
+	"time"
 )
 
 var serviceLinkedin = linkedinservice.ServiceImpl{}
 
 type linkedInFeedPostRequest struct {
-	ContentType linkedin.LinkedinContentType       `json:"content_type" binding:"required,oneof=text poll"`
-	Text        string                             `json:"text"`
-	Data        models.LinkedInFeedPostContentPoll `json:"data" binding:"required"`
+	ContentType linkedin.LinkedinContentType `json:"content_type" binding:"required,oneof=text poll"`
+	Text        string                       `json:"text"`
+	Data        interface{}                  `json:"data" binding:"required"`
 }
 
 func CreatePostForFeed(ctx *gin.Context) {
@@ -30,6 +35,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
 		return
 	}
+
 	// get current user id and get current user password
 	token, err := fetchLinkedinAccountAccessToken(ctx)
 	if err != nil {
@@ -42,16 +48,36 @@ func CreatePostForFeed(ctx *gin.Context) {
 	//urn:li:organization:456
 	//urn:li:sponsoredAccount:789
 
+	byteStr, _ := json.Marshal(reqBody.Data)
+
+	args := sqlcmodels.ScheduleAUserPostOnLinkedinParams{
+		ScheduledPostID: uuid.New().String(),
+		PostJsonString:  string(byteStr),
+		PostType:        reqBody.ContentType.String(),
+		ScheduledTime:   time.Now(),
+		Status:          "PUBLISHED",
+		CreatedBy:       auth.GetCurrentUser(),
+	}
+
+	_, err = store.GetInstance().ScheduleAUserPostOnLinkedin(ctx, args)
+	if err != nil {
+		plogger.Error("error inserting ", err)
+		return
+	}
+
 	out := ""
 	switch reqBody.ContentType {
 	case linkedin.TEXT:
-		content := reqBody.Data
+		var content models.LinkedInFeedPostContent
+		_ = utils.JsonToStruct(reqBody.Data, &content)
 		content.Commentary = reqBody.Text
 		out, err = serviceLinkedin.CreateALinkedinTextPost(token, &content)
 		break
 	case linkedin.POLL:
-		content := reqBody.Data
-		out, err = serviceLinkedin.CreateALinkedinPoll(token, content)
+		var content models.LinkedInFeedPostContentPoll
+		_ = utils.JsonToStruct(reqBody.Data, &content)
+		content.Commentary = reqBody.Text
+		out, err = serviceLinkedin.CreateALinkedinPoll(token, &content)
 		break
 	default:
 		break

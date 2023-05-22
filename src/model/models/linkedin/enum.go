@@ -11,6 +11,10 @@ const (
 
 type LinkedinContentType string
 
+func (l LinkedinContentType) String() string {
+	return string(l)
+}
+
 const (
 	TEXT LinkedinContentType = "text"
 	POLL                     = "poll"
