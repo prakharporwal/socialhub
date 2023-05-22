@@ -123,7 +123,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       }),
     })
       .then((res) => {
-        if (res.ok) {
+        if (res.ok || res.status === 201) {
           return res.json();
         }
         console.log(res.text);

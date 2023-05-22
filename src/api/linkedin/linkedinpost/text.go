@@ -2,9 +2,12 @@ package linkedinpost
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"net/http"
+	"socialhub-server/api/auth"
 	"socialhub-server/model/models"
 	"socialhub-server/model/models/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
@@ -13,6 +16,7 @@ import (
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
+	"time"
 )
 
 var serviceLinkedin = linkedinservice.ServiceImpl{}
@@ -43,6 +47,23 @@ func CreatePostForFeed(ctx *gin.Context) {
 	//urn:li:person:123
 	//urn:li:organization:456
 	//urn:li:sponsoredAccount:789
+
+	byteStr, _ := json.Marshal(reqBody.Data)
+
+	args := sqlcmodels.ScheduleAUserPostOnLinkedinParams{
+		ScheduledPostID: uuid.New().String(),
+		PostJsonString:  string(byteStr),
+		PostType:        reqBody.ContentType.String(),
+		ScheduledTime:   time.Now(),
+		Status:          "PUBLISHED",
+		CreatedBy:       auth.GetCurrentUser(),
+	}
+
+	_, err = store.GetInstance().ScheduleAUserPostOnLinkedin(ctx, args)
+	if err != nil {
+		plogger.Error("error inserting ", err)
+		return
+	}
 
 	out := ""
 	switch reqBody.ContentType {
