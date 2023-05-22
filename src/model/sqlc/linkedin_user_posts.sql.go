@@ -10,6 +10,47 @@ import (
 	"time"
 )
 
+const fetchAllPosts = `-- name: FetchAllPosts :many
+SELECT scheduled_post_id, account_id, author_urn, post_id_on_linkedin, post_json_string, post_type, scheduled_time, status, created_by, created_at, updated_at FROM socialhub.linkedin_scheduled_user_posts
+WHERE created_by=($1)
+LIMIT 10
+`
+
+func (q *Queries) FetchAllPosts(ctx context.Context, createdBy string) ([]SocialhubLinkedinScheduledUserPost, error) {
+	rows, err := q.db.QueryContext(ctx, fetchAllPosts, createdBy)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []SocialhubLinkedinScheduledUserPost{}
+	for rows.Next() {
+		var i SocialhubLinkedinScheduledUserPost
+		if err := rows.Scan(
+			&i.ScheduledPostID,
+			&i.AccountID,
+			&i.AuthorUrn,
+			&i.PostIDOnLinkedin,
+			&i.PostJsonString,
+			&i.PostType,
+			&i.ScheduledTime,
+			&i.Status,
+			&i.CreatedBy,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const fetchPostsToBePublished = `-- name: FetchPostsToBePublished :many
 SELECT scheduled_post_id, author_urn, post_type, post_json_string, scheduled_time FROM socialhub.linkedin_scheduled_user_posts
 WHERE scheduled_time < now() and (status='SUBMITTED' or status='FAILED')

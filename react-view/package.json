@@ -1,7 +1,7 @@
 {
   "name": "react-view",
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.6.1",
@@ -27,6 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "copy": "npm run build && rm -rf ../view/* && cp -r build/ ../view/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

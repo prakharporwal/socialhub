@@ -87,6 +87,7 @@ func InitRouter() *gin.Engine {
 
 	protected.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
 	protected.POST("/linkedin/schedule/post", linkedinpost.SchedulePost)
+	protected.GET("/linkedin/posts/fetchall", linkedinpost.PostsHistoryList)
 
 	return router
 }

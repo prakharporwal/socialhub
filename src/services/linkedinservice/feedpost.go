@@ -131,8 +131,6 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 
 	plogger.Debug(req.Header.Get("Authorization"))
 
-	plogger.Debug(req.Header.Get("Authorization"))
-
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		plogger.Error("Error getting the account URN! ", err)
@@ -142,7 +140,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK || resp.StatusCode != http.StatusCreated {
 		plogger.Error("Error creating post on linkedin :")
 		plogger.Debug("resp status code ", resp.StatusCode)
 		plogger.Debug("resp Header ", resp.Header)

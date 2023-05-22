@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   ChakraProvider,
   Box,
@@ -8,16 +8,18 @@ import {
   Code,
   Grid,
   theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
-import SimpleSidebar from "./components/SimpleSidebarWithHeader"
-import LinkedinButton from "./components/buttons/LinkedinButton"
-import SidebarWithHeader from "./components/SimpleSidebarWithHeader"
-import { Navigate, Route, Routes } from "react-router"
-import SignInForm from "./components/SignInForm"
-import ProtectedRoute from "./components/authenticated/ProtectedRoute"
-import LinkedPostForm from "./components/LinkedPostForm"
+} from "@chakra-ui/react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { Logo } from "./Logo";
+import SimpleSidebar from "./components/SimpleSidebarWithHeader";
+import LinkedinButton from "./components/buttons/LinkedinButton";
+import SidebarWithHeader from "./components/SimpleSidebarWithHeader";
+import { Navigate, Route, Routes } from "react-router";
+import SignInForm from "./components/SignInForm";
+import ProtectedRoute from "./components/authenticated/ProtectedRoute";
+import LinkedPostForm from "./components/LinkedPostForm";
+import PostingHistoryList from "./components/PostingHistoryList";
+import MarketingPage from "./MarketingPage";
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -44,17 +46,16 @@ import LinkedPostForm from "./components/LinkedPostForm"
 //   </ChakraProvider>
 // )
 
-export const App = ()=>{
-  return <>
-      <SidebarWithHeader>
+export const App = () => {
+  return (
+    <>
       <Routes>
-      <Route path="/">
-      <Route path="/post" element={<LinkedPostForm/>}></Route>
-      <Route path="/signin" element={<SignInForm/>}></Route>
-      </Route>
+        <Route path="/" element={<MarketingPage />}></Route>
+
+        <Route path="/create/new" element={<LinkedPostForm />}></Route>
+        <Route path="/posts" element={<PostingHistoryList />}></Route>
+        <Route path="/signin" element={<SignInForm />}></Route>
       </Routes>
-      </SidebarWithHeader>
-  </>
-}
-
-
+    </>
+  );
+};

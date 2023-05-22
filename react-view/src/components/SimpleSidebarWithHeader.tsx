@@ -39,6 +39,7 @@ import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import ColorModeToggle from './buttons/ColorModeToggleButton';
 import ColorModeToggleButton from './buttons/ColorModeToggleButton';
+import { FaListOl } from 'react-icons/fa';
 
 interface LinkItemProps {
   name: string;
@@ -46,8 +47,8 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, linkTo: "/post"},
-  { name: 'Trending', icon: FiTrendingUp, linkTo: "/trending"},
+  { name: 'Home', icon: FiHome, linkTo: "/create/new"},
+  { name: 'Your Post', icon: FaListOl, linkTo: "/posts"},
   { name: 'Explore', icon: FiCompass, linkTo: "/explore" },
   { name: 'Favourites', icon: FiStar, linkTo: "/favourites" },
   { name: 'Settings', icon: FiSettings, linkTo: "settings" },
@@ -80,7 +81,7 @@ export default function SidebarWithHeader({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} user={{username: "Prakhar Porwal", userType: "Admin",imagSrc:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80',
        imgSrc:'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'}}/>
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box ml={{ base: 0, md: 60 }}>
         {children}
       </Box>
     </Box>

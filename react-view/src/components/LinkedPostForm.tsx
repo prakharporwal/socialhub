@@ -378,9 +378,8 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                   setScheduledTime(e.currentTarget.value)
                 }}
                 ></Input>
-
-                <Select>
-                  <option value={"15min"}  selected>15 min</option>
+                <Select value={"15min"}>
+                  <option value={"15min"}>15 min</option>
                   <option value={"30min"}>30 min</option>
                   <option value={"1hr"}>1 hour</option>
                   <option value={"Tomorrow"}>Tomorrow</option>
