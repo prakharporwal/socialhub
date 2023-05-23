@@ -27,7 +27,6 @@ import { Link as ReactRouterLink, useNavigate } from "react-router-dom"
 
 import {
   FiHome,
-  FiTrendingUp,
   FiCompass,
   FiStar,
   FiSettings,
@@ -37,7 +36,6 @@ import {
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
-import ColorModeToggle from './buttons/ColorModeToggleButton';
 import ColorModeToggleButton from './buttons/ColorModeToggleButton';
 import { FaListOl } from 'react-icons/fa';
 

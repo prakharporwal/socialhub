@@ -25,9 +25,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "develop": "webpack-dev-server --mode development",
+    "build" : "webpack --mode production",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "copy": "npm run build && rm -rf ../view/* && cp -r build/ ../view/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -45,5 +46,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0"
   }
 }

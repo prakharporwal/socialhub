@@ -118,34 +118,11 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	requestBody := content
 	body, _ := json.Marshal(requestBody)
 	plogger.Debug("post request body ", string(body))
-	req, err := http.NewRequest(http.MethodPost, postOnFeedURN, strings.NewReader(string(body)))
+
+	err = SendPostToLinkedin(string(body), accessToken)
 	if err != nil {
-		plogger.Error("Creating Request Object for Linkedin post API failed! ", err)
+		plogger.Error("Failed while sending post to linkedin ", err)
 		return "", err
-	}
-	plogger.Debug("access Token ", accessToken)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+accessToken)
-	req.Header.Set("LinkedIn-Version", "202304")
-	req.Header.Set("X-Restli-Protocol-Version", "2.0.0")
-
-	plogger.Debug(req.Header.Get("Authorization"))
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		plogger.Error("Error getting the account URN! ", err)
-		return "", errors.New("post creation Failed")
-	}
-	body, err = ioutil.ReadAll(resp.Body)
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK || resp.StatusCode != http.StatusCreated {
-		plogger.Error("Error creating post on linkedin :")
-		plogger.Debug("resp status code ", resp.StatusCode)
-		plogger.Debug("resp Header ", resp.Header)
-		plogger.Debug("resp body ", string(body))
-		return "", errors.New("post creation Failed")
 	}
 
 	return "success", nil
@@ -160,4 +137,41 @@ func createURN(resourceType string, urnId string) string {
 	default:
 		return ""
 	}
+}
+
+func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) error {
+	req, err := http.NewRequest(http.MethodPost, postOnFeedURN, strings.NewReader(bodyJsonString))
+
+	if err != nil {
+		plogger.Error("Creating Request Object for Linkedin post API failed! ", err)
+		return err
+	}
+
+	plogger.Debug("access Token ", linkedinAccessToken)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+linkedinAccessToken)
+	req.Header.Set("LinkedIn-Version", "202304")
+	req.Header.Set("X-Restli-Protocol-Version", "2.0.0")
+
+	plogger.Debug(req.Header.Get("Authorization"))
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		plogger.Error("Error getting the account URN! ", err)
+		return errors.New("post creation Failed")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK || resp.StatusCode != http.StatusCreated {
+		plogger.Error("Error creating post on linkedin :")
+		plogger.Debug("resp status code ", resp.StatusCode)
+		plogger.Debug("resp Header ", resp.Header)
+		plogger.Debug("resp body ", string(body))
+		return errors.New("post creation Failed")
+	}
+
+	return nil
 }

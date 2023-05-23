@@ -13,6 +13,7 @@ import (
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
+	"socialhub-server/pkg/encrypt"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
@@ -37,10 +38,11 @@ func CreatePostForFeed(ctx *gin.Context) {
 	}
 
 	// get current user id and get current user password
-	token, err := fetchLinkedinAccountAccessToken(ctx)
+	token, err := FetchLinkedinAccountAccessToken()
 	if err != nil {
 		plogger.Error(err)
-		ctx.Redirect(http.StatusTemporaryRedirect, "/app/oauth/linkedin/access/initiate")
+		ctx.Redirect(http.StatusTemporaryRedirect, "/app/linkedin/oauth/access/initiate")
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Linkedin Account not connected or access revoked"})
 		return
 	}
 
@@ -95,13 +97,13 @@ func CreatePostForFeed(ctx *gin.Context) {
 var ErrTokenExpired = errors.New("access token is expired, obtain a new one")
 var ErrNotFound = errors.New("token not found!")
 
-func fetchLinkedinAccountAccessToken(ctx context.Context) (string, error) {
+func FetchLinkedinAccountAccessToken() (string, error) {
 	args := sqlcmodels.FindLinkedInAccountAccessTokenParams{
 		OrganisationGroupID: "org_yogveda",
 		UserEmail:           "prakharporwal99@gmail.com",
 	}
 
-	row, err := store.GetInstance().FindLinkedInAccountAccessToken(ctx, args)
+	row, err := store.GetInstance().FindLinkedInAccountAccessToken(context.Background(), args)
 	if err != nil {
 		plogger.Error("Error getting access token for linkedin!", err)
 		return ",", ErrNotFound
@@ -112,5 +114,5 @@ func fetchLinkedinAccountAccessToken(ctx context.Context) (string, error) {
 	//	return "", ErrTokenExpired
 	//}
 
-	return row.AccessToken, nil
+	return encrypt.DecryptToken(row.AccessToken), nil
 }
