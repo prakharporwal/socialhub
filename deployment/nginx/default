@@ -14,7 +14,6 @@ server {
 
     server_name www.yogveda.live;
 
-
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
 

@@ -43,7 +43,7 @@ func pickScheduledPosts() {
 	}
 
 	if len(rows) == 0 {
-		plogger.Debug("No Posts Scheduled!")
+		//plogger.Debug("No Posts Scheduled!")
 	}
 
 	for i, row := range rows {

@@ -21,6 +21,7 @@ import LinkedPostForm from "./components/LinkedPostForm";
 import PostingHistoryList from "./components/PostingHistoryList";
 import MarketingPage from "./MarketingPage";
 import NotFoundPage from "./NotFoundPage";
+import SignUpForm from "./components/SignUpForm";
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -56,6 +57,7 @@ export const App = () => {
         <Route path="/create/new" element={<LinkedPostForm />}></Route>
         <Route path="/posts" element={<PostingHistoryList />}></Route>
         <Route path="/signin" element={<SignInForm />}></Route>
+        <Route path="/signup" element={<SignUpForm />}></Route>
       </Routes>
     </>
   );

@@ -17,9 +17,10 @@ import (
 // delete user if not activated on next 7 days
 
 type signUpRequest struct {
-	Username  string `json:"username" binding:"required,alphanum"`
-	UserEmail string `json:"email" binding:"required,email"`
-	Password  string `json:"password" binding:"required,min=6"`
+	Username       string `json:"username" binding:"required,alphanum"`
+	UserEmail      string `json:"email" binding:"required,email"`
+	OrganisationId string `json:"organisation_id" binding:"required"`
+	Password       string `json:"password" binding:"required,min=6"`
 }
 
 func SignUp(ctx *gin.Context) {

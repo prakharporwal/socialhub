@@ -8,7 +8,7 @@ import (
 )
 
 func TestJWTMaker(t *testing.T) {
-	maker, err := NewJWTMaker(utils.RandomString(32))
+	maker, err := NewJWTMaker()
 	require.NoError(t, err)
 
 	username := utils.RandomEmail()
