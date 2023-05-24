@@ -54,7 +54,7 @@ export const App = () => {
       <Routes>
       <Route path='*' element={<NotFoundPage />} />
         <Route path="/" element={<MarketingPage />}></Route>
-        <Route path="/create/new" element={<LinkedPostForm />}></Route>
+        <Route path="/post/new" element={<LinkedPostForm />}></Route>
         <Route path="/posts" element={<PostingHistoryList />}></Route>
         <Route path="/signin" element={<SignInForm />}></Route>
         <Route path="/signup" element={<SignUpForm />}></Route>

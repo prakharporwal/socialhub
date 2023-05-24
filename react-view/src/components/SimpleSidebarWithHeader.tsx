@@ -45,11 +45,11 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, linkTo: "/create/new"},
+  { name: 'Home', icon: FiHome, linkTo: "/post/new"},
   { name: 'Your Post', icon: FaListOl, linkTo: "/posts"},
   { name: 'Explore', icon: FiCompass, linkTo: "/explore" },
   { name: 'Favourites', icon: FiStar, linkTo: "/favourites" },
-  { name: 'Settings', icon: FiSettings, linkTo: "settings" },
+  { name: 'Settings', icon: FiSettings, linkTo: "/settings" },
 ];
 
 export default function SidebarWithHeader({

@@ -31,15 +31,16 @@ export default function SignUpForm() {
   const navigate = useNavigate();
 
   function submitSignUpForm() {
+    console.log()
     setIsRegistering(true);
 
-    if ( organisationId ==="" || username==="" || email === "" || password === "") {
+    if (organisationId ==="" || username==="" || email === "" || password === "" || !validateEmail(email)) {
       if (!toast.isActive("signup-error")) {
         toast({
           // todo add the username here
           id: "signup-error",
           title: "Invalid data cannot be empty",
-          description: "Email and Password Field empty",
+          description: "Field empty",
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -85,8 +86,8 @@ export default function SignUpForm() {
   }
 
   function validateEmail(email:any){
-    if(email)
-    return false
+    if(email ==="")
+       return false
     return true
   }
 
@@ -109,7 +110,7 @@ export default function SignUpForm() {
           >
             <Stack spacing={4}>
             <FormControl id="orgname">
-                <FormLabel>Email address</FormLabel>
+                <FormLabel>Organisation Id</FormLabel>
                 <Input
                   type="text"
                   value={organisationId}
@@ -124,8 +125,6 @@ export default function SignUpForm() {
                   type="email"
                   value={email}
                   onChange={(e) => {
-                    if(!validateEmail(e.currentTarget.value))
-                        return
                     setEmail(e.currentTarget.value);
                   }}
                 />
