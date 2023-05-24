@@ -9,7 +9,6 @@ import (
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
-	"socialhub-server/pkg/encrypt"
 	"socialhub-server/pkg/plogger"
 	"time"
 )
@@ -182,7 +181,7 @@ func GetAccessToken(ctx *gin.Context) {
 	args := models.SaveLinkedinAccessTokenParams{
 		OrganisationGroupID: "org_yogveda",
 		UserEmail:           jwtInfo.Username,
-		AccessToken:         encrypt.EncryptToken(tokenResp.AccessToken),
+		AccessToken:         tokenResp.AccessToken,
 		Scope:               tokenResp.Scope,
 		ExpiresAt:           time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Millisecond),
 	}

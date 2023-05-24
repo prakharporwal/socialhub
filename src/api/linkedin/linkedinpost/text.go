@@ -13,7 +13,6 @@ import (
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
-	"socialhub-server/pkg/encrypt"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
@@ -114,5 +113,5 @@ func FetchLinkedinAccountAccessToken() (string, error) {
 	//	return "", ErrTokenExpired
 	//}
 
-	return encrypt.DecryptToken(row.AccessToken), nil
+	return row.AccessToken, nil
 }

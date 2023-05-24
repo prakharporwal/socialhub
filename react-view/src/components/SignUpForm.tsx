@@ -66,10 +66,11 @@ export default function SignUpForm() {
         window.localStorage.setItem("access_token", data.access_token);
         window.localStorage.setItem("authenticated", "true");
         document.cookie = "access_token=" + data.access_token;
+        
         toast({
           // todo add the user name here
           title: "Account Creation successful",
-          description: "Logged in as {username}",
+          description: "",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -79,6 +80,14 @@ export default function SignUpForm() {
       })
       .catch((err) => {
         console.log(err);
+        toast({
+            // todo add the user name here
+            title: "Signup Failed",
+            description: err.message ,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
       })
       .finally(() => {
         setIsRegistering(false);

@@ -47,7 +47,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
 
   let moreInfoRef = useRef<HTMLDivElement>(null);
   let navigate = useNavigate();
-  
+
   return (
     <Box overflowY='auto'>
       <Container maxW={"5xl"} h="100vh">
@@ -91,6 +91,18 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
               onClick={()=>{navigate("/signup")}}
             >
               Get Started
+            </Button>
+            <Button
+              colorScheme={"green"}
+              variant={'outline'}
+              rounded={"full"}
+              px={6}
+              _hover={{
+                bg: "green.500",
+              }}
+              onClick={()=>{navigate("/signin")}}
+            >
+              Sign In
             </Button>
             <Button variant={"link"} colorScheme={"blue"} size={"sm"} onClick={()=>{
                if (moreInfoRef.current) {
