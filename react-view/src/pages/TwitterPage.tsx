@@ -9,7 +9,6 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
     let [isConnecting, setIsConnecting] = useState(false);
 
   function handleConnectToTwitter(e: React.MouseEvent) {
-    console.log("handleConnectToTwitter");
     setIsConnecting(true);
 
     fetch("https://api.yogveda.live/app/twitter/oauth/access", {
@@ -34,9 +33,11 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
 
         console.log(err)
         toast({
+            id: "post-submit-error",
             status: "error",
-            title: "Could not connect twitter account"
-        })
+            title: "Could not connect to Twitter",
+            description: "",
+          });
       })
       .finally(() => {
         setIsConnecting(false);
