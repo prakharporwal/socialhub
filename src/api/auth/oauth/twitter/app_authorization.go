@@ -47,10 +47,6 @@ func RequestAccess(ctx *gin.Context) {
 
 	}
 
-	if resp.StatusCode != http.StatusOK {
-
-	}
-
 	defer resp.Body.Close()
 
 	var body responseBody
@@ -60,8 +56,16 @@ func RequestAccess(ctx *gin.Context) {
 		plogger.Error("error decoding request token response body ", err)
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		plogger.Info(resp.StatusCode)
+		plogger.Error("request to twitter request_access failed")
+	}
+
+	plogger.Info(body.OAuthToken)
+
 	if !body.OAuthCallbackConfirmed {
 		plogger.Error("error twitter oauth callback confirmed is false. cannot proceed for authorization ", body.OAuthCallbackConfirmed)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
 
