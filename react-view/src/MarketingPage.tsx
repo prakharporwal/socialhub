@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import {
   Container,
   Heading,
@@ -18,6 +18,7 @@ import { IoMdAnalytics, IoLogoBitcoin, IoMdSearch } from "react-icons/io";
 import "./marketing.css";
 import MarketingFooter from "./components/MarketingFooter";
 import { useNavigate } from "react-router";
+import { useAuth } from "./hooks/useAuth";
 
 interface FeatureProps {
   text: string;
@@ -47,6 +48,12 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
 
   let moreInfoRef = useRef<HTMLDivElement>(null);
   let navigate = useNavigate();
+  let auth = useAuth();
+
+  useEffect(()=>{
+    if(auth.isAuthenticated)
+      navigate("/posts");
+  },[])
 
   return (
     <Box overflowY='auto'>
@@ -82,11 +89,10 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
           >
             <Button
               colorScheme={"green"}
-              bg={"green.400"}
               rounded={"full"}
               px={6}
               _hover={{
-                bg: "green.500",
+                bg: "green.500"
               }}
               onClick={()=>{navigate("/signup")}}
             >
@@ -99,6 +105,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
               px={6}
               _hover={{
                 bg: "green.500",
+                color: "white"
               }}
               onClick={()=>{navigate("/signin")}}
             >

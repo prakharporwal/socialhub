@@ -8,6 +8,7 @@ import (
 	"socialhub-server/api"
 	"socialhub-server/api/auth"
 	"socialhub-server/api/auth/oauth/linkedin"
+	"socialhub-server/api/auth/oauth/twitter"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/server/middleware"
@@ -84,6 +85,10 @@ func InitRouter() *gin.Engine {
 	protected.GET("/linkedin/oauth/access/initiate", linkedin.FetchAuthCode)
 
 	public.GET("/linkedin/oauth/access/callback", linkedin.GetAccessToken)
+
+	protected.GET("/twitter/oauth/access/initiate", twitter.AccessTokenAPI)
+	protected.GET("/twitter/oauth/access", twitter.RequestAccess)
+	public.GET("/twitter/oauth/access/callback", twitter.OAuthCallbackController)
 
 	protected.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
 	protected.POST("/linkedin/schedule/post", linkedinpost.SchedulePost)
