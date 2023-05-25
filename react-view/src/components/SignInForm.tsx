@@ -55,7 +55,7 @@ export default function SignInForm() {
         if (res.ok) {
           return res.json();
         }
-        throw new Error("failed to login");
+        throw new Error("Incorrect credentials");
       })
       .then((data) => {
         console.log(data.access_token);
@@ -75,6 +75,14 @@ export default function SignInForm() {
       })
       .catch((err) => {
         console.log(err);
+        toast({
+          // todo add the user name here
+          title: "Login Failed",
+          description: err.message ,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       })
       .finally(() => {
         setIsLoggingIn(false);

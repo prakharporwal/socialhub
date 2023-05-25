@@ -42,6 +42,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isConnectingLinkedin, setIsConnectingLinkedin] = useState(false);
   const [isSubmittingScheduled, setIsSubmittingScheduled] = useState(false);
   const [scheduledTime, setScheduledTime] = useState((new Date()).toISOString().substring(0,16))
 
@@ -159,21 +160,29 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
 
 
   async function handleConnectLinkedinAccount(){
+     setIsConnectingLinkedin(true)
+
      await fetch("https://api.yogveda.live" + `/app/linkedin/oauth/access/initiate`, {
       method: "get",
       headers: {
         "access-token": window.localStorage.getItem("access_token") || "",
       },
-    })
+      })
       .then((res) => {
-        let x = res.json();
-        return x;
+        if(res.ok){
+          return res.json();
+        }
+        throw new Error("");
       })
       .then((data) => {
         console.log("data",data);
         window.location.replace(data.redirect_uri)
-      }).finally(()=>{
-        
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+      .finally(()=>{
+        setIsConnectingLinkedin(false)
       })
   }
 
@@ -223,7 +232,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     w={"full"}
     maxW={"md"}
     leftIcon={<SiLinkedin />}
-    isLoading={isSubmitting}
+    isLoading={isConnectingLinkedin}
     onClick={handleConnectLinkedinAccount}
   >
     <Center>
@@ -271,7 +280,6 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                 <option value="text">Text</option>
               </Select>
             </FormControl>
-
             {type === "poll" ? (
               <>
                 <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>

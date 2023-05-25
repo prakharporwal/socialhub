@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   ChakraProvider,
   Box,
@@ -20,6 +20,9 @@ import ProtectedRoute from "./components/authenticated/ProtectedRoute";
 import LinkedPostForm from "./components/LinkedPostForm";
 import PostingHistoryList from "./components/PostingHistoryList";
 import MarketingPage from "./MarketingPage";
+import NotFoundPage from "./NotFoundPage";
+import SignUpForm from "./components/SignUpForm";
+import TwitterPage from "./pages/TwitterPage";
 
 // export const App = () => (
 //   <ChakraProvider theme={theme}>
@@ -47,14 +50,17 @@ import MarketingPage from "./MarketingPage";
 // )
 
 export const App = () => {
+
   return (
     <>
       <Routes>
+      <Route path='*' element={<NotFoundPage />} />
         <Route path="/" element={<MarketingPage />}></Route>
-
-        <Route path="/create/new" element={<LinkedPostForm />}></Route>
+        <Route path="/twitter" element={<TwitterPage />}></Route>
+        <Route path="/post/new" element={<LinkedPostForm />}></Route>
         <Route path="/posts" element={<PostingHistoryList />}></Route>
         <Route path="/signin" element={<SignInForm />}></Route>
+        <Route path="/signup" element={<SignUpForm />}></Route>
       </Routes>
     </>
   );

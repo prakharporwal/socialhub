@@ -27,7 +27,6 @@ import { Link as ReactRouterLink, useNavigate } from "react-router-dom"
 
 import {
   FiHome,
-  FiTrendingUp,
   FiCompass,
   FiStar,
   FiSettings,
@@ -37,7 +36,6 @@ import {
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
-import ColorModeToggle from './buttons/ColorModeToggleButton';
 import ColorModeToggleButton from './buttons/ColorModeToggleButton';
 import { FaListOl } from 'react-icons/fa';
 
@@ -47,11 +45,11 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, linkTo: "/create/new"},
+  { name: 'Home', icon: FiHome, linkTo: "/post/new"},
   { name: 'Your Post', icon: FaListOl, linkTo: "/posts"},
   { name: 'Explore', icon: FiCompass, linkTo: "/explore" },
   { name: 'Favourites', icon: FiStar, linkTo: "/favourites" },
-  { name: 'Settings', icon: FiSettings, linkTo: "settings" },
+  { name: 'Settings', icon: FiSettings, linkTo: "/settings" },
 ];
 
 export default function SidebarWithHeader({
