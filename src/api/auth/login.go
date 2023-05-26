@@ -12,7 +12,8 @@ import (
 	"time"
 )
 
-const TokenAgeInSeconds = 5 * 60 * 60
+const fiveHours = 5 * 60 * 60
+const TokenAgeInSeconds = fiveHours
 
 type loginRequest struct {
 	UserId   string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
@@ -61,7 +62,7 @@ func Login(ctx *gin.Context) {
 	plogger.Debug(request.UserId, " is logged in successfully!")
 
 	// not working IDK why
-	ctx.SetCookie("AccessToken", response.AccessToken, TokenAgeInSeconds, "/", "yogveda.live", false, false)
+	ctx.SetCookie("AccessToken", response.AccessToken, TokenAgeInSeconds, "/", "www.yogveda.live", false, false)
 
 	ctx.JSON(http.StatusOK, response)
 }

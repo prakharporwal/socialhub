@@ -31,6 +31,7 @@ import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
+  const auth = useAuth();
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -96,7 +97,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
 
     await fetch("https://api.yogveda.live/app/linkedin/post", {
       headers: {
-        "access-token": window.localStorage.getItem("access_token") || "",
+        "access-token": auth.accessToken || "",
       },
       method: "POST",
       body: JSON.stringify({
@@ -158,7 +159,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     fetch("https://api.yogveda.live" + "/app/linkedin/schedule/post", {
       method: "POST",
       headers: {
-        "access-token": window.localStorage.getItem("access_token") || "",
+        "access-token": auth.accessToken || "",
       },
       body: JSON.stringify({
         post_type: type,
