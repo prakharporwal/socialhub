@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from "react";
+import { getCookie } from "../utils/cookieUtils";
 
 export function useAuth() {
-    const [auth, setAuth] = useState<boolean>(window.localStorage.getItem('authenticated') === 'true');
-    const tokenFromStorage = window.localStorage.getItem('access_token');
+  // const [auth, setAuth] = useState<boolean>(window.localStorage.getItem('authenticated') === 'true');
+  const tokenFromStorage = getCookie("access_token");
+  const [auth, _] = useState<boolean>(
+    tokenFromStorage != null && tokenFromStorage !== ""
+  );
 
-    let isAuthenticated = false;    
-    if(auth){
-        isAuthenticated = true;
-    }
-
-    return {
-        isAuthenticated,
-        accessToken: tokenFromStorage
-    }
+  return {
+    isAuthenticated: auth,
+    accessToken: tokenFromStorage,
+  };
 }

@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"strings"
 )
 
 /// steps
@@ -26,16 +27,17 @@ type responseBody struct {
 }
 
 func RequestAccess(ctx *gin.Context) {
-	redirectParams := url.Values{}
-	redirectParams.Set("oauth_callback", twitterOAuthCallback)
-	redirectParams.Set("oauth_consumer_key", "qdVQOpAp7RiUzgUUOtdIFUzlB")
+	redirectParams := map[string]interface{}{}
+	redirectParams["oauth_callback"] = twitterOAuthCallback
+	redirectParams["oauth_consumer_key"] = "qdVQOpAp7RiUzgUUOtdIFUzlB"
 
 	//oauth_token=NPcudxy0yU5T3tBzho7iCotZ3cnetKwcTIRlX0iwRl0
 	//oauth_token_secret=veNRnAWe6inFuo8o2u8SLLZLjolYDmDP7SzL0YfYI
 	//oauth_callback_confirmed=true
+	byteArr, err := json.Marshal(redirectParams)
+	reqUrl := twitterRequestTokenUrl
 
-	reqUrl := twitterRequestTokenUrl + "?" + redirectParams.Encode()
-	req, err := http.NewRequest("POST", reqUrl, nil)
+	req, err := http.NewRequest("POST", reqUrl, strings.NewReader(string(byteArr)))
 	if err != nil {
 		plogger.Error(err)
 		ctx.JSON(http.StatusOK, apierror.UnexpectedError)
@@ -44,11 +46,8 @@ func RequestAccess(ctx *gin.Context) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-
-	}
-
-	if resp.StatusCode != http.StatusOK {
-
+		plogger.Error(err)
+		plogger.Info(resp)
 	}
 
 	defer resp.Body.Close()
@@ -60,8 +59,16 @@ func RequestAccess(ctx *gin.Context) {
 		plogger.Error("error decoding request token response body ", err)
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		plogger.Info(resp.StatusCode)
+		plogger.Error("request to twitter request_access failed")
+	}
+
+	plogger.Info(body.OAuthToken)
+
 	if !body.OAuthCallbackConfirmed {
 		plogger.Error("error twitter oauth callback confirmed is false. cannot proceed for authorization ", body.OAuthCallbackConfirmed)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
 
@@ -70,8 +77,6 @@ func RequestAccess(ctx *gin.Context) {
 
 	redirectUrl := twitterAuthorizationUrl + "?" + urlParams.Encode()
 	ctx.Redirect(http.StatusFound, redirectUrl)
-
-	//ctx.JSON(http.StatusOK, gin.H{})
 }
 
 func InitiateAuthorization(ctx *gin.Context) {
