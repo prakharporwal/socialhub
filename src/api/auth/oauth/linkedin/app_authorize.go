@@ -37,6 +37,7 @@ func FetchAuthCode(ctx *gin.Context) {
 	//	generate a JWT For callback and user identification
 	// 	and pass as a state then it should be valid for a minute.
 	tm, _ := auth.NewPasetoMaker()
+
 	oauthJwtToken, err := tm.CreateToken(auth.GetCurrentUser(), 1*time.Minute)
 	if err != nil {
 		plogger.Error("Error creating state for oauth callback! ", err)

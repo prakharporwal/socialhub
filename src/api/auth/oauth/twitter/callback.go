@@ -14,5 +14,5 @@ func OAuthCallbackController(ctx *gin.Context) {
 	plogger.Debug(oauthVerifier)
 
 	ctx.Redirect(http.StatusFound, "https://www.yogveda.live/")
-	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+	//ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }

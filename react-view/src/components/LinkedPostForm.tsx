@@ -121,6 +121,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         if (res.ok || res.status === 201) {
           return res.json();
         }
+        console.log(res.status);
         console.log(res.text);
         throw new Error("creating post request failed!");
       })

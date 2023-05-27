@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from "react";
 import {
   Flex,
   Box,
@@ -14,9 +14,10 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import {Link as RouterLink} from 'react-router-dom'
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import './signin.css'
+import "./signin.css";
 
 export default function SignInForm() {
   const [email, setEmail] = useState<string>("");
@@ -27,7 +28,9 @@ export default function SignInForm() {
 
   const navigate = useNavigate();
 
-  function submitSignInForm() {
+  function submitSignInForm(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
     setIsLoggingIn(true);
 
     if (email === "" || password === "") {
@@ -74,14 +77,17 @@ export default function SignInForm() {
       })
       .catch((err) => {
         console.log(err);
-        toast({
-          // todo add the user name here
-          title: "Login Failed",
-          description: err.message ,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
+        if (!toast.isActive("login-api-failed")) {
+          toast({
+            // todo add the user name here
+            id: "login-api-failed",
+            title: "Login Failed",
+            description: err.message,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       })
       .finally(() => {
         setIsLoggingIn(false);
@@ -90,13 +96,17 @@ export default function SignInForm() {
 
   return (
     <>
-      <Flex className='signin-background' h={"100vh"} align={"center"} justify={"center"}>
+      <Flex
+        className="signin-background"
+        h={"100vh"}
+        align={"center"}
+        justify={"center"}
+      >
         <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"}>Sign in to your account</Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
               to enjoy all of our cool <Link color={"blue.400"}>features</Link>{" "}
-              ✌️
             </Text>
           </Stack>
           <Box
@@ -106,54 +116,59 @@ export default function SignInForm() {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <Stack spacing={10}>
-                <Stack
-                  direction={{ base: "column", sm: "row" }}
-                  align={"start"}
-                  justify={"space-between"}
-                >
-                  <Checkbox
-                    checked={rememberMe}
+              <form onSubmit={submitSignInForm}>
+                <FormControl id="email">
+                  <FormLabel>Email address</FormLabel>
+                  <Input
+                    type="email"
+                    value={email}
                     onChange={(e) => {
-                      setRememberMe(e.currentTarget.checked);
+                      setEmail(e.currentTarget.value);
                     }}
+                  />
+                </FormControl>
+                <FormControl id="password">
+                  <FormLabel>Password</FormLabel>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+                <Stack spacing={10}>
+                  <Stack
+                    direction={{ base: "column", sm: "row" }}
+                    align={"start"}
+                    justify={"space-between"}
                   >
-                    Remember me
-                  </Checkbox>
-                  <Link color={"blue.400"}>Forgot password?</Link>
+                    <Checkbox
+                      checked={rememberMe}
+                      onChange={(e) => {
+                        setRememberMe(e.currentTarget.checked);
+                      }}
+                    >
+                      Remember me
+                    </Checkbox>
+                    <Link as={RouterLink} to="/forgot-password" color={"blue.400"}>Forgot password?</Link>
+                  </Stack>
+                  <Button
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    _focus={{
+                      bg: "blue.500",
+                    }}
+                    type="submit"
+                    isLoading={isLoggingIn}
+                  >
+                    Sign in
+                  </Button>
                 </Stack>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.400",
-                  }}
-                  isLoading={isLoggingIn}
-                  onClick={submitSignInForm}
-                >
-                  Sign in
-                </Button>
-              </Stack>
+              </form>
             </Stack>
           </Box>
         </Stack>

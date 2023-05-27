@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Flex,
   Box,
@@ -15,12 +15,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link as ReactLink } from 'react-router-dom';
+import { Link as ReactLink } from "react-router-dom";
 import { useNavigate } from "react-router";
-import './signin.css'
+import "./signin.css";
 
 export default function SignUpForm() {
-    const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [organisationId, setOrganisationId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -31,10 +31,16 @@ export default function SignUpForm() {
   const navigate = useNavigate();
 
   function submitSignUpForm() {
-    console.log()
+    console.log();
     setIsRegistering(true);
 
-    if (organisationId ==="" || username==="" || email === "" || password === "" || !validateEmail(email)) {
+    if (
+      organisationId === "" ||
+      username === "" ||
+      email === "" ||
+      password === "" ||
+      !validateEmail(email)
+    ) {
       if (!toast.isActive("signup-error")) {
         toast({
           // todo add the username here
@@ -53,7 +59,12 @@ export default function SignUpForm() {
     console.log(email, password, organisationId, username);
     fetch("https://api.yogveda.live/v1/signup", {
       method: "POST",
-      body: JSON.stringify({organisation_id: organisationId, username: username, user_id: email, password: password }),
+      body: JSON.stringify({
+        organisation_id: organisationId,
+        username: username,
+        user_id: email,
+        password: password,
+      }),
     })
       .then((res) => {
         if (res.ok) {
@@ -66,7 +77,7 @@ export default function SignUpForm() {
         window.localStorage.setItem("access_token", data.access_token);
         window.localStorage.setItem("authenticated", "true");
         document.cookie = "access_token=" + data.access_token;
-        
+
         toast({
           // todo add the user name here
           title: "Account Creation successful",
@@ -81,34 +92,43 @@ export default function SignUpForm() {
       .catch((err) => {
         console.log(err);
         toast({
-            // todo add the user name here
-            title: "Signup Failed",
-            description: err.message ,
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
+          // todo add the user name here
+          title: "Signup Failed",
+          description: err.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       })
       .finally(() => {
         setIsRegistering(false);
       });
   }
 
-  function validateEmail(email:any){
-    if(email ==="")
-       return false
-    return true
+  function validateEmail(email: any) {
+    if (email === "") return false;
+    return true;
   }
 
   return (
     <>
-      <Flex className='signin-background' h={"100vh"} align={"center"} justify={"center"}>
+      <Flex
+        className="signin-background"
+        h={"100vh"}
+        align={"center"}
+        justify={"center"}
+        bg={"whitesmoke"}
+      >
         <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
-            <Heading fontSize={"4xl"} maxW={"5xl"}>SignUp into Organisation</Heading>
+            <Heading fontSize={"4xl"} maxW={"5xl"}>
+              SignUp into Organisation
+            </Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
-              To explore our all of our cool <Link as={ReactLink} to="/" color={"blue.400"}>features</Link>{" "}
-              ✌️
+              To explore our all of our cool{" "}
+              <Link as={ReactLink} to="/" color={"blue.400"}>
+                features
+              </Link>
             </Text>
           </Stack>
           <Box
@@ -117,59 +137,62 @@ export default function SignUpForm() {
             boxShadow={"lg"}
             p={8}
           >
-            <Stack spacing={4}>
-            <FormControl id="orgname">
-                <FormLabel>Organisation Id</FormLabel>
-                <Input
-                  type="text"
-                  value={organisationId}
-                  onChange={(e) => {
-                    setOrganisationId(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl id="username">
-                <FormLabel>Username</FormLabel>
-                <Input
-                  type="text"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.400",
-                  }}
-                  isLoading={isRegistering}
-                  onClick={submitSignUpForm}
-                >
-                  Sign up
-                </Button>
-            </Stack>
+            <form onSubmit={submitSignUpForm}>
+              <Stack spacing={4}>
+                <FormControl id="orgname">
+                  <FormLabel>Organisation Id</FormLabel>
+                  <Input
+                    type="text"
+                    value={organisationId}
+                    onChange={(e) => {
+                      setOrganisationId(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl id="email">
+                  <FormLabel>Email address</FormLabel>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl id="username">
+                  <FormLabel>Username</FormLabel>
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl id="password">
+                  <FormLabel>Password</FormLabel>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
+              </Stack>
+              <Button
+              marginTop={"4"}
+                bg={"blue.400"}
+                color={"white"}
+                _hover={{
+                  bg: "blue.400",
+                }}
+                type="submit"
+                isLoading={isRegistering}
+              >
+                Sign up
+              </Button>
+            </form>
           </Box>
         </Stack>
       </Flex>
