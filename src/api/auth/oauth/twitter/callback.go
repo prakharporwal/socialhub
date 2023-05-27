@@ -7,8 +7,8 @@ import (
 )
 
 func OAuthCallbackController(ctx *gin.Context) {
-	twitterOAuthToken := ctx.Param("oauth_token")
-	oauthVerifier := ctx.Param("oauth_verifier")
+	twitterOAuthToken := ctx.Param("code")
+	oauthVerifier := ctx.Param("state")
 
 	plogger.Debug(twitterOAuthToken)
 	plogger.Debug(oauthVerifier)
