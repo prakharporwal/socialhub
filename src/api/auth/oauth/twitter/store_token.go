@@ -19,11 +19,13 @@ func TwitterOAuth2Initiate(ctx *gin.Context) {
 	codeChallenge := "challenge"
 	codeChallengeMethod := "plain"
 
+	scope := "tweet.read,users.read,offline.access"
 	dataParams := url.Values{}
 
 	dataParams.Add("response_type", responseType)
 	dataParams.Add("client_id", clientId)
 	dataParams.Add("redirect_uri", redirectUri)
+	dataParams.Add("scope", scope)
 	dataParams.Add("state", state)
 	dataParams.Add("code_challenge", codeChallenge)
 	dataParams.Add("code_challenge_method", codeChallengeMethod)
