@@ -25,8 +25,6 @@ import { FaClock } from "react-icons/fa";
 import { SiLinkedin } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import { getCookie } from "../utils/cookieUtils";
-import { FiSend } from "react-icons/fi";
 import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {

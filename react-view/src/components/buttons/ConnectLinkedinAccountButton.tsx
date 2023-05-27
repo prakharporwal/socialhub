@@ -1,9 +1,11 @@
 import { Button, Center, Text } from "@chakra-ui/react"
 import { useState } from "react";
 import { SiLinkedin } from "react-icons/si"
+import { useAuth } from "../../hooks/useAuth";
 
 const ConnectLinkedinAccountButton: React.FunctionComponent<any>= (props)=>{
     const [isConnectingLinkedin, setIsConnectingLinkedin] = useState<boolean>(false);
+    const auth = useAuth()
 
     async function handleConnectLinkedinAccount() {
         setIsConnectingLinkedin(true);
@@ -13,7 +15,7 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any>= (props)=>{
           {
             method: "get",
             headers: {
-              "access-token": window.localStorage.getItem("access_token") || "",
+              "access-token": auth.accessToken || "",
             },
           }
         )

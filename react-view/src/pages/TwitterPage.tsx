@@ -6,7 +6,7 @@ import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 
 const TwitterPage: React.FunctionComponent<any> = (props) => {
     const toast = useToast();
-    let auth = useAuth();
+    const auth = useAuth();
     let [isConnecting, setIsConnecting] = useState(false);
 
   function handleConnectToTwitter(e: React.MouseEvent) {
@@ -29,6 +29,8 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
         //     status: "error",
         //     title: "Could not connect twitter account"
         // })
+
+        window.location = data.redirect_url
       })
       .catch((err) => {
 

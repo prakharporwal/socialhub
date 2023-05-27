@@ -16,6 +16,7 @@ import { Editable } from "@chakra-ui/editable";
 import { Switch } from "@chakra-ui/switch";
 import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
+import { useAuth } from "../hooks/useAuth";
 // {
 //     "scheduled_post_id": "292341f2-bde1-4c39-9436-35be4a7e606e",
 //     "account_id": 1234,
@@ -44,6 +45,9 @@ interface IProps {
 }
 
 const PostingHistoryList: React.FunctionComponent<IProps> = () => {
+
+  const auth = useAuth()
+
   const [posts, setPosts] = useState<Post[]>([
     {
       scheduled_post_id: "hello",
@@ -112,7 +116,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     fetch("https://api.yogveda.live" + "/app/linkedin/posts/fetchall", {
       method: "GET",
       headers: {
-        "access-token": window.localStorage.getItem("access_token") || "",
+        "access-token": auth.accessToken || "",
       },
     })
       .then((res) => {
