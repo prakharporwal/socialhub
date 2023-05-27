@@ -1,5 +1,5 @@
-import { Box, Button, Container, Flex, useToast } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { FaPlug } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
@@ -12,7 +12,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   function handleConnectToTwitter(e: React.MouseEvent) {
     setIsConnecting(true);
 
-    fetch("https://api.yogveda.live/app/twitter/oauth/access", {
+    fetch("https://api.yogveda.live/app/twitter/oauth2/access/initiate", {
       headers: {
         "access-token": auth.accessToken || "",
       },
