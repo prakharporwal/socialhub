@@ -12,14 +12,14 @@ const twitterOAuth2Url = "https://twitter.com/i/oauth2/authorize"
 func TwitterOAuth2Initiate(ctx *gin.Context) {
 	responseType := "code"
 	clientId := "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
-	redirectUri := "https://api.yogveda.live/twitter/oauth2/access/callback"
+	redirectUri := "https://api.yogveda.live/app/twitter/oauth2/access/callback"
 
 	state := stringutils.GenerateRandomString(30)
 	// todo: to be generate in a safer way code challenge
 	codeChallenge := "challenge"
 	codeChallengeMethod := "plain"
 
-	scope := "tweet.read,users.read,offline.access"
+	scope := "tweet.read users.read offline.access"
 	dataParams := url.Values{}
 
 	dataParams.Add("response_type", responseType)
