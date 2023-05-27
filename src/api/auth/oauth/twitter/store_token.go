@@ -28,7 +28,6 @@ func TwitterOAuth2Initiate(ctx *gin.Context) {
 	dataParams.Add("code_challenge", codeChallenge)
 	dataParams.Add("code_challenge_method", codeChallengeMethod)
 
-	url := twitterOAuth2Url + dataParams.Encode()
-
-	ctx.Redirect(http.StatusFound, url)
+	redirectURL := twitterOAuth2Url + "?" + dataParams.Encode()
+	ctx.Redirect(http.StatusFound, redirectURL)
 }
