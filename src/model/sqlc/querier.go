@@ -19,10 +19,12 @@ type Querier interface {
 	FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLinkedinURNbyAccountIdParams) (string, error)
 	FetchPostsToBePublished(ctx context.Context, limit int32) ([]FetchPostsToBePublishedRow, error)
 	FindLinkedInAccountAccessToken(ctx context.Context, arg FindLinkedInAccountAccessTokenParams) (SocialhubLinkedinAccountAccessToken, error)
+	FindTwitterAccountAccessToken(ctx context.Context, arg FindTwitterAccountAccessTokenParams) (SocialhubTwitterAccountAccessToken, error)
 	GetSession(ctx context.Context, sessionID uuid.UUID) (Session, error)
 	GetUserDetails(ctx context.Context, userEmail string) (GetUserDetailsRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
+	SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAccessTokenParams) (SaveTwitterAccessTokenRow, error)
 	ScheduleAUserPostOnLinkedin(ctx context.Context, arg ScheduleAUserPostOnLinkedinParams) (ScheduleAUserPostOnLinkedinRow, error)
 	UpdatePostStatus(ctx context.Context, arg UpdatePostStatusParams) (UpdatePostStatusRow, error)
 }

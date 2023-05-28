@@ -68,6 +68,7 @@ func Login(ctx *gin.Context) {
 }
 
 var currentUser string
+var currentOrganisationId string
 
 func SetCurrentUser(username string) {
 	currentUser = username
@@ -75,6 +76,14 @@ func SetCurrentUser(username string) {
 
 func GetCurrentUser() string {
 	return currentUser
+}
+
+func SetCurrentOrganisationId(orgId string) {
+	currentOrganisationId = orgId
+}
+
+func GetCurrentOrganisationId() string {
+	return currentOrganisationId
 }
 
 func generateLoginSession(useremail string, useragent string, clientip string) *loginResponse {

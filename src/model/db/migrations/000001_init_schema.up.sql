@@ -145,3 +145,25 @@ CREATE TRIGGER set_timestamp
     ON socialhub.linkedin_account_access_tokens
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+
+CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
+(
+    organisation_group_id varchar     NOT NULL,
+    user_email            varchar     NOT NULL,
+    twitter_id          varchar     NOT NULL DEFAULT '',
+    access_token          varchar     NOT NULL,
+    scope                 varchar     NOT NULL,
+    expires_at            timestamptz NOT NULL,
+    created_at            timestamptz NOT NULL DEFAULT now(),
+    updated_at            timestamptz not null default now(),
+    PRIMARY KEY (organisation_group_id, user_email)
+    );
+
+-- setting trigger to update timestamp accounts table
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.twitter_account_access_tokens
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
