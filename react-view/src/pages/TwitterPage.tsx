@@ -1,14 +1,35 @@
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Container,
+  Flex,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaPlug } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import CONSTANTS from "../CONSTANTS";
 
+type TweetType = {
+  id: string;
+  text: string;
+};
+
 const TwitterPage: React.FunctionComponent<any> = (props) => {
   const toast = useToast();
   const auth = useAuth();
   let [isConnecting, setIsConnecting] = useState(false);
+
+  const [tweets, setTweets] = useState<TweetType[]>([
+    {
+      id: "hello",
+      text: "Hi All",
+    },
+  ]);
 
   function handleConnectToTwitter(e: React.MouseEvent) {
     setIsConnecting(true);
@@ -91,7 +112,21 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           Get Tweets Twitter
         </Button>
       </Flex>
+      <Container>
+        {tweets.map((tweet) => {
+          return <TweetCard tweet={tweet}></TweetCard>;
+        })}
+      </Container>
     </Box>
+  );
+};
+
+const TweetCard: React.FunctionComponent<any> = ({ tweet }) => {
+  return (
+    <Card p="4">
+      <CardHeader>Tweet by You</CardHeader>
+      <CardBody>{tweet.text}</CardBody>
+    </Card>
   );
 };
 
