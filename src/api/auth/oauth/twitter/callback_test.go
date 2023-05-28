@@ -11,7 +11,7 @@ func TestServiceTwitterAccessTokenSave(t *testing.T) {
 		args := models.SaveTwitterAccessTokenParams{
 			AccessToken: "access-token",
 			UserEmail:   "fakem@mail.com",
-			Scope:       "users.read tweet.read offline.access",
+			TokenScope:  "users.read tweet.read offline.access",
 		}
 		serviceTwitterAccessTokenSave(args)
 	})

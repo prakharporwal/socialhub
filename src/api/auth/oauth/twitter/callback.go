@@ -85,7 +85,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 		AccessToken:         respBody.AccessToken,
 		UserEmail:           auth.GetCurrentUser(),
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		Scope:               respBody.Scope,
+		TokenScope:          respBody.Scope,
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInSeconds * time.Second),
 	}
 
@@ -110,5 +110,5 @@ func serviceTwitterAccessTokenSave(args models.SaveTwitterAccessTokenParams) {
 		return
 	}
 	plogger.Info(row.UserEmail)
-	plogger.Info(row.Scope)
+	plogger.Info(row.TokenScope)
 }

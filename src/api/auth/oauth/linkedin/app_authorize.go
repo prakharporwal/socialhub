@@ -186,7 +186,7 @@ func GetAccessToken(ctx *gin.Context) {
 		OrganisationGroupID: "org_yogveda",
 		UserEmail:           jwtInfo.Username,
 		AccessToken:         tokenResp.AccessToken,
-		Scope:               tokenResp.Scope,
+		TokenScope:          tokenResp.Scope,
 		ExpiresAt:           time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Millisecond),
 	}
 
@@ -197,7 +197,7 @@ func GetAccessToken(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
-	plogger.Debug(row.UserEmail, " ", row.Scope)
+	plogger.Debug(row.UserEmail, " ", row.TokenScope)
 	ctx.Redirect(http.StatusTemporaryRedirect, "https://www.yogveda.live")
 	//ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
 }
