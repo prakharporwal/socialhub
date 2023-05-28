@@ -40,17 +40,20 @@ func OAuthCallbackController(ctx *gin.Context) {
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
-
 	if err != nil {
 		plogger.Info("error getting tweets from twitter ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
-	plogger.Debug(resp.StatusCode)
-	plogger.Debug(resp.Status)
-	plogger.Debug(resp.Header)
 
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		plogger.Info(" Getting Access Token API call failed! ")
+		plogger.Debug(resp.StatusCode)
+		plogger.Debug(resp.Status)
+		plogger.Debug(resp.Header)
+	}
 
 	var respBody struct {
 		AccessToken string `json:"token"`
