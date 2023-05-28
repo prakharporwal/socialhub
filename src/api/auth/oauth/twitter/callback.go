@@ -27,16 +27,17 @@ func OAuthCallbackController(ctx *gin.Context) {
 	// 2. store token in db
 
 	queryData := url.Values{}
-	queryData.Add("content-type", "application/x-www-form-urlencoded")
 	queryData.Add("code", twitterOAuthToken)
 	queryData.Add("grant_type", "authorization_code")
-	queryData.Add("client_id", "rG9n6402A3dbUJKzXTNX4oWHJ")
+	queryData.Add("client_id", "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ")
 	queryData.Add("redirect_uri", twitterOAuthCallback)
+	// todo: use a complex code_verifier
 	queryData.Add("code_verifier", "challenge")
 
 	reqUrl := twitterAccessTokenUrl + "?" + queryData.Encode()
 
 	req, err := http.NewRequest("POST", reqUrl, nil)
+	req.Header.Add("content-type", "application/x-www-form-urlencoded")
 
 	resp, err := http.DefaultClient.Do(req)
 
