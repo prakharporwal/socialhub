@@ -83,7 +83,9 @@ func SetCurrentOrganisationId(orgId string) {
 }
 
 func GetCurrentOrganisationId() string {
-	return currentOrganisationId
+	//return currentOrganisationId
+	// todo : implement this
+	return "org_yogveda"
 }
 
 func generateLoginSession(useremail string, useragent string, clientip string) *loginResponse {

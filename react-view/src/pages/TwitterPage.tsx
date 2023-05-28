@@ -5,9 +5,9 @@ import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 
 const TwitterPage: React.FunctionComponent<any> = (props) => {
-    const toast = useToast();
-    const auth = useAuth();
-    let [isConnecting, setIsConnecting] = useState(false);
+  const toast = useToast();
+  const auth = useAuth();
+  let [isConnecting, setIsConnecting] = useState(false);
 
   function handleConnectToTwitter(e: React.MouseEvent) {
     setIsConnecting(true);
@@ -30,21 +30,41 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
         //     title: "Could not connect twitter account"
         // })
 
-        window.location = data.redirect_url
+        window.location = data.redirect_url;
       })
       .catch((err) => {
-
-        console.log(err)
+        console.log(err);
         toast({
-            id: "post-submit-error",
-            status: "error",
-            title: "Could not connect to Twitter",
-            description: "",
-          });
+          id: "post-submit-error",
+          status: "error",
+          title: "Could not connect to Twitter",
+          description: "",
+        });
       })
       .finally(() => {
         setIsConnecting(false);
       });
+  }
+
+  function handleFetchTweets() {
+    fetch("https://api.yogveda.live/app/twitter/tweets/all", {
+      headers: {
+        "access-token": auth.accessToken || "",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("failed fetching tweets");
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
   }
 
   return (
@@ -58,9 +78,14 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           <FaPlug />
           Connect Twitter
         </Button>
+
+        <Button colorScheme={"twitter"} onClick={handleConnectToTwitter}>
+          <FaPlug />
+          Get Tweets Twitter
+        </Button>
       </Flex>
     </Box>
   );
 };
 
-export default withAuthenticationRequired(TwitterPage)
+export default withAuthenticationRequired(TwitterPage);

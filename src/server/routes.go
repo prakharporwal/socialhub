@@ -10,6 +10,7 @@ import (
 	"socialhub-server/api/auth/oauth/linkedin"
 	"socialhub-server/api/auth/oauth/twitter"
 	"socialhub-server/api/linkedin/linkedinpost"
+	"socialhub-server/api/twitterapi"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/server/middleware"
 )
@@ -90,6 +91,7 @@ func InitRouter() *gin.Engine {
 	protected.GET("/twitter/oauth2/access/initiate", twitter.TwitterOAuth2Initiate)
 	protected.GET("/twitter/oauth/access", twitter.RequestAccess)
 	public.GET("/twitter/oauth2/access/callback", twitter.OAuthCallbackController)
+	protected.GET("/twitter/tweets/all", twitterapi.FetchTweets)
 
 	protected.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
 	protected.POST("/linkedin/schedule/post", linkedinpost.SchedulePost)

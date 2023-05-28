@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"net/url"
 	"socialhub-server/api/auth"
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
@@ -11,7 +12,7 @@ import (
 	"time"
 )
 
-const twitterAccessTokenUrl = "https://api.twitter.com/oauth2/token"
+const twitterAccessTokenUrl = "https://api.twitter.com/2/oauth2/token"
 
 func OAuthCallbackController(ctx *gin.Context) {
 	twitterOAuthToken := ctx.Query("code")
@@ -23,7 +24,18 @@ func OAuthCallbackController(ctx *gin.Context) {
 	// 1. verify the state variable
 
 	// 2. store token in db
-	req, err := http.NewRequest("POST", twitterAccessTokenUrl, nil)
+
+	queryData := url.Values{}
+	queryData.Add("content-type", "application/x-www-form-urlencoded")
+	queryData.Add("code", twitterOAuthToken)
+	queryData.Add("grant_type", "authorization_code")
+	queryData.Add("client_id", "rG9n6402A3dbUJKzXTNX4oWHJ")
+	queryData.Add("redirect_uri", twitterOAuthCallback)
+	queryData.Add("code_verifier", "challenge")
+
+	reqUrl := twitterRequestTokenUrl + "?" + queryData.Encode()
+
+	req, err := http.NewRequest("POST", reqUrl, nil)
 
 	resp, err := http.DefaultClient.Do(req)
 	defer resp.Body.Close()
