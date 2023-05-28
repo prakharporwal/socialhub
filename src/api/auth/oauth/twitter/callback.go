@@ -1,6 +1,7 @@
 package twitter
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -67,6 +68,9 @@ func OAuthCallbackController(ctx *gin.Context) {
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
+	if err != nil {
+		plogger.Info("error decoding resp body ", err)
+	}
 
 	plogger.Debug(respBody)
 	plogger.Debug(respBody.Scope)
@@ -85,14 +89,26 @@ func OAuthCallbackController(ctx *gin.Context) {
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInSeconds * time.Second),
 	}
 
-	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
+	serviceTwitterAccessTokenSave(args)
+	//row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
+	//if err != nil {
+	//	plogger.Error("Error saving the token to database ", err)
+	//	ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+	//	return
+	//}
+	//plogger.Info(row.UserEmail)
+	//plogger.Info(row.Scope)
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
+}
+
+func serviceTwitterAccessTokenSave(args models.SaveTwitterAccessTokenParams) {
+	row, err := store.GetInstance().SaveTwitterAccessToken(context.Background(), args)
 	if err != nil {
 		plogger.Error("Error saving the token to database ", err)
-		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		//ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
 	plogger.Info(row.UserEmail)
 	plogger.Info(row.Scope)
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
 }

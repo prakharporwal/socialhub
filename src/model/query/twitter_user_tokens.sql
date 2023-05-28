@@ -3,14 +3,14 @@ INSERT INTO socialhub.twitter_account_access_tokens(
     organisation_group_id ,
     user_email            ,
     access_token          ,
-    scope                 ,
+    token_scope                 ,
     expires_at
 )
 VALUES ($1,$2,$3,$4,$5)
     ON CONFLICT (organisation_group_id,user_email)
 DO
 UPDATE SET access_token=($3)
-    RETURNING user_email, scope;
+    RETURNING user_email, token_scope;
 
 -- name: FindTwitterAccountAccessToken :one
 SELECT * FROM socialhub.twitter_account_access_tokens

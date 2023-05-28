@@ -36,7 +36,7 @@ type SocialhubLinkedinAccountAccessToken struct {
 	UserEmail           string    `json:"user_email"`
 	LinkedinUrn         string    `json:"linkedin_urn"`
 	AccessToken         string    `json:"access_token"`
-	Scope               string    `json:"scope"`
+	TokenScope          string    `json:"token_scope"`
 	ExpiresAt           time.Time `json:"expires_at"`
 	CreatedAt           time.Time `json:"created_at"`
 	UpdatedAt           time.Time `json:"updated_at"`
@@ -69,7 +69,7 @@ type SocialhubTwitterAccountAccessToken struct {
 	UserEmail           string    `json:"user_email"`
 	TwitterID           string    `json:"twitter_id"`
 	AccessToken         string    `json:"access_token"`
-	Scope               string    `json:"scope"`
+	TokenScope          string    `json:"token_scope"`
 	ExpiresAt           time.Time `json:"expires_at"`
 	CreatedAt           time.Time `json:"created_at"`
 	UpdatedAt           time.Time `json:"updated_at"`

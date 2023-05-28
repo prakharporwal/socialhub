@@ -11,7 +11,7 @@ import (
 )
 
 const findTwitterAccountAccessToken = `-- name: FindTwitterAccountAccessToken :one
-SELECT organisation_group_id, user_email, twitter_id, access_token, scope, expires_at, created_at, updated_at FROM socialhub.twitter_account_access_tokens
+SELECT organisation_group_id, user_email, twitter_id, access_token, token_scope, expires_at, created_at, updated_at FROM socialhub.twitter_account_access_tokens
 WHERE organisation_group_id=($1) and user_email=($2)
 `
 
@@ -28,7 +28,7 @@ func (q *Queries) FindTwitterAccountAccessToken(ctx context.Context, arg FindTwi
 		&i.UserEmail,
 		&i.TwitterID,
 		&i.AccessToken,
-		&i.Scope,
+		&i.TokenScope,
 		&i.ExpiresAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -41,27 +41,27 @@ INSERT INTO socialhub.twitter_account_access_tokens(
     organisation_group_id ,
     user_email            ,
     access_token          ,
-    scope                 ,
+    token_scope                 ,
     expires_at
 )
 VALUES ($1,$2,$3,$4,$5)
     ON CONFLICT (organisation_group_id,user_email)
 DO
 UPDATE SET access_token=($3)
-    RETURNING user_email, scope
+    RETURNING user_email, token_scope
 `
 
 type SaveTwitterAccessTokenParams struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	UserEmail           string    `json:"user_email"`
 	AccessToken         string    `json:"access_token"`
-	Scope               string    `json:"scope"`
+	TokenScope          string    `json:"token_scope"`
 	ExpiresAt           time.Time `json:"expires_at"`
 }
 
 type SaveTwitterAccessTokenRow struct {
-	UserEmail string `json:"user_email"`
-	Scope     string `json:"scope"`
+	UserEmail  string `json:"user_email"`
+	TokenScope string `json:"token_scope"`
 }
 
 func (q *Queries) SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAccessTokenParams) (SaveTwitterAccessTokenRow, error) {
@@ -69,10 +69,10 @@ func (q *Queries) SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAcc
 		arg.OrganisationGroupID,
 		arg.UserEmail,
 		arg.AccessToken,
-		arg.Scope,
+		arg.TokenScope,
 		arg.ExpiresAt,
 	)
 	var i SaveTwitterAccessTokenRow
-	err := row.Scan(&i.UserEmail, &i.Scope)
+	err := row.Scan(&i.UserEmail, &i.TokenScope)
 	return i, err
 }

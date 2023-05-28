@@ -28,7 +28,7 @@ func (q *Queries) FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLink
 }
 
 const findLinkedInAccountAccessToken = `-- name: FindLinkedInAccountAccessToken :one
-SELECT organisation_group_id, user_email, linkedin_urn, access_token, scope, expires_at, created_at, updated_at FROM socialhub.linkedin_account_access_tokens
+SELECT organisation_group_id, user_email, linkedin_urn, access_token, token_scope, expires_at, created_at, updated_at FROM socialhub.linkedin_account_access_tokens
 WHERE organisation_group_id=($1) and user_email=($2)
 `
 
@@ -45,7 +45,7 @@ func (q *Queries) FindLinkedInAccountAccessToken(ctx context.Context, arg FindLi
 		&i.UserEmail,
 		&i.LinkedinUrn,
 		&i.AccessToken,
-		&i.Scope,
+		&i.TokenScope,
 		&i.ExpiresAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -58,27 +58,27 @@ INSERT INTO socialhub.linkedin_account_access_tokens(
     organisation_group_id ,
     user_email            ,
     access_token          ,
-    scope                 ,
+    token_scope                 ,
     expires_at
 )
 VALUES ($1,$2,$3,$4,$5)
 ON CONFLICT (organisation_group_id,user_email)
 DO
 UPDATE SET access_token=($3)
-RETURNING user_email, scope
+RETURNING user_email, token_scope
 `
 
 type SaveLinkedinAccessTokenParams struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	UserEmail           string    `json:"user_email"`
 	AccessToken         string    `json:"access_token"`
-	Scope               string    `json:"scope"`
+	TokenScope          string    `json:"token_scope"`
 	ExpiresAt           time.Time `json:"expires_at"`
 }
 
 type SaveLinkedinAccessTokenRow struct {
-	UserEmail string `json:"user_email"`
-	Scope     string `json:"scope"`
+	UserEmail  string `json:"user_email"`
+	TokenScope string `json:"token_scope"`
 }
 
 func (q *Queries) SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error) {
@@ -86,11 +86,11 @@ func (q *Queries) SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinA
 		arg.OrganisationGroupID,
 		arg.UserEmail,
 		arg.AccessToken,
-		arg.Scope,
+		arg.TokenScope,
 		arg.ExpiresAt,
 	)
 	var i SaveLinkedinAccessTokenRow
-	err := row.Scan(&i.UserEmail, &i.Scope)
+	err := row.Scan(&i.UserEmail, &i.TokenScope)
 	return i, err
 }
 
@@ -98,7 +98,7 @@ const saveLinkedinURN = `-- name: SaveLinkedinURN :one
 UPDATE socialhub.linkedin_account_access_tokens
 SET linkedin_urn=($1)
 WHERE organisation_group_id=($2) and user_email=($3)
-RETURNING linkedin_urn, scope
+RETURNING linkedin_urn, token_scope
 `
 
 type SaveLinkedinURNParams struct {
@@ -109,12 +109,12 @@ type SaveLinkedinURNParams struct {
 
 type SaveLinkedinURNRow struct {
 	LinkedinUrn string `json:"linkedin_urn"`
-	Scope       string `json:"scope"`
+	TokenScope  string `json:"token_scope"`
 }
 
 func (q *Queries) SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error) {
 	row := q.db.QueryRowContext(ctx, saveLinkedinURN, arg.LinkedinUrn, arg.OrganisationGroupID, arg.UserEmail)
 	var i SaveLinkedinURNRow
-	err := row.Scan(&i.LinkedinUrn, &i.Scope)
+	err := row.Scan(&i.LinkedinUrn, &i.TokenScope)
 	return i, err
 }
