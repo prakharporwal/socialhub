@@ -63,6 +63,7 @@ export default function SignInForm() {
       .then((data) => {
         console.log(data.access_token);
         window.localStorage.setItem("authenticated", "true");
+        window.localStorage.setItem("current_username", data.username);
         document.cookie = "access_token=" + data.access_token;
         toast({
           // todo add the user name here

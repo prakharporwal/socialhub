@@ -89,7 +89,7 @@ func InitRouter() *gin.Engine {
 
 	//protected.GET("/twitter/oauth/access/initiate", twitter.AccessTokenAPI)
 	protected.GET("/twitter/oauth2/access/initiate", twitter.TwitterOAuth2Initiate)
-	protected.GET("/twitter/oauth/access", twitter.RequestAccess)
+	//protected.GET("/twitter/oauth/access", twitter.RequestAccess)
 	public.GET("/twitter/oauth2/access/callback", twitter.OAuthCallbackController)
 	protected.GET("/twitter/tweets/all", twitterapi.FetchTweets)
 

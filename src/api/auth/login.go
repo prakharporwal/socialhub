@@ -21,6 +21,7 @@ type loginRequest struct {
 }
 
 type loginResponse struct {
+	Username     string    `json:"username"`
 	AccessToken  string    `json:"access_token"` // userId can be username or userEmail
 	RefreshToken string    `json:"refresh_token"`
 	ExpiresAt    time.Time `json:"expires_at"`
@@ -58,6 +59,8 @@ func Login(ctx *gin.Context) {
 
 	// respond with a paseto / jwt for further login
 	response := generateLoginSession(user.UserEmail, ctx.Request.UserAgent(), ctx.ClientIP())
+
+	response.Username = user.Username
 
 	plogger.Debug(request.UserId, " is logged in successfully!")
 

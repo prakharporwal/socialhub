@@ -8,6 +8,7 @@ import (
 	"socialhub-server/api/auth"
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
+	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"time"
 )
@@ -33,15 +34,25 @@ func OAuthCallbackController(ctx *gin.Context) {
 	queryData.Add("redirect_uri", twitterOAuthCallback)
 	queryData.Add("code_verifier", "challenge")
 
-	reqUrl := twitterRequestTokenUrl + "?" + queryData.Encode()
+	reqUrl := twitterAccessTokenUrl + "?" + queryData.Encode()
 
 	req, err := http.NewRequest("POST", reqUrl, nil)
 
 	resp, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		plogger.Info("error getting tweets from twitter ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
+	plogger.Debug(resp.StatusCode)
+	plogger.Debug(resp.Status)
+	plogger.Debug(resp.Header)
+
 	defer resp.Body.Close()
 
 	var respBody struct {
-		AccessToken string `json:"access_token"`
+		AccessToken string `json:"token"`
 		Scope       string `json:"scope"`
 	}
 
