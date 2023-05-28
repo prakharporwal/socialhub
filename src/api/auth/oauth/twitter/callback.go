@@ -1,7 +1,6 @@
 package twitter
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -72,8 +71,11 @@ func OAuthCallbackController(ctx *gin.Context) {
 		plogger.Info("error decoding resp body ", err)
 	}
 
+	byteArr, _ := json.Marshal(respBody)
+
 	plogger.Debug(respBody)
-	plogger.Debug(respBody.Scope)
+	plogger.Debug("stringified :", string(byteArr))
+	plogger.Debug("scope from body :", respBody.Scope)
 
 	if err != nil {
 		plogger.Error("Failed JSON decoding of response")
@@ -89,28 +91,16 @@ func OAuthCallbackController(ctx *gin.Context) {
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInSeconds * time.Second),
 	}
 
-	serviceTwitterAccessTokenSave(args)
-	//row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
-	//if err != nil {
-	//	plogger.Error("Error saving the token to database ", err)
-	//	ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
-	//	return
-	//}
-	//plogger.Info(row.UserEmail)
-	//plogger.Info(row.Scope)
+	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
+	if err != nil {
+		plogger.Error("Error saving the token to database ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
+	plogger.Info(row.UserEmail)
+	plogger.Info("scope from db response", row.TokenScope)
 
 	ctx.Redirect(http.StatusFound, "https://www.yogveda.live/")
 
 	//ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
-}
-
-func serviceTwitterAccessTokenSave(args models.SaveTwitterAccessTokenParams) {
-	row, err := store.GetInstance().SaveTwitterAccessToken(context.Background(), args)
-	if err != nil {
-		plogger.Error("Error saving the token to database ", err)
-		//ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
-		return
-	}
-	plogger.Info(row.UserEmail)
-	plogger.Info(row.TokenScope)
 }
