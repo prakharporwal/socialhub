@@ -99,7 +99,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 		return
 	}
 	plogger.Info(row.UserEmail)
-	plogger.Info("scope from db response", row.TokenScope)
+	plogger.Info("scope from db response ", row.TokenScope)
 
 	ctx.Redirect(http.StatusFound, "https://www.yogveda.live/")
 
