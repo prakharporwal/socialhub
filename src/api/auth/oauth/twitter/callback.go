@@ -18,6 +18,8 @@ const twitterAccessTokenUrl = "https://api.twitter.com/2/oauth2/token"
 func OAuthCallbackController(ctx *gin.Context) {
 	twitterOAuthToken := ctx.Query("code")
 	oauthVerifier := ctx.Query("state")
+	clientId := "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
+	clientSecret := "2Qf7eGgae5W0J95J6eVoAm2lOfM58pXh1-Kzqy5yESc_f83dGO"
 
 	plogger.Debug(twitterOAuthToken)
 	plogger.Debug(oauthVerifier)
@@ -29,7 +31,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 	queryData := url.Values{}
 	queryData.Add("code", twitterOAuthToken)
 	queryData.Add("grant_type", "authorization_code")
-	queryData.Add("client_id", "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ")
+	queryData.Add("client_id", clientId)
 	queryData.Add("redirect_uri", twitterOAuthCallback)
 	// todo: use a complex code_verifier
 	queryData.Add("code_verifier", "challenge")
@@ -38,6 +40,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 
 	req, err := http.NewRequest("POST", reqUrl, nil)
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
+	req.SetBasicAuth(clientId, clientSecret)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -48,8 +51,13 @@ func OAuthCallbackController(ctx *gin.Context) {
 
 	defer resp.Body.Close()
 
+	plogger.Info(" Getting Access Token API call failed! ")
+	plogger.Debug(resp.StatusCode)
+	plogger.Debug(resp.Status)
+	plogger.Debug(resp.Header)
+
 	if resp.StatusCode != http.StatusOK {
-		plogger.Info(" Getting Access Token API call failed! ")
+		plogger.Error(" Getting Access Token API call failed ! ")
 		plogger.Debug(resp.StatusCode)
 		plogger.Debug(resp.Status)
 		plogger.Debug(resp.Header)
@@ -66,6 +74,8 @@ func OAuthCallbackController(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting the oauth token!"})
 		return
 	}
+
+	plogger.Debug(respBody)
 
 	args := models.SaveTwitterAccessTokenParams{
 		AccessToken:         respBody.AccessToken,
