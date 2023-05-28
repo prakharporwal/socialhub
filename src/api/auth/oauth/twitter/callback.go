@@ -49,8 +49,6 @@ func OAuthCallbackController(ctx *gin.Context) {
 
 	defer resp.Body.Close()
 
-	plogger.Info(" Getting Access Token API call failed! ")
-
 	if resp.StatusCode != http.StatusOK {
 		plogger.Error(" Getting Access Token API call failed ! ")
 		plogger.Debug(resp.StatusCode)
@@ -59,11 +57,11 @@ func OAuthCallbackController(ctx *gin.Context) {
 	}
 
 	var respBody struct {
-		AccessToken      string        `json:"access_token"`
-		RefreshToken     string        `json:"refresh_token"`
-		Scope            string        `json:"scope"`
-		TokenType        string        `json:"token_type"`
-		ExpiresInSeconds time.Duration `json:"expires_in"`
+		AccessToken           string        `json:"access_token"`
+		RefreshToken          string        `json:"refresh_token"`
+		Scope                 string        `json:"scope"`
+		TokenType             string        `json:"token_type"`
+		ExpiresInMicroseconds time.Duration `json:"expires_in"`
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
@@ -74,6 +72,9 @@ func OAuthCallbackController(ctx *gin.Context) {
 	byteArr, _ := json.Marshal(respBody)
 
 	plogger.Debug(respBody)
+	plogger.Debug("token type: ", respBody.TokenType)
+	plogger.Debug("refresh token: ", respBody.RefreshToken)
+	plogger.Debug("Expires in: ", respBody.ExpiresInMicroseconds)
 	plogger.Debug("stringified :", string(byteArr))
 	plogger.Debug("scope from body :", respBody.Scope)
 
@@ -88,7 +89,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 		UserEmail:           auth.GetCurrentUser(),
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		TokenScope:          respBody.Scope,
-		ExpiresAt:           time.Now().Add(respBody.ExpiresInSeconds * time.Second),
+		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}
 
 	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
