@@ -6,14 +6,14 @@ package twitter
 // {gets redirected}
 //
 
-const twitterRequestTokenUrl = "https://api.twitter.com/oauth/request_token"
-const twitterAuthorizationUrl = "https://api.twitter.com/oauth/authorize"
-
-type responseBody struct {
-	OAuthToken             string `json:"oauth_token"`
-	OAuthTokenSecret       string `json:"oauth_token_secret"`
-	OAuthCallbackConfirmed bool   `json:"oauth_callback_confirmed"`
-}
+//const twitterRequestTokenUrl = "https://api.twitter.com/oauth/request_token"
+//const twitterAuthorizationUrl = "https://api.twitter.com/oauth/authorize"
+//
+//type responseBody struct {
+//	OAuthToken             string `json:"oauth_token"`
+//	OAuthTokenSecret       string `json:"oauth_token_secret"`
+//	OAuthCallbackConfirmed bool   `json:"oauth_callback_confirmed"`
+//}
 
 //
 //func RequestAccess(ctx *gin.Context) {

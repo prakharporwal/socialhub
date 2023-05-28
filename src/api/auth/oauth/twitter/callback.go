@@ -69,15 +69,6 @@ func OAuthCallbackController(ctx *gin.Context) {
 		plogger.Info("error decoding resp body ", err)
 	}
 
-	byteArr, _ := json.Marshal(respBody)
-
-	plogger.Debug(respBody)
-	plogger.Debug("token type: ", respBody.TokenType)
-	plogger.Debug("refresh token: ", respBody.RefreshToken)
-	plogger.Debug("Expires in: ", respBody.ExpiresInMicroseconds)
-	plogger.Debug("stringified :", string(byteArr))
-	plogger.Debug("scope from body :", respBody.Scope)
-
 	if err != nil {
 		plogger.Error("Failed JSON decoding of response")
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting the oauth token!"})
@@ -102,6 +93,4 @@ func OAuthCallbackController(ctx *gin.Context) {
 	plogger.Info("scope from db response ", row.TokenScope)
 
 	ctx.Redirect(http.StatusFound, "https://www.yogveda.live/")
-
-	//ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
 }

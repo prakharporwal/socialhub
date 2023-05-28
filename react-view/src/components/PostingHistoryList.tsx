@@ -143,9 +143,10 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
       <Box w="100%" p={4} color="white" as={"div"}>
         <Heading color={"black"}>Your Posts</Heading>
         <List>
-          {posts.map((item, idx) => {
-            return <PostHistory key={item.scheduled_post_id} post={item} />;
-          })}
+          {posts &&
+            posts.map((item, idx) => {
+              return <PostHistory key={item.scheduled_post_id} post={item} />;
+            })}
         </List>
       </Box>
     </Box>

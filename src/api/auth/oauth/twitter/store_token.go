@@ -5,27 +5,27 @@ import (
 	"net/http"
 	"net/url"
 	"socialhub-server/env"
-	"socialhub-server/pkg/utils/stringutils"
+	"socialhub-server/pkg/utils"
 )
 
 const twitterOAuth2Url = "https://twitter.com/i/oauth2/authorize"
 
-func TwitterOAuth2Initiate(ctx *gin.Context) {
+func OAuth2Initiate(ctx *gin.Context) {
 	responseType := "code"
 	clientId := "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
 
-	state := stringutils.GenerateRandomString(30)
+	state := utils.GenerateRandomString(30)
 	// todo: to be generate in a safer way code challenge
 	codeChallenge := "challenge"
 	codeChallengeMethod := "plain"
 
-	scope := "tweet.read users.read offline.access"
+	requestedScope := "tweet.read tweet.write users.read offline.access"
 	dataParams := url.Values{}
 
 	dataParams.Add("response_type", responseType)
 	dataParams.Add("client_id", clientId)
 	dataParams.Add("redirect_uri", env.TwitterOAuthCallback)
-	dataParams.Add("scope", scope)
+	dataParams.Add("scope", requestedScope)
 	dataParams.Add("state", state)
 	dataParams.Add("code_challenge", codeChallenge)
 	dataParams.Add("code_challenge_method", codeChallengeMethod)

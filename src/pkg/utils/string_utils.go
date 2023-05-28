@@ -1,6 +1,7 @@
-package stringutils
+package utils
 
 import (
+	"encoding/json"
 	"math/rand"
 	"socialhub-server/pkg/plogger"
 )
@@ -13,4 +14,9 @@ func GenerateRandomString(size int) string {
 	}
 	plogger.Info(string(b))
 	return string(b)
+}
+
+func Stringify(v any) string {
+	byteArr, _ := json.Marshal(v)
+	return string(byteArr)
 }
