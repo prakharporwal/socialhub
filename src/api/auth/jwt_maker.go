@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"socialhub-server/pkg/env"
 	"time"
 )
 
@@ -19,10 +20,10 @@ type JWTMaker struct {
 const minSecretKeySize = 32
 
 func NewJWTMaker() (TokenMaker, error) {
-	if len(symmetricKey) < minSecretKeySize {
+	if len(env.SymmetricKey) < minSecretKeySize {
 		return nil, fmt.Errorf("invalid key size: must be at least %d characters", minSecretKeySize)
 	}
-	return &JWTMaker{symmetricKey}, nil
+	return &JWTMaker{env.SymmetricKey}, nil
 }
 
 func (jwtMaker *JWTMaker) CreateToken(username string, duration time.Duration) (string, error) {

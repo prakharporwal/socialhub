@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import {
   Flex,
   Box,
@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import "./signin.css";
+import CONSTANTS from "../CONSTANTS";
 
 export default function SignUpForm() {
   const [username, setUsername] = useState<string>("");
@@ -30,8 +31,8 @@ export default function SignUpForm() {
 
   const navigate = useNavigate();
 
-  function submitSignUpForm() {
-    console.log();
+  function submitSignUpForm(e: FormEvent<HTMLFormElement>) {
+    console.log(e.preventDefault());
     setIsRegistering(true);
 
     if (
@@ -57,12 +58,12 @@ export default function SignUpForm() {
     }
 
     console.log(email, password, organisationId, username);
-    fetch("https://api.yogveda.live/v1/signup", {
+    fetch(CONSTANTS.api_server_url + "/v1/signup", {
       method: "POST",
       body: JSON.stringify({
         organisation_id: organisationId,
         username: username,
-        user_id: email,
+        email: email,
         password: password,
       }),
     })
@@ -75,6 +76,8 @@ export default function SignUpForm() {
       .then((data) => {
         console.log(data.access_token);
         window.localStorage.setItem("access_token", data.access_token);
+        window.localStorage.setItem("current_username", data.username);
+        window.localStorage.setItem("current_user_email", data.user_email);
         window.localStorage.setItem("authenticated", "true");
         document.cookie = "access_token=" + data.access_token;
 
@@ -103,6 +106,8 @@ export default function SignUpForm() {
       .finally(() => {
         setIsRegistering(false);
       });
+
+    console.log(e.preventDefault());
   }
 
   function validateEmail(email: any) {
@@ -181,7 +186,7 @@ export default function SignUpForm() {
                 </FormControl>
               </Stack>
               <Button
-              marginTop={"4"}
+                marginTop={"4"}
                 bg={"blue.400"}
                 color={"white"}
                 _hover={{

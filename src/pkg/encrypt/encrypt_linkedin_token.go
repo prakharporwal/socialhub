@@ -4,16 +4,14 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/plogger"
 )
-
-// TODO : store securly somewhere else in ENV
-const KEY = "lmov567IN6&hj87Hko^$*IUNu3kwp+85"
 
 var bytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
 
 func EncryptToken(token string) string {
-	key := []byte(KEY)
+	key := []byte(env.AESEncryptionKey)
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		plogger.Error("err :", err)
@@ -44,7 +42,7 @@ func Decode(b string) string {
 }
 
 func DecryptToken(payload string) string {
-	key := []byte(KEY)
+	key := []byte(env.AESEncryptionKey)
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		plogger.Error("err :", err)

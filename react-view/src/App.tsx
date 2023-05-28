@@ -10,11 +10,10 @@ import SignUpForm from "./components/SignUpForm";
 import TwitterPage from "./pages/TwitterPage";
 
 export const App = () => {
-
   return (
     <>
       <Routes>
-      <Route path='*' element={<NotFoundPage />} />
+        <Route path="*" element={<NotFoundPage />} />
         <Route path="/" element={<MarketingPage />}></Route>
         <Route path="/twitter" element={<TwitterPage />}></Route>
         <Route path="/post/new" element={<LinkedPostForm />}></Route>

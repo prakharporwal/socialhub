@@ -3,7 +3,7 @@ import { getCookie } from "../utils/cookieUtils";
 
 export function useAuth() {
   // const [auth, setAuth] = useState<boolean>(window.localStorage.getItem('authenticated') === 'true');
-  const tokenFromStorage = useMemo(()=>getCookie("access_token"),[]);
+  const tokenFromStorage = useMemo(() => getCookie("access_token"), []);
   const [auth, _] = useState<boolean>(
     tokenFromStorage != null && tokenFromStorage !== ""
   );

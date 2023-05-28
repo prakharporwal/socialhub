@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const SessionTokenAgeInMinutes = 1200 //ten hours
+const SessionTokenAgeInMinutes = 1200 //twenty hours
 
 func CreateSession(email string, userAgent string, clientIP string) (*models.Session, error) {
 	tokenMaker, err := NewPasetoMaker()

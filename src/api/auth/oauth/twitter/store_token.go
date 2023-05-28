@@ -4,10 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
+	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/utils/stringutils"
 )
-
-const twitterOAuthCallback = "https://api.yogveda.live/twitter/oauth2/access/callback"
 
 const twitterOAuth2Url = "https://twitter.com/i/oauth2/authorize"
 
@@ -25,7 +24,7 @@ func TwitterOAuth2Initiate(ctx *gin.Context) {
 
 	dataParams.Add("response_type", responseType)
 	dataParams.Add("client_id", clientId)
-	dataParams.Add("redirect_uri", twitterOAuthCallback)
+	dataParams.Add("redirect_uri", env.TwitterOAuthCallback)
 	dataParams.Add("scope", scope)
 	dataParams.Add("state", state)
 	dataParams.Add("code_challenge", codeChallenge)

@@ -9,34 +9,32 @@ import (
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
+	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/plogger"
 	"time"
 )
 
-const twitterAccessTokenUrl = "https://api.twitter.com/2/oauth2/token"
-
 func OAuthCallbackController(ctx *gin.Context) {
 	twitterOAuthToken := ctx.Query("code")
 	oauthVerifier := ctx.Query("state")
-	clientId := "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
-	clientSecret := "2Qf7eGgae5W0J95J6eVoAm2lOfM58pXh1-Kzqy5yESc_f83dGO"
+	clientId := env.TwitterAppClientId
+	clientSecret := env.TwitterAppClientSecret
 
 	plogger.Debug(twitterOAuthToken)
 	plogger.Debug(oauthVerifier)
 
 	// 1. verify the state variable
-
 	// 2. store token in db
 
 	queryData := url.Values{}
 	queryData.Add("code", twitterOAuthToken)
 	queryData.Add("grant_type", "authorization_code")
 	queryData.Add("client_id", clientId)
-	queryData.Add("redirect_uri", twitterOAuthCallback)
+	queryData.Add("redirect_uri", env.TwitterOAuthCallback)
 	// todo: use a complex code_verifier
 	queryData.Add("code_verifier", "challenge")
 
-	reqUrl := twitterAccessTokenUrl + "?" + queryData.Encode()
+	reqUrl := env.TwitterAccessTokenUrl + "?" + queryData.Encode()
 
 	req, err := http.NewRequest("POST", reqUrl, nil)
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
@@ -63,10 +61,11 @@ func OAuthCallbackController(ctx *gin.Context) {
 		plogger.Debug(resp.Header)
 	}
 
-	var respBody struct {
-		AccessToken string `json:"token"`
-		Scope       string `json:"scope"`
-	}
+	var respBody interface{}
+	//struct {
+	//	AccessToken string `json:"token"`
+	//	Scope       string `json:"scope"`
+	//}
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 	if err != nil {
@@ -77,16 +76,25 @@ func OAuthCallbackController(ctx *gin.Context) {
 
 	plogger.Debug(respBody)
 
+	mapOfBody := respBody.(map[string]interface{})
+	plogger.Debug(mapOfBody)
+	plogger.Debug(mapOfBody["token"])
+	plogger.Debug(mapOfBody["scope"])
+
 	args := models.SaveTwitterAccessTokenParams{
-		AccessToken:         respBody.AccessToken,
+		AccessToken:         "access-token",
 		UserEmail:           auth.GetCurrentUser(),
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		Scope:               respBody.Scope,
+		Scope:               "scope",
 		ExpiresAt:           time.Now().Add(100 * time.Hour),
 	}
 
 	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
-
+	if err != nil {
+		plogger.Error("Error saving the token to database ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
 	plogger.Info(row.UserEmail)
 	plogger.Info(row.Scope)
 

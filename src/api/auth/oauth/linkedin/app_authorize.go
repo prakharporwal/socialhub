@@ -9,14 +9,13 @@ import (
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
+	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/plogger"
 	"time"
 )
 
 const MESSAGE = "message"
 const CODE = "code"
-
-const LINKEDIN_GET_AUTHORISATION_CODE_URL = "https://www.linkedin.com/oauth/v2/authorization"
 
 // fixme: use in env secret
 const clientId = "77270lc9p0hmuz"
@@ -59,7 +58,7 @@ func FetchAuthCode(ctx *gin.Context) {
 	getDataParams.Set("state", oauthJwtToken)
 	getDataParams.Set("scope", scope)
 
-	url := LINKEDIN_GET_AUTHORISATION_CODE_URL + "?" + getDataParams.Encode()
+	url := env.LINKEDIN_GET_AUTHORISATION_CODE_URL + "?" + getDataParams.Encode()
 
 	//resp, err := http.Get(url)
 	//if err != nil {

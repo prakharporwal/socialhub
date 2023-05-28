@@ -6,13 +6,9 @@ import (
 	"fmt"
 	"log"
 	models "socialhub-server/model/sqlc"
+	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/plogger"
 	"sync"
-)
-
-const (
-	dbSource = "postgres://admin:I89Yn4ebUIrxDvtUba@localhost:5432/postgres?sslmode=disable"
-	dbDriver = "postgres"
 )
 
 type Store interface {
@@ -37,7 +33,7 @@ func GetInstance() *SQLStore {
 		defer lock.Unlock()
 		if sqlInstance == nil {
 			plogger.Info("Creating single instance now.")
-			conn, err := sql.Open(dbDriver, dbSource)
+			conn, err := sql.Open(env.DBDriver, env.DBSource)
 			if err != nil {
 				plogger.Error("connect to db failed !", err)
 				panic(err)

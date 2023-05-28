@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"github.com/aead/chacha20poly1305"
 	"github.com/o1egl/paseto/v2"
+	"socialhub-server/pkg/env"
 	"time"
 )
-
-const symmetricKey = "TjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8"
 
 type PasetoMaker struct {
 	paseto       *paseto.V2
@@ -15,12 +14,12 @@ type PasetoMaker struct {
 }
 
 func NewPasetoMaker() (TokenMaker, error) {
-	if len(symmetricKey) != chacha20poly1305.KeySize {
+	if len(env.SymmetricKey) != chacha20poly1305.KeySize {
 		return nil, fmt.Errorf("invalid key size must be exactly %d", chacha20poly1305.KeySize)
 	}
 	return &PasetoMaker{
 		paseto:       paseto.NewV2(),
-		symmetricKey: []byte(symmetricKey),
+		symmetricKey: []byte(env.SymmetricKey),
 	}, nil
 }
 

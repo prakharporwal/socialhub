@@ -45,18 +45,16 @@ const Feature = ({ text, icon, iconBg }: FeatureProps) => {
 };
 
 const MarketingPage: React.FunctionComponent<any> = (props) => {
-
   let moreInfoRef = useRef<HTMLDivElement>(null);
   let navigate = useNavigate();
   let auth = useAuth();
 
-  useEffect(()=>{
-    if(auth.isAuthenticated)
-      navigate("/posts");
-  },[])
+  useEffect(() => {
+    if (auth.isAuthenticated) navigate("/posts");
+  }, []);
 
   return (
-    <Box overflowY='auto'>
+    <Box overflowY="auto">
       <Container maxW={"5xl"} h="100vh">
         <Stack
           as={Box}
@@ -92,30 +90,39 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
               rounded={"full"}
               px={6}
               _hover={{
-                bg: "green.500"
+                bg: "green.500",
               }}
-              onClick={()=>{navigate("/signup")}}
+              onClick={() => {
+                navigate("/signup");
+              }}
             >
               Get Started
             </Button>
             <Button
               colorScheme={"green"}
-              variant={'outline'}
+              variant={"outline"}
               rounded={"full"}
               px={6}
               _hover={{
                 bg: "green.500",
-                color: "white"
+                color: "white",
               }}
-              onClick={()=>{navigate("/signin")}}
+              onClick={() => {
+                navigate("/signin");
+              }}
             >
               Sign In
             </Button>
-            <Button variant={"link"} colorScheme={"blue"} size={"sm"} onClick={()=>{
-               if (moreInfoRef.current) {
-                moreInfoRef.current.scrollIntoView({ behavior: "smooth" });
-              }
-            }}>
+            <Button
+              variant={"link"}
+              colorScheme={"blue"}
+              size={"sm"}
+              onClick={() => {
+                if (moreInfoRef.current) {
+                  moreInfoRef.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
               Learn more
             </Button>
           </Stack>

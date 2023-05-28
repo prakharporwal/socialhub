@@ -26,6 +26,7 @@ import { SiLinkedin } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
+import CONSTANTS from "../CONSTANTS";
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
@@ -64,7 +65,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     }
 
     // debugger;
-    // await fetch("https://api.yogveda.live/app/linkedin/post", {
+    // await fetch(CONSTANTS.api_server_url+"/app/linkedin/post", {
     //   headers: {
     //     "access-token": window.localStorage.getItem("access_token") || "",
     //   },
@@ -93,7 +94,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     //   .catch()
     //   .finally();
 
-    await fetch("https://api.yogveda.live/app/linkedin/post", {
+    await fetch(CONSTANTS.api_server_url + "/app/linkedin/post", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -151,11 +152,10 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     return;
   };
 
-
   function handleSubmitSchedulePost() {
     setIsSubmittingScheduled(true);
 
-    fetch("https://api.yogveda.live" + "/app/linkedin/schedule/post", {
+    fetch(CONSTANTS.api_server_url + "/app/linkedin/schedule/post", {
       method: "POST",
       headers: {
         "access-token": auth.accessToken || "",
@@ -189,8 +189,13 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
 
   return (
     <>
-      <Flex minH={"80vh"} align={"center"} justify={"center"} direction={"column"}>
-        <ConnectLinkedinAccountButton/>
+      <Flex
+        minH={"80vh"}
+        align={"center"}
+        justify={"center"}
+        direction={"column"}
+      >
+        <ConnectLinkedinAccountButton />
         <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Box
             borderWidth="2px"

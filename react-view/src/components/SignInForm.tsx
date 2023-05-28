@@ -14,10 +14,11 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import {Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./signin.css";
+import CONSTANTS from "../CONSTANTS";
 
 export default function SignInForm() {
   const [email, setEmail] = useState<string>("");
@@ -50,7 +51,7 @@ export default function SignInForm() {
     }
 
     console.log(email, password, rememberMe);
-    fetch("https://api.yogveda.live/v1/login", {
+    fetch(CONSTANTS.api_server_url + "/v1/login", {
       method: "POST",
       body: JSON.stringify({ user_id: email, password }),
     })
@@ -152,7 +153,13 @@ export default function SignInForm() {
                     >
                       Remember me
                     </Checkbox>
-                    <Link as={RouterLink} to="/forgot-password" color={"blue.400"}>Forgot password?</Link>
+                    <Link
+                      as={RouterLink}
+                      to="/forgot-password"
+                      color={"blue.400"}
+                    >
+                      Forgot password?
+                    </Link>
                   </Stack>
                   <Button
                     bg={"blue.400"}

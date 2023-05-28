@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaPlug } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
+import CONSTANTS from "../CONSTANTS";
 
 const TwitterPage: React.FunctionComponent<any> = (props) => {
   const toast = useToast();
@@ -12,7 +13,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   function handleConnectToTwitter(e: React.MouseEvent) {
     setIsConnecting(true);
 
-    fetch("https://api.yogveda.live/app/twitter/oauth2/access/initiate", {
+    fetch(CONSTANTS.api_server_url + "/app/twitter/oauth2/access/initiate", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -47,7 +48,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   }
 
   function handleFetchTweets() {
-    fetch("https://api.yogveda.live/app/twitter/tweets/all", {
+    fetch(CONSTANTS.api_server_url + "/app/twitter/tweets/all", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -69,7 +70,13 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
 
   return (
     <Box h="80vh">
-      <Flex align="center" justify={"center"} h="100%">
+      <Flex
+        direction={"column"}
+        align="center"
+        justify={"center"}
+        h="100%"
+        gap={"8"}
+      >
         <Button
           isLoading={isConnecting}
           colorScheme={"twitter"}

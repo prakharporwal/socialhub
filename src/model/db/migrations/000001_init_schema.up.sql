@@ -147,7 +147,6 @@ CREATE TRIGGER set_timestamp
     EXECUTE PROCEDURE trigger_set_timestamp();
 
 
-
 CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
 (
     organisation_group_id varchar     NOT NULL,
