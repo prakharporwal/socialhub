@@ -99,7 +99,9 @@ func OAuthCallbackController(ctx *gin.Context) {
 	//plogger.Info(row.UserEmail)
 	//plogger.Info(row.Scope)
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
+	ctx.Redirect(http.StatusFound, "https://www.yogveda.live/")
+
+	//ctx.JSON(http.StatusOK, gin.H{"message": "success", "token": twitterOAuthToken})
 }
 
 func serviceTwitterAccessTokenSave(args models.SaveTwitterAccessTokenParams) {
