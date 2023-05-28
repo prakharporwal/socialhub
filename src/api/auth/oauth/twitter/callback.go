@@ -61,11 +61,13 @@ func OAuthCallbackController(ctx *gin.Context) {
 		plogger.Debug(resp.Header)
 	}
 
-	var respBody interface{}
-	//struct {
-	//	AccessToken string `json:"token"`
-	//	Scope       string `json:"scope"`
-	//}
+	var respBody struct {
+		AccessToken      string        `json:"access_token"`
+		RefreshToken     string        `json:"refresh_token"`
+		Scope            string        `json:"scope"`
+		TokenType        string        `json:"token_type"`
+		ExpiresInSeconds time.Duration `json:"expires_in"`
+	}
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 	if err != nil {
@@ -74,19 +76,12 @@ func OAuthCallbackController(ctx *gin.Context) {
 		return
 	}
 
-	plogger.Debug(respBody)
-
-	mapOfBody := respBody.(map[string]interface{})
-	plogger.Debug(mapOfBody)
-	plogger.Debug(mapOfBody["token"])
-	plogger.Debug(mapOfBody["scope"])
-
 	args := models.SaveTwitterAccessTokenParams{
-		AccessToken:         "access-token",
+		AccessToken:         respBody.AccessToken,
 		UserEmail:           auth.GetCurrentUser(),
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		Scope:               "scope",
-		ExpiresAt:           time.Now().Add(100 * time.Hour),
+		Scope:               respBody.Scope,
+		ExpiresAt:           time.Now().Add(respBody.ExpiresInSeconds * time.Second),
 	}
 
 	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)

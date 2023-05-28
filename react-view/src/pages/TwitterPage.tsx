@@ -86,7 +86,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           Connect Twitter
         </Button>
 
-        <Button colorScheme={"twitter"} onClick={handleConnectToTwitter}>
+        <Button colorScheme={"twitter"} onClick={handleFetchTweets}>
           <FaPlug />
           Get Tweets Twitter
         </Button>
