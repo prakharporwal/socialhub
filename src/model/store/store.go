@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"socialhub-server/env"
 	models "socialhub-server/model/sqlc"
-	"socialhub-server/pkg/env"
 	"socialhub-server/pkg/plogger"
 	"sync"
 )

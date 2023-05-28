@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"socialhub-server/pkg/env"
+	"socialhub-server/env"
 	"time"
 )
 

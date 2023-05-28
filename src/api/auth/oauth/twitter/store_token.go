@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
-	"socialhub-server/pkg/env"
+	"socialhub-server/env"
 	"socialhub-server/pkg/utils/stringutils"
 )
 

@@ -4,7 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
-	"socialhub-server/pkg/env"
+	"socialhub-server/env"
 	"socialhub-server/pkg/plogger"
 )
 
