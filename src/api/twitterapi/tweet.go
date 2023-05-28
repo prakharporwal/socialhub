@@ -7,6 +7,7 @@ import (
 	"socialhub-server/api/auth"
 	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
+	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 )
 
@@ -20,15 +21,25 @@ func FetchTweets(ctx *gin.Context) {
 	}
 
 	row, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	if err != nil {
+		plogger.Error("Error getting bearer token from db! ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
 
 	req, err := http.NewRequest("GET", twitterFetchTweetsUrl, nil)
 	if err != nil {
-
+		plogger.Error("Error creating request to fetch tweets from twitter! ", err)
 	}
 
 	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
 
 	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		plogger.Error(err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
 
 	defer resp.Body.Close()
 

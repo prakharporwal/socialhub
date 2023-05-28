@@ -50,8 +50,6 @@ func OAuthCallbackController(ctx *gin.Context) {
 	defer resp.Body.Close()
 
 	plogger.Info(" Getting Access Token API call failed! ")
-	plogger.Debug(resp.StatusCode)
-	plogger.Debug(resp.Status)
 	plogger.Debug(resp.Header)
 
 	if resp.StatusCode != http.StatusOK {
@@ -70,6 +68,9 @@ func OAuthCallbackController(ctx *gin.Context) {
 	}
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
+
+	plogger.Debug(respBody)
+
 	if err != nil {
 		plogger.Error("Failed JSON decoding of response")
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting the oauth token!"})
