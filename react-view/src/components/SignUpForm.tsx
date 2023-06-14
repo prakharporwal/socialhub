@@ -1,11 +1,10 @@
-import React, { FormEvent } from "react";
+import { FormEvent } from "react";
 import {
   Flex,
   Box,
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
   Link,
   Button,

@@ -21,7 +21,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "develop": "webpack-dev-server --mode development",
+    "develop": "webpack-dev-server --mode development --hot",
     "build": "react-scripts build",
     "copy": "rm -rf ../view/* && cp -r build/ ../view",
     "start": "react-scripts start",

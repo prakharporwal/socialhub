@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	db "socialhub-server/model/sqlc"
-	models "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
@@ -15,14 +14,14 @@ import (
 
 const SessionTokenAgeInMinutes = 1200 //twenty hours
 
-func CreateSession(email string, userAgent string, clientIP string) (*models.Session, error) {
+func CreateSession(email string, currentOrgId string, userAgent string, clientIP string) (*db.Session, error) {
 	tokenMaker, err := NewPasetoMaker()
 	if err != nil {
 		plogger.Error("Paseto Maker Failed ! ", err)
 		return nil, errors.New("paseto Maker Failed ")
 	}
 
-	token, err := tokenMaker.CreateToken(email, TokenAgeInSeconds*time.Second)
+	token, err := tokenMaker.CreateToken(email, currentOrgId, TokenAgeInSeconds*time.Second)
 	if err != nil {
 		plogger.Error("Token Creation Failed ! ", err)
 		return nil, errors.New("paseto Maker Failed ")
@@ -55,7 +54,7 @@ func RefreshSession(ctx *gin.Context) {
 	}
 
 	// generate a new pair of tokens and return
-	response := generateLoginSession(useremail, ctx.Request.UserAgent(), ctx.ClientIP())
+	response := generateLoginSession(useremail, currentOrganisationId, ctx.Request.UserAgent(), ctx.ClientIP())
 
 	ctx.JSON(http.StatusOK, response)
 }

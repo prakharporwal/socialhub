@@ -76,13 +76,14 @@ type SocialhubTwitterAccountAccessToken struct {
 }
 
 type SocialhubUser struct {
-	UserID       int64     `json:"user_id"`
-	Username     string    `json:"username"`
-	UserEmail    string    `json:"user_email"`
-	PasswordHash string    `json:"password_hash"`
-	IsVerified   bool      `json:"is_verified"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	UserID              int64     `json:"user_id"`
+	Username            string    `json:"username"`
+	UserEmail           string    `json:"user_email"`
+	OrganisationGroupID string    `json:"organisation_group_id"`
+	PasswordHash        string    `json:"password_hash"`
+	IsVerified          bool      `json:"is_verified"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
 }
 
 type SocialhubUserRole struct {

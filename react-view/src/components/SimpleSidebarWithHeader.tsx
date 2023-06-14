@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   IconButton,
   Avatar,
@@ -27,9 +27,6 @@ import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 
 import {
   FiHome,
-  FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu,
   FiBell,
   FiChevronDown,
@@ -38,7 +35,7 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
-import { FaLinkedinIn, FaListOl } from "react-icons/fa";
+import { FaLinkedinIn } from "react-icons/fa";
 
 interface LinkItemProps {
   name: string;

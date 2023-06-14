@@ -21,19 +21,20 @@ func (payload *Payload) Valid() error {
 	return nil
 }
 
-func NewPayload(username string, duration time.Duration) *Payload {
+func NewPayload(username string, currentOrgId string, duration time.Duration) *Payload {
 	id, _ := uuid.NewRandom()
 	currTime := time.Now()
 
 	return &Payload{
-		Id:        id,
-		Username:  username,
-		IssuedAt:  currTime,
-		ExpiresAt: currTime.Add(duration),
+		Id:                  id,
+		Username:            username,
+		OrganisationGroupID: currentOrgId,
+		IssuedAt:            currTime,
+		ExpiresAt:           currTime.Add(duration),
 	}
 }
 
 type TokenMaker interface {
-	CreateToken(username string, duration time.Duration) (string, error)
+	CreateToken(username string, currentOrgId string, duration time.Duration) (string, error)
 	VerifyToken(token string) (*Payload, error)
 }

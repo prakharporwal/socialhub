@@ -50,8 +50,10 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
   let auth = useAuth();
 
   useEffect(() => {
-    if (auth.isAuthenticated) navigate("/posts");
-  }, []);
+    if (auth.isAuthenticated) {
+      navigate("/posts");
+    }
+  }, [auth]);
 
   return (
     <Box overflowY="auto">

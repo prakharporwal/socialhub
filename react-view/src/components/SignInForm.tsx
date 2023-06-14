@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import {
   Flex,
   Box,
@@ -21,6 +21,7 @@ import "./signin.css";
 import CONSTANTS from "../CONSTANTS";
 
 export default function SignInForm() {
+  const [organisationId, setOrganisationId] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
@@ -34,7 +35,7 @@ export default function SignInForm() {
 
     setIsLoggingIn(true);
 
-    if (email === "" || password === "") {
+    if (organisationId === "" || email === "" || password === "") {
       if (!toast.isActive("login-error")) {
         toast({
           // todo add the username here
@@ -53,7 +54,11 @@ export default function SignInForm() {
     console.log(email, password, rememberMe);
     fetch(CONSTANTS.api_server_url + "/v1/login", {
       method: "POST",
-      body: JSON.stringify({ user_id: email, password }),
+      body: JSON.stringify({
+        organisation_group_id: organisationId,
+        user_id: email,
+        password,
+      }),
     })
       .then((res) => {
         if (res.ok) {
@@ -117,8 +122,19 @@ export default function SignInForm() {
             boxShadow={"lg"}
             p={8}
           >
+            {/* // Todo: Form Validate and sanitize input for xss and sql injection  */}
             <Stack spacing={4}>
               <form onSubmit={submitSignInForm}>
+                <FormControl id="organisation-id">
+                  <FormLabel>Organisation Id</FormLabel>
+                  <Input
+                    type="text"
+                    value={organisationId}
+                    onChange={(e) => {
+                      setOrganisationId(e.currentTarget.value);
+                    }}
+                  />
+                </FormControl>
                 <FormControl id="email">
                   <FormLabel>Email address</FormLabel>
                   <Input

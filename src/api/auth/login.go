@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
@@ -16,8 +17,9 @@ const fiveHours = 5 * 60 * 60
 const TokenAgeInSeconds = fiveHours
 
 type loginRequest struct {
-	UserId   string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
-	Password string `json:"password" binding:"required"`
+	UserId              string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
+	OrganisationGroupId string `json:"organisation_group_id" binding:"required"`
+	Password            string `json:"password" binding:"required"`
 }
 
 type loginResponse struct {
@@ -36,10 +38,13 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	plogger.Debug(request.UserId, " is attempting login!")
-
+	args := sqlcmodels.GetUserDetailsParams{
+		UserEmail:           request.UserId,
+		OrganisationGroupID: request.OrganisationGroupId,
+	}
 	// convert provided password and username to hash with salt
 	// check for the hash string match or not
-	user, err := store.GetInstance().GetUserDetails(ctx, request.UserId)
+	user, err := store.GetInstance().GetUserDetails(ctx, args)
 	if err != nil {
 		plogger.Error("User fetching failed ", err)
 		if err == sql.ErrNoRows {
@@ -52,13 +57,13 @@ func Login(ctx *gin.Context) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(request.Password))
 	if err != nil {
-		plogger.Error("Password Not matched!", err)
+		plogger.Error("Password Not matched! ", err)
 		ctx.JSON(http.StatusUnauthorized, gin.H{apierror.MESSAGE: "Incorrect user or password"})
 		return
 	}
 
 	// respond with a paseto / jwt for further login
-	response := generateLoginSession(user.UserEmail, ctx.Request.UserAgent(), ctx.ClientIP())
+	response := generateLoginSession(user.UserEmail, user.OrganisationGroupID, ctx.Request.UserAgent(), ctx.ClientIP())
 
 	response.Username = user.Username
 
@@ -86,25 +91,33 @@ func SetCurrentOrganisationId(orgId string) {
 }
 
 func GetCurrentOrganisationId() string {
-	//return currentOrganisationId
+	return currentOrganisationId
 	// todo : implement this
-	return "org_yogveda"
+	//return "org_yogveda"
 }
 
-func generateLoginSession(useremail string, useragent string, clientip string) *loginResponse {
+func SetUserPermission() {
+
+}
+
+func GetUserPermission() string {
+	return ""
+}
+
+func generateLoginSession(useremail string, currentOrgId string, useragent string, clientip string) *loginResponse {
 	//var auth services.Auth
 	tokenMaker, err := NewPasetoMaker()
 	if err != nil {
 		plogger.Error("Paseto Maker Failed ! ", err)
 		return nil
 	}
-	token, err := tokenMaker.CreateToken(useremail, TokenAgeInSeconds*time.Second)
+	token, err := tokenMaker.CreateToken(useremail, currentOrgId, TokenAgeInSeconds*time.Second)
 	if err != nil {
 		plogger.Error("Token Creation Failed ! ", err)
 		return nil
 	}
 
-	session, err := CreateSession(useremail, useragent, clientip)
+	session, err := CreateSession(useremail, currentOrgId, useragent, clientip)
 
 	return &loginResponse{
 		AccessToken:  token,

@@ -10,21 +10,23 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO socialhub.users (user_email, username, password_hash, is_verified)
-VALUES ( $1, $2, $3, $4)
-RETURNING user_email, username
+INSERT INTO socialhub.users (user_email, username, password_hash, organisation_group_id, is_verified)
+VALUES ( $1, $2, $3, $4, $5)
+RETURNING user_email, username, organisation_group_id
 `
 
 type CreateUserParams struct {
-	UserEmail    string `json:"user_email"`
-	Username     string `json:"username"`
-	PasswordHash string `json:"password_hash"`
-	IsVerified   bool   `json:"is_verified"`
+	UserEmail           string `json:"user_email"`
+	Username            string `json:"username"`
+	PasswordHash        string `json:"password_hash"`
+	OrganisationGroupID string `json:"organisation_group_id"`
+	IsVerified          bool   `json:"is_verified"`
 }
 
 type CreateUserRow struct {
-	UserEmail string `json:"user_email"`
-	Username  string `json:"username"`
+	UserEmail           string `json:"user_email"`
+	Username            string `json:"username"`
+	OrganisationGroupID string `json:"organisation_group_id"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
@@ -32,27 +34,64 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 		arg.UserEmail,
 		arg.Username,
 		arg.PasswordHash,
+		arg.OrganisationGroupID,
 		arg.IsVerified,
 	)
 	var i CreateUserRow
-	err := row.Scan(&i.UserEmail, &i.Username)
+	err := row.Scan(&i.UserEmail, &i.Username, &i.OrganisationGroupID)
 	return i, err
 }
 
 const getUserDetails = `-- name: GetUserDetails :one
-SELECT user_email, username, password_hash
-FROM socialhub.users WHERE user_email=($1) or username=($1)
+SELECT user_email, username, organisation_group_id, password_hash
+FROM socialhub.users WHERE user_email=($1) or username=($1) and organisation_group_id=($2)
 `
 
-type GetUserDetailsRow struct {
-	UserEmail    string `json:"user_email"`
-	Username     string `json:"username"`
-	PasswordHash string `json:"password_hash"`
+type GetUserDetailsParams struct {
+	UserEmail           string `json:"user_email"`
+	OrganisationGroupID string `json:"organisation_group_id"`
 }
 
-func (q *Queries) GetUserDetails(ctx context.Context, userEmail string) (GetUserDetailsRow, error) {
-	row := q.db.QueryRowContext(ctx, getUserDetails, userEmail)
+type GetUserDetailsRow struct {
+	UserEmail           string `json:"user_email"`
+	Username            string `json:"username"`
+	OrganisationGroupID string `json:"organisation_group_id"`
+	PasswordHash        string `json:"password_hash"`
+}
+
+func (q *Queries) GetUserDetails(ctx context.Context, arg GetUserDetailsParams) (GetUserDetailsRow, error) {
+	row := q.db.QueryRowContext(ctx, getUserDetails, arg.UserEmail, arg.OrganisationGroupID)
 	var i GetUserDetailsRow
-	err := row.Scan(&i.UserEmail, &i.Username, &i.PasswordHash)
+	err := row.Scan(
+		&i.UserEmail,
+		&i.Username,
+		&i.OrganisationGroupID,
+		&i.PasswordHash,
+	)
+	return i, err
+}
+
+const resetUserPassword = `-- name: ResetUserPassword :one
+UPDATE socialhub.users
+SET password_hash=($3)
+WHERE user_email=($1) and organisation_group_id=($2)
+RETURNING user_email, organisation_group_id
+`
+
+type ResetUserPasswordParams struct {
+	UserEmail           string `json:"user_email"`
+	OrganisationGroupID string `json:"organisation_group_id"`
+	PasswordHash        string `json:"password_hash"`
+}
+
+type ResetUserPasswordRow struct {
+	UserEmail           string `json:"user_email"`
+	OrganisationGroupID string `json:"organisation_group_id"`
+}
+
+func (q *Queries) ResetUserPassword(ctx context.Context, arg ResetUserPasswordParams) (ResetUserPasswordRow, error) {
+	row := q.db.QueryRowContext(ctx, resetUserPassword, arg.UserEmail, arg.OrganisationGroupID, arg.PasswordHash)
+	var i ResetUserPasswordRow
+	err := row.Scan(&i.UserEmail, &i.OrganisationGroupID)
 	return i, err
 }

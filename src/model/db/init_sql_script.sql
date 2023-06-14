@@ -19,13 +19,15 @@ CREATE TABLE IF NOT EXISTS socialhub.accounts
 
 CREATE TABLE IF NOT EXISTS socialhub.users
 (
-    user_id       BIGSERIAL PRIMARY KEY,
+    user_id       BIGSERIAL NOT NULL,
     username      varchar        NOT NULL,
     user_email    varchar UNIQUE NOT NULL,
+    organisation_group_id varchar NOT NULL,
     password_hash varchar        NOT NULL,
     is_verified   boolean        NOT NULL DEFAULT false,
     created_at    timestamptz    NOT NULL DEFAULT now(),
-    updated_at    timestamptz    NOT NULL DEFAULT now()
+    updated_at    timestamptz    NOT NULL DEFAULT now(),
+    PRIMARY KEY(user_email,organisation_group_id)
 );
 
 CREATE TABLE IF NOT EXISTS socialhub.organisation_group

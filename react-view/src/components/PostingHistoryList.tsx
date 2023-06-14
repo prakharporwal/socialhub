@@ -11,8 +11,6 @@ import {
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import { Card, CardBody, CardFooter, CardHeader } from "@chakra-ui/card";
 import { Button, ButtonGroup } from "@chakra-ui/button";
-import { Textarea } from "@chakra-ui/textarea";
-import { Editable } from "@chakra-ui/editable";
 import { Switch } from "@chakra-ui/switch";
 import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
@@ -29,12 +27,23 @@ import CONSTANTS from "../CONSTANTS";
 //     "status": "PUBLISHED",
 //     "created_by": "prakharporwal99@gmail.com",
 //     "created_at": "2023-05-22T07:30:47.660895Z",
-//     "updated_at": "2023-05-22T07:41:33.060103Z"
+//    "updated_at": "2023-05-22T07:41:33.060103Z"
 // },
+
+type LinkedinPost = {
+  author?: string;
+  author_urn?: string;
+  distribution?: any;
+  commentary?: string;
+  visibility?: string;
+  isReshareDisabledByAuthor?: boolean;
+  lifecycleState?: string;
+};
+
 type Post = {
   scheduled_post_id: string;
   account_id?: number;
-  post_json_string: string;
+  post_json_string: LinkedinPost;
   post_type: string;
   status: string;
   created_by: string;
@@ -51,14 +60,9 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   const [posts, setPosts] = useState<Post[]>([
     {
       scheduled_post_id: "hello",
-      post_json_string: `{
-        scheduled_post_id: "hello",
-        post_json_string:"",
-        post_type:"text",
-        status:"PUBLISHED",
-        created_by: "prakhar@gmail.com",
-        created_at: "25th May 2023",
-      },`,
+      post_json_string: {
+        commentary: "hello",
+      },
       post_type: "text",
       status: "PUBLISHED",
       created_by: "prakhar@gmail.com",
@@ -66,14 +70,9 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     },
     {
       scheduled_post_id: "hello",
-      post_json_string: `{
-            scheduled_post_id: "hello",
-            post_json_string: '',
-            post_type:"text",
-            status:"PUBLISHED",
-            created_by: "prakhar@gmail.com",
-            created_at: "25th May 2023",
-          },`,
+      post_json_string: {
+        commentary: "hello",
+      },
       post_type: "text",
       status: "PUBLISHED",
       created_by: "prakhar@gmail.com",
@@ -81,14 +80,9 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     },
     {
       scheduled_post_id: "hello",
-      post_json_string: `{
-            scheduled_post_id: "hello",
-            post_json_string: '',
-            post_type:"text",
-            status:"PUBLISHED",
-            created_by: "prakhar@gmail.com",
-            created_at: "25th May 2023",
-          },`,
+      post_json_string: {
+        commentary: "hello",
+      },
       post_type: "text",
       status: "PUBLISHED",
       created_by: "prakhar@gmail.com",
@@ -96,15 +90,26 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     },
     {
       scheduled_post_id: "hello",
-      post_json_string: `{postId,}`,
-      post_type: "text",
+      post_json_string: {
+        author: "a",
+        commentary: "hey Guzs",
+        distribution: {
+          feedDistribution: "MAIN_FEED",
+          targetEntities: [],
+          thirdPartyDistributionChannels: [],
+        },
+        isReshareDisabledByAuthor: false,
+        lifecycleState: "PUBLISHED",
+        visibility: "PUBLIC",
+      },
       status: "PUBLISHED",
+      post_type: "text",
       created_by: "prakhar@gmail.com",
       created_at: "25th May 2023",
     },
     {
       scheduled_post_id: "hello",
-      post_json_string: `{postId,}`,
+      post_json_string: {},
       post_type: "text",
       status: "PUBLISHED",
       created_by: "prakhar@gmail.com",
@@ -136,7 +141,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
         console.log(err);
       })
       .finally(() => {});
-  }, []);
+  }, [auth]);
 
   return (
     <Box h={"calc(100vh - 4rem)"} overflowY={"auto"}>
@@ -160,10 +165,18 @@ interface IPHprops {
 const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
   return (
     <Card p="4" m="4" w="70%">
-      <CardHeader>{"Post"}</CardHeader>
-      <Heading size="sm">JSON</Heading>
+      <CardHeader>
+        <Heading size="sm"></Heading>
+      </CardHeader>
       <CardBody>
-        <Card>{post.post_json_string}</Card>
+        <Box
+          bg={"whitesmoke"}
+          p="4"
+          border={"1px solid grey"}
+          borderRadius={"4px"}
+        >
+          {post.post_json_string?.commentary}
+        </Box>
       </CardBody>
       <CardFooter display={"flex"} flexDirection={"column"}>
         <Text>{post.scheduled_post_id}</Text>
@@ -185,7 +198,7 @@ const _PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
           <CardBody>
             <Heading size={"sm"}>Content</Heading>
             <Card p={4} bg={"lightgray"}>
-              <Text>{post.post_json_string}</Text>
+              <Text>{post.post_json_string.commentary}</Text>
             </Card>
             <Text as="b" display={"block"}>
               {"post on: " + post.created_at}

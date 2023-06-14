@@ -9,6 +9,8 @@ import (
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
+	"strings"
 )
 
 const twitterFetchTweetsUrl = "https://api.twitter.com/2/tweets"
@@ -49,4 +51,28 @@ func FetchTweets(ctx *gin.Context) {
 
 	plogger.Info("Fetched Tweets From Twitter")
 	ctx.JSON(http.StatusOK, gin.H{"tweets": respBody})
+}
+
+type tweetRequest struct {
+	Text string `json:"text" binding:"required"`
+}
+
+const twitterPostTweetUrl = "https://api.twitter.com/2/tweets"
+
+func WriteTweet(ctx *gin.Context) {
+	var reqBody tweetRequest
+
+	err := ctx.ShouldBindJSON(&reqBody)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
+		return
+	}
+
+	tweetObj := map[string]interface{}{
+		"tweet": reqBody.Text,
+	}
+
+	http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "posted successfully"})
 }
