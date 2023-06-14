@@ -5,8 +5,8 @@ echo "Deploying from bash script!"
 #go build -o build/socialhub .
 echo "Build is present"
 
-cd ~/github/socialhub/deployment
-chmod u+x ~/github/socialhub/src/build/socialhub
+#cd ~/github/socialhub/deployment
+#chmod u+x ~/github/socialhub/src/build/socialhub
 
 sudo cp -ar ../view/. /var/www/html
 sudo cp nginx/default /etc/nginx/sites-enabled/default
