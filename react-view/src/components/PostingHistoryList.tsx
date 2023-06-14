@@ -121,7 +121,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     fetch(CONSTANTS.api_server_url + "/app/linkedin/posts/fetchall", {
       method: "GET",
       headers: {
-        "access-token": auth.accessToken || "",
+        "access-token": auth.accessToken,
       },
     })
       .then((res) => {
@@ -135,13 +135,12 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
       .then((data) => {
         console.log(data);
         setPosts(data);
-        return;
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {});
-  }, [auth]);
+  }, []);
 
   return (
     <Box h={"calc(100vh - 4rem)"} overflowY={"auto"}>
