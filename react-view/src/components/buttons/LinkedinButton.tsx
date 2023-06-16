@@ -8,7 +8,7 @@ export default function LinkedinButton() {
       <Button
         w={"full"}
         maxW={"md"}
-        colorScheme={"messenger"}
+        colorScheme={"linkedin"}
         leftIcon={<SiLinkedin />}
       >
         <Center>

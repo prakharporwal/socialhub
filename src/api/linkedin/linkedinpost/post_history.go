@@ -1,18 +1,14 @@
 package linkedinpost
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api/auth"
 	"socialhub-server/model/store"
-	"socialhub-server/pkg/plogger"
-
-	"github.com/gin-gonic/gin"
 )
 
 func PostsHistoryList(ctx *gin.Context) {
-	out, _ := store.GetInstance().FetchAllPosts(ctx, auth.GetCurrentUser())
-
-	plogger.Debug(out)
+	out, _ := store.GetInstance().FetchAllPosts(ctx, auth.GetCurrentOrganisationId()+" | "+auth.GetCurrentUser())
 
 	ctx.JSON(http.StatusOK, out)
 }

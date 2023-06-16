@@ -15,7 +15,7 @@ RETURNING scheduled_post_id, post_type, post_json_string, scheduled_time;
 -- name: FetchPostsToBePublished :many
 SELECT scheduled_post_id, author_urn, post_type, post_json_string, scheduled_time FROM socialhub.linkedin_scheduled_user_posts
 WHERE scheduled_time < now() and (status='SUBMITTED' or status='FAILED')
-LIMIT $1;
+LIMIT ($1);
 
 
 -- name: UpdatePostStatus :one

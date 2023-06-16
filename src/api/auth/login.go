@@ -23,10 +23,11 @@ type loginRequest struct {
 }
 
 type loginResponse struct {
-	Username     string    `json:"username"`
-	AccessToken  string    `json:"access_token"` // userId can be username or userEmail
-	RefreshToken string    `json:"refresh_token"`
-	ExpiresAt    time.Time `json:"expires_at"`
+	Username            string    `json:"username"`
+	OrganisationGroupId string    `json:"organisation_group_id"`
+	AccessToken         string    `json:"access_token"` // userId can be username or userEmail
+	RefreshToken        string    `json:"refresh_token"`
+	ExpiresAt           time.Time `json:"expires_at"`
 }
 
 func Login(ctx *gin.Context) {
@@ -66,12 +67,12 @@ func Login(ctx *gin.Context) {
 	response := generateLoginSession(user.UserEmail, user.OrganisationGroupID, ctx.Request.UserAgent(), ctx.ClientIP())
 
 	response.Username = user.Username
+	response.OrganisationGroupId = user.OrganisationGroupID
 
 	plogger.Debug(request.UserId, " is logged in successfully!")
 
 	// not working IDK why
 	ctx.SetCookie("AccessToken", response.AccessToken, TokenAgeInSeconds, "/", "www.yogveda.live", false, false)
-
 	ctx.JSON(http.StatusOK, response)
 }
 

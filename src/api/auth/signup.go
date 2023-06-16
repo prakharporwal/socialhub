@@ -17,18 +17,18 @@ import (
 // delete user if not activated on next 7 days
 
 type signUpRequest struct {
-	Username       string `json:"username" binding:"required,alphanum"`
-	UserEmail      string `json:"email" binding:"required,email"`
-	OrganisationId string `json:"organisation_id" binding:"required"`
-	Password       string `json:"password" binding:"required,min=6"`
+	Username            string `json:"username" binding:"required"`
+	UserEmail           string `json:"email" binding:"required,email"`
+	OrganisationGroupId string `json:"organisation_group_id" binding:"required"`
+	Password            string `json:"password" binding:"required,min=6"`
 }
 
 func SignUp(ctx *gin.Context) {
 	var request signUpRequest
-	err := ctx.ShouldBindJSON(&request)
 
+	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		plogger.Error("parsing json data failed!")
+		plogger.Error("parsing json data failed!", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.InvalidRequestBody)
 		return
 	}
@@ -44,9 +44,11 @@ func SignUp(ctx *gin.Context) {
 	}
 
 	args := db.CreateUserParams{
-		UserEmail:    request.UserEmail,
-		Username:     request.Username,
-		PasswordHash: string(passwordHash),
+		UserEmail:           request.UserEmail,
+		Username:            request.Username,
+		OrganisationGroupID: request.OrganisationGroupId,
+		PasswordHash:        string(passwordHash),
+		IsVerified:          false,
 	}
 
 	user, err := store.GetInstance().CreateUser(ctx, args)

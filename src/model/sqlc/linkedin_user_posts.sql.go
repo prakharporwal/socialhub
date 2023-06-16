@@ -54,7 +54,7 @@ func (q *Queries) FetchAllPosts(ctx context.Context, createdBy string) ([]Social
 const fetchPostsToBePublished = `-- name: FetchPostsToBePublished :many
 SELECT scheduled_post_id, author_urn, post_type, post_json_string, scheduled_time FROM socialhub.linkedin_scheduled_user_posts
 WHERE scheduled_time < now() and (status='SUBMITTED' or status='FAILED')
-LIMIT $1
+LIMIT ($1)
 `
 
 type FetchPostsToBePublishedRow struct {

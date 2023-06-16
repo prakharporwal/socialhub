@@ -16,6 +16,7 @@ import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import CONSTANTS from "../CONSTANTS";
+import { useColorModeValue } from "@chakra-ui/react";
 // {
 //     "scheduled_post_id": "292341f2-bde1-4c39-9436-35be4a7e606e",
 //     "account_id": 1234,
@@ -43,7 +44,7 @@ type LinkedinPost = {
 type Post = {
   scheduled_post_id: string;
   account_id?: number;
-  post_json_string: LinkedinPost;
+  post_json_string: string;
   post_type: string;
   status: string;
   created_by: string;
@@ -57,65 +58,65 @@ interface IProps {
 const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   const auth = useAuth();
 
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      scheduled_post_id: "hello",
-      post_json_string: {
-        commentary: "hello",
-      },
-      post_type: "text",
-      status: "PUBLISHED",
-      created_by: "prakhar@gmail.com",
-      created_at: "25th May 2023",
-    },
-    {
-      scheduled_post_id: "hello",
-      post_json_string: {
-        commentary: "hello",
-      },
-      post_type: "text",
-      status: "PUBLISHED",
-      created_by: "prakhar@gmail.com",
-      created_at: "25th May 2023",
-    },
-    {
-      scheduled_post_id: "hello",
-      post_json_string: {
-        commentary: "hello",
-      },
-      post_type: "text",
-      status: "PUBLISHED",
-      created_by: "prakhar@gmail.com",
-      created_at: "25th May 2023",
-    },
-    {
-      scheduled_post_id: "hello",
-      post_json_string: {
-        author: "a",
-        commentary: "hey Guzs",
-        distribution: {
-          feedDistribution: "MAIN_FEED",
-          targetEntities: [],
-          thirdPartyDistributionChannels: [],
-        },
-        isReshareDisabledByAuthor: false,
-        lifecycleState: "PUBLISHED",
-        visibility: "PUBLIC",
-      },
-      status: "PUBLISHED",
-      post_type: "text",
-      created_by: "prakhar@gmail.com",
-      created_at: "25th May 2023",
-    },
-    {
-      scheduled_post_id: "hello",
-      post_json_string: {},
-      post_type: "text",
-      status: "PUBLISHED",
-      created_by: "prakhar@gmail.com",
-      created_at: "25th May 2023",
-    },
-  ]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  //   {
+  //     scheduled_post_id: "hello",
+  //     post_json_string: {
+  //       commentary: "hello",
+  //     },
+  //     post_type: "text",
+  //     status: "PUBLISHED",
+  //     created_by: "prakhar@gmail.com",
+  //     created_at: "25th May 2023",
+  //   },
+  //   {
+  //     scheduled_post_id: "hello",
+  //     post_json_string: {
+  //       commentary: "hello",
+  //     },
+  //     post_type: "text",
+  //     status: "PUBLISHED",
+  //     created_by: "prakhar@gmail.com",
+  //     created_at: "25th May 2023",
+  //   },
+  //   {
+  //     scheduled_post_id: "hello",
+  //     post_json_string: {
+  //       commentary: "hello",
+  //     },
+  //     post_type: "text",
+  //     status: "PUBLISHED",
+  //     created_by: "prakhar@gmail.com",
+  //     created_at: "25th May 2023",
+  //   },
+  //   {
+  //     scheduled_post_id: "hello",
+  //     post_json_string: {
+  //       author: "a",
+  //       commentary: "hey Guzs",
+  //       distribution: {
+  //         feedDistribution: "MAIN_FEED",
+  //         targetEntities: [],
+  //         thirdPartyDistributionChannels: [],
+  //       },
+  //       isReshareDisabledByAuthor: false,
+  //       lifecycleState: "PUBLISHED",
+  //       visibility: "PUBLIC",
+  //     },
+  //     status: "PUBLISHED",
+  //     post_type: "text",
+  //     created_by: "prakhar@gmail.com",
+  //     created_at: "25th May 2023",
+  //   },
+  //   {
+  //     scheduled_post_id: "hello",
+  //     post_json_string: {},
+  //     post_type: "text",
+  //     status: "PUBLISHED",
+  //     created_by: "prakhar@gmail.com",
+  //     created_at: "25th May 2023",
+  //   },
+  // ]);
 
   useEffect(() => {
     fetch(CONSTANTS.api_server_url + "/app/linkedin/posts/fetchall", {
@@ -143,16 +144,14 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   }, []);
 
   return (
-    <Box h={"calc(100vh - 4rem)"} overflowY={"auto"}>
-      <Box w="100%" p={4} color="white" as={"div"}>
-        <Heading color={"black"}>Your Posts</Heading>
-        <List>
-          {posts &&
-            posts.map((item, idx) => {
-              return <PostHistory key={item.scheduled_post_id} post={item} />;
-            })}
-        </List>
-      </Box>
+    <Box w="100%" p={4} color="white" as={"div"}>
+      <Heading color={"black"}>Your Posts</Heading>
+      <List>
+        {posts &&
+          posts.map((item, idx) => {
+            return <PostHistory key={item.scheduled_post_id} post={item} />;
+          })}
+      </List>
     </Box>
   );
 };
@@ -162,6 +161,9 @@ interface IPHprops {
 }
 
 const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
+  useEffect(() => {
+    console.log(post);
+  }, []);
   return (
     <Card p="4" m="4" w="70%">
       <CardHeader>
@@ -169,12 +171,12 @@ const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
       </CardHeader>
       <CardBody>
         <Box
-          bg={"whitesmoke"}
+          bg={useColorModeValue("whitesmoke", "grey")}
           p="4"
           border={"1px solid grey"}
           borderRadius={"4px"}
         >
-          {post.post_json_string?.commentary}
+          {JSON.parse(post.post_json_string)?.commentary}
         </Box>
       </CardBody>
       <CardFooter display={"flex"} flexDirection={"column"}>
@@ -197,7 +199,7 @@ const _PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
           <CardBody>
             <Heading size={"sm"}>Content</Heading>
             <Card p={4} bg={"lightgray"}>
-              <Text>{post.post_json_string.commentary}</Text>
+              <Text>{JSON.parse(post.post_json_string)?.commentary}</Text>
             </Card>
             <Text as="b" display={"block"}>
               {"post on: " + post.created_at}

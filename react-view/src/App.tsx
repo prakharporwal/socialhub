@@ -8,6 +8,8 @@ import MarketingPage from "./pages/MarketingPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignUpForm from "./components/SignUpForm";
 import TwitterPage from "./pages/TwitterPage";
+import InstagramPage from "./pages/InstagramPage";
+import FacebookPage from "./pages/FacebookPage";
 
 export const App = () => {
   return (
@@ -16,6 +18,8 @@ export const App = () => {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/" element={<MarketingPage />}></Route>
         <Route path="/twitter" element={<TwitterPage />}></Route>
+        <Route path="/instagram" element={<InstagramPage />}></Route>
+        <Route path="/facebook" element={<FacebookPage />}></Route>
         <Route path="/post/new" element={<LinkedPostForm />}></Route>
         <Route path="/posts" element={<PostingHistoryList />}></Route>
         <Route path="/signin" element={<SignInForm />}></Route>

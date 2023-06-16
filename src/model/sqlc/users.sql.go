@@ -44,7 +44,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 
 const getUserDetails = `-- name: GetUserDetails :one
 SELECT user_email, username, organisation_group_id, password_hash
-FROM socialhub.users WHERE user_email=($1) or username=($1) and organisation_group_id=($2)
+FROM socialhub.users WHERE (user_email=($1) or username=($1)) and organisation_group_id=($2)
 `
 
 type GetUserDetailsParams struct {

@@ -60,7 +60,7 @@ export default function SignUpForm() {
     fetch(CONSTANTS.api_server_url + "/v1/signup", {
       method: "POST",
       body: JSON.stringify({
-        organisation_id: organisationId,
+        organisation_group_id: organisationId,
         username: username,
         email: email,
         password: password,

@@ -23,19 +23,18 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-
 import {
-  FiHome,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-  FiTwitter,
-} from "react-icons/fi";
+  NavLink as RouterNavLink,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaLinkedinIn } from "react-icons/fa";
+import { SiFacebook, SiInstagram, SiTwitter } from "react-icons/si";
 
 interface LinkItemProps {
   name: string;
@@ -43,11 +42,11 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Link", icon: FiHome, linkTo: "/post/new" },
-  { name: "Linkedin Posts", icon: FaLinkedinIn, linkTo: "/posts" },
-  { name: "Twitter", icon: FiTwitter, linkTo: "/twitter" },
-  // { name: 'Favourites', icon: FiStar, linkTo: "/favourites" },
-  // { name: 'Settings', icon: FiSettings, linkTo: "/settings" },
+  { name: "Home", icon: FiHome, linkTo: "/post/new" },
+  { name: "Linkedin", icon: FaLinkedinIn, linkTo: "/posts" },
+  { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
+  { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
+  { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
 
 export default function SidebarWithHeader({
@@ -80,7 +79,7 @@ export default function SidebarWithHeader({
         onOpen={onOpen}
         user={{
           username: window.localStorage.getItem("current_username"),
-          userType: "org_yogveda",
+          userType: window.localStorage.getItem("organisation_group_id"),
           imagSrc:
             "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80",
           imgSrc:
@@ -130,18 +129,23 @@ interface NavItemProps extends FlexProps {
 }
 
 const NavItem = ({ icon, linkTo, children, ...rest }: NavItemProps) => {
+  const route = useLocation();
   return (
     <Link
-      as={ReactRouterLink}
+      _activeLink={{
+        color: "cyan.500",
+        fontWeight: 700,
+      }}
+      as={RouterNavLink}
       to={linkTo}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
       <Flex
         align="center"
+        borderRadius="lg"
         p="4"
         mx="4"
-        borderRadius="lg"
         role="group"
         cursor="pointer"
         _hover={{
@@ -206,7 +210,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
         <IconButton
           size="lg"
           variant="ghost"
-          aria-label="open menu"
+          aria-label="notifications"
           icon={<FiBell />}
         />
         <ColorModeToggleButton />

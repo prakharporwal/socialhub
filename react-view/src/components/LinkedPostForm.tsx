@@ -188,7 +188,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
   }
 
   return (
-    <>
+    <Box>
       <Flex
         minH={"80vh"}
         align={"center"}
@@ -373,7 +373,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
           </Box>
         </Stack>
       </Flex>
-    </>
+    </Box>
   );
 };
 
