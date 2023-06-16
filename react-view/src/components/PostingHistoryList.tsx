@@ -122,7 +122,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
     fetch(CONSTANTS.api_server_url + "/app/linkedin/posts/fetchall", {
       method: "GET",
       headers: {
-        "access-token": auth.accessToken,
+        "access-token": auth.accessToken || "",
       },
     })
       .then((res) => {

@@ -1,13 +1,16 @@
-import { useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { getCookie } from "../utils/cookieUtils";
 
 export function useAuth() {
-  const tokenFromStorage = useRef(getCookie("access_token") || "");
-  const auth = tokenFromStorage.current != null;
+  const tokenFromStorage = useMemo(() => getCookie("access_token"), []);
+  const [auth, _] = useState<boolean>(
+    tokenFromStorage != null &&
+      tokenFromStorage !== undefined &&
+      tokenFromStorage !== ""
+  );
 
-  console.log(auth);
   return {
     isAuthenticated: auth,
-    accessToken: tokenFromStorage.current,
+    accessToken: tokenFromStorage,
   };
 }
