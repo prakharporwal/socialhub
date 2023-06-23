@@ -168,3 +168,17 @@ CREATE TRIGGER set_timestamp
     ON socialhub.twitter_account_access_tokens
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+
+-- sessions table
+CREATE TABLE IF NOT EXISTS socialhub.sessions(
+    session_id uuid NOT NULL PRIMARY KEY ,
+    email varchar NOT NULL ,
+    user_agent varchar NOT NULL,
+    client_ip varchar NOT NULL,
+    refresh_token varchar NOT NULL ,
+    expires_at timestamptz NOT NULL ,
+    is_blocked bool NOT NULL default false,
+    created_at timestamptz NOT NULL DEFAULT NOW()
+);

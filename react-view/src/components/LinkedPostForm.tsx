@@ -25,7 +25,6 @@ import { FaClock } from "react-icons/fa";
 import { SiLinkedin } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
 import CONSTANTS from "../CONSTANTS";
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {
@@ -195,7 +194,6 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         justify={"center"}
         direction={"column"}
       >
-        <ConnectLinkedinAccountButton />
         <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Box
             borderWidth="2px"
@@ -335,8 +333,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                       <Text>Send to Linkedin</Text>
                     </Center>
                   </Button>
-
-                  <Input
+                  {/* <Input
                     type={"datetime-local"}
                     value={scheduledTime}
                     onChange={(e) => {
@@ -366,7 +363,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     <Center>
                       <Text>Schedule for Later</Text>
                     </Center>
-                  </Button>
+                  </Button> */}
                 </Stack>
               </FormControl>
             </SimpleGrid>
@@ -375,6 +372,10 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
       </Flex>
     </Box>
   );
+};
+
+const Arr: React.FunctionComponent<any> = (props) => {
+  return <div></div>;
 };
 
 export default withAuthenticationRequired(LinkedinPostForm);

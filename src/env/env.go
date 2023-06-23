@@ -17,3 +17,8 @@ const (
 	TwitterAccessTokenUrl  = "https://api.twitter.com/2/oauth2/token"
 	TwitterOAuthCallback   = "https://api.yogveda.live/twitter/oauth2/access/callback"
 )
+
+const (
+	InstagramOAuthAuthorisationUrl = "https://api.instagram.com/oauth/authorize"
+	InstagramAppClientSecret
+)

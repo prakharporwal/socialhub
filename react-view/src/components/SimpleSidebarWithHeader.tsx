@@ -23,15 +23,10 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 
-import {
-  NavLink as RouterNavLink,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { NavLink as RouterNavLink, useNavigate } from "react-router-dom";
 
 import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
-import { ReactText } from "react";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaLinkedinIn } from "react-icons/fa";
 import { SiFacebook, SiInstagram, SiTwitter } from "react-icons/si";
@@ -125,11 +120,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   linkTo: string | undefined;
-  children: ReactText;
+  children: any;
 }
 
 const NavItem = ({ icon, linkTo, children, ...rest }: NavItemProps) => {
-  const route = useLocation();
   return (
     <Link
       _activeLink={{
@@ -205,7 +199,6 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
       >
         Socialhub
       </Text>
-
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
           size="lg"
@@ -249,9 +242,12 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               <MenuDivider />
               <MenuItem
                 onClick={() => {
-                  window.localStorage.setItem("authenticated", "false");
-                  window.localStorage.setItem("access_token", "false");
-                  document.cookie = `access_token=''`;
+                  window.localStorage.removeItem("authenticated");
+                  window.localStorage.removeItem("access_token");
+                  window.localStorage.removeItem("username");
+                  window.localStorage.removeItem("organisation_group_id");
+
+                  document.cookie = `access_token=; Path=/;`;
                   navigate("/signin");
                 }}
               >

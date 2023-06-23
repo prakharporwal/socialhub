@@ -17,6 +17,7 @@ import { SiLinkedin, SiTwitter } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import CONSTANTS from "../CONSTANTS";
 import { useColorModeValue } from "@chakra-ui/react";
+import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
 // {
 //     "scheduled_post_id": "292341f2-bde1-4c39-9436-35be4a7e606e",
 //     "account_id": 1234,
@@ -129,12 +130,10 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
         if (res.ok) {
           return res.json();
         }
-        console.log(res.status);
-        console.log(res.body);
+
         throw new Error("failed fetching posts!");
       })
       .then((data) => {
-        console.log(data);
         setPosts(data);
       })
       .catch((err) => {
@@ -146,6 +145,8 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   return (
     <Box w="100%" p={4} color="white" as={"div"}>
       <Heading color={"black"}>Your Posts</Heading>
+      <ConnectLinkedinAccountButton />
+
       <List>
         {posts &&
           posts.map((item, idx) => {

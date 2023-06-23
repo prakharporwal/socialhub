@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"net/http"
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
@@ -12,9 +13,9 @@ import (
 	"time"
 )
 
-const SessionTokenAgeInMinutes = 1200 //twenty hours
+//const SessionTokenAgeInMinutes = 1200 //twenty hours
 
-func CreateSession(email string, currentOrgId string, userAgent string, clientIP string) (*db.Session, error) {
+func CreateSession(email string, currentOrgId string, userAgent string, clientIP string) (*db.SocialhubSession, error) {
 	tokenMaker, err := NewPasetoMaker()
 	if err != nil {
 		plogger.Error("Paseto Maker Failed ! ", err)
@@ -28,15 +29,20 @@ func CreateSession(email string, currentOrgId string, userAgent string, clientIP
 	}
 
 	args := db.CreateSessionParams{
+		SessionID:    uuid.New(),
 		Email:        email,
 		ClientIp:     clientIP,
 		UserAgent:    userAgent,
 		RefreshToken: token,
-		ExpiresAt:    time.Now().Add(SessionTokenAgeInMinutes * time.Minute),
+		ExpiresAt:    time.Now().Add(TokenAgeInSeconds * time.Second),
 	}
-	// create session in DB
-	session, _ := store.GetInstance().CreateSession(context.Background(), args)
 
+	// create session in DB
+	session, err := store.GetInstance().CreateSession(context.Background(), args)
+	if err != nil {
+		plogger.Error("Failed saving session to DB")
+		plogger.Error(err)
+	}
 	return &session, nil
 }
 

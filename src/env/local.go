@@ -17,3 +17,8 @@ package env
 //	TwitterAccessTokenUrl  = "https://api.twitter.com/2/oauth2/token"
 //	TwitterOAuthCallback   = "http://localhost:8080/twitter/oauth2/access/callback"
 //)
+//
+//const (
+//	InstagramOAuthAuthorisationUrl = "https://api.instagram.com/oauth/authorize"
+//	InstagramAppClientSecret
+//)

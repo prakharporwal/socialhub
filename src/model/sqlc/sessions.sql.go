@@ -13,14 +13,14 @@ import (
 )
 
 const blockSessionById = `-- name: BlockSessionById :one
-UPDATE sessions SET is_blocked=true
+UPDATE socialhub.sessions SET is_blocked=true
 WHERE session_id=($1)
 RETURNING session_id, email, user_agent, client_ip, refresh_token, expires_at, is_blocked, created_at
 `
 
-func (q *Queries) BlockSessionById(ctx context.Context, sessionID uuid.UUID) (Session, error) {
+func (q *Queries) BlockSessionById(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error) {
 	row := q.db.QueryRowContext(ctx, blockSessionById, sessionID)
-	var i Session
+	var i SocialhubSession
 	err := row.Scan(
 		&i.SessionID,
 		&i.Email,
@@ -35,14 +35,14 @@ func (q *Queries) BlockSessionById(ctx context.Context, sessionID uuid.UUID) (Se
 }
 
 const blockSessionFamily = `-- name: BlockSessionFamily :one
-UPDATE sessions SET is_blocked=true
+UPDATE socialhub.sessions SET is_blocked=true
 WHERE email=($1)
 RETURNING session_id, email, user_agent, client_ip, refresh_token, expires_at, is_blocked, created_at
 `
 
-func (q *Queries) BlockSessionFamily(ctx context.Context, email string) (Session, error) {
+func (q *Queries) BlockSessionFamily(ctx context.Context, email string) (SocialhubSession, error) {
 	row := q.db.QueryRowContext(ctx, blockSessionFamily, email)
-	var i Session
+	var i SocialhubSession
 	err := row.Scan(
 		&i.SessionID,
 		&i.Email,
@@ -57,18 +57,20 @@ func (q *Queries) BlockSessionFamily(ctx context.Context, email string) (Session
 }
 
 const createSession = `-- name: CreateSession :one
-INSERT INTO sessions(
+INSERT INTO socialhub.sessions(
+    session_id,
     email ,
     user_agent,
     client_ip,
     refresh_token,
     expires_at
 )
-VALUES ($1,$2,$3,$4,$5)
+VALUES ($1,$2,$3,$4,$5,$6)
 RETURNING session_id, email, user_agent, client_ip, refresh_token, expires_at, is_blocked, created_at
 `
 
 type CreateSessionParams struct {
+	SessionID    uuid.UUID `json:"session_id"`
 	Email        string    `json:"email"`
 	UserAgent    string    `json:"user_agent"`
 	ClientIp     string    `json:"client_ip"`
@@ -76,15 +78,16 @@ type CreateSessionParams struct {
 	ExpiresAt    time.Time `json:"expires_at"`
 }
 
-func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
+func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (SocialhubSession, error) {
 	row := q.db.QueryRowContext(ctx, createSession,
+		arg.SessionID,
 		arg.Email,
 		arg.UserAgent,
 		arg.ClientIp,
 		arg.RefreshToken,
 		arg.ExpiresAt,
 	)
-	var i Session
+	var i SocialhubSession
 	err := row.Scan(
 		&i.SessionID,
 		&i.Email,
@@ -99,12 +102,12 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 }
 
 const getSession = `-- name: GetSession :one
-SELECT session_id, email, user_agent, client_ip, refresh_token, expires_at, is_blocked, created_at FROM sessions where session_id=($1)
+SELECT session_id, email, user_agent, client_ip, refresh_token, expires_at, is_blocked, created_at FROM socialhub.sessions where session_id=($1)
 `
 
-func (q *Queries) GetSession(ctx context.Context, sessionID uuid.UUID) (Session, error) {
+func (q *Queries) GetSession(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error) {
 	row := q.db.QueryRowContext(ctx, getSession, sessionID)
-	var i Session
+	var i SocialhubSession
 	err := row.Scan(
 		&i.SessionID,
 		&i.Email,

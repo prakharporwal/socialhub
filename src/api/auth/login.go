@@ -23,11 +23,11 @@ type loginRequest struct {
 }
 
 type loginResponse struct {
-	Username            string    `json:"username"`
-	OrganisationGroupId string    `json:"organisation_group_id"`
-	AccessToken         string    `json:"access_token"` // userId can be username or userEmail
-	RefreshToken        string    `json:"refresh_token"`
-	ExpiresAt           time.Time `json:"expires_at"`
+	Username            string `json:"username"`
+	OrganisationGroupId string `json:"organisation_group_id"`
+	AccessToken         string `json:"access_token"` // userId can be username or userEmail
+	RefreshToken        string `json:"refresh_token"`
+	ExpiresAt           string `json:"expires_at"`
 }
 
 func Login(ctx *gin.Context) {
@@ -119,10 +119,12 @@ func generateLoginSession(useremail string, currentOrgId string, useragent strin
 	}
 
 	session, err := CreateSession(useremail, currentOrgId, useragent, clientip)
-
+	if err != nil {
+		plogger.Error("Error creating session for ", useremail, err)
+	}
 	return &loginResponse{
 		AccessToken:  token,
 		RefreshToken: session.RefreshToken,
-		ExpiresAt:    session.ExpiresAt,
+		ExpiresAt:    session.ExpiresAt.UTC().String(),
 	}
 }

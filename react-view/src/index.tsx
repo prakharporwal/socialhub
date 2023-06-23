@@ -14,10 +14,10 @@ const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <ChakraProvider>
-      <ColorModeScript />
-      <App />
-    </ChakraProvider>
+      <ChakraProvider>
+        <ColorModeScript />
+        <App />
+      </ChakraProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

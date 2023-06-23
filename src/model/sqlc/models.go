@@ -64,6 +64,17 @@ type SocialhubOrganisationGroup struct {
 	UpdatedAt           time.Time `json:"updated_at"`
 }
 
+type SocialhubSession struct {
+	SessionID    uuid.UUID `json:"session_id"`
+	Email        string    `json:"email"`
+	UserAgent    string    `json:"user_agent"`
+	ClientIp     string    `json:"client_ip"`
+	RefreshToken string    `json:"refresh_token"`
+	ExpiresAt    time.Time `json:"expires_at"`
+	IsBlocked    bool      `json:"is_blocked"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
 type SocialhubTwitterAccountAccessToken struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	UserEmail           string    `json:"user_email"`

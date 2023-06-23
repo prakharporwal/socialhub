@@ -67,14 +67,17 @@ export default function SignInForm() {
         throw new Error("Incorrect credentials");
       })
       .then((data) => {
-        console.log(data.access_token);
+        console.log(data);
         window.localStorage.setItem("authenticated", "true");
         window.localStorage.setItem("current_username", data.username);
         window.localStorage.setItem(
           "organisation_group_id",
           data.organisation_group_id
         );
-        document.cookie = "access_token=" + data.access_token;
+
+        document.cookie =
+          "access_token=" + data.access_token + ";Path=/;" + "Max-Age=18000;";
+
         toast({
           // todo add the user name here
           title: "Login successful",
