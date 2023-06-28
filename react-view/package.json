@@ -21,10 +21,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "deploy": "cp ./src/envs/prod.env ./src/.env && npm run build && npm run copy",
     "develop": "webpack-dev-server --mode development --hot",
     "build": "react-scripts build",
     "copy": "rm -rf ../view/* && cp -r build/ ../view",
-    "start": "react-scripts start",
+    "start": "cp ./src/envs/local.env ./src/.env && react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
