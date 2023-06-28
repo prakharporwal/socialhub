@@ -40,3 +40,10 @@ once moving forward decide what to do next
 
 query and update stuff
 inside the action check if the guys is allowed to perform the action.
+
+
+# Creating SSL cert for nginx using certbot
+
+```sh
+    sudo certbot --nginx -d example.com -d www.example.com
+```
