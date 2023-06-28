@@ -162,43 +162,45 @@ export default function SignInForm() {
                     }}
                   />
                 </FormControl>
-                <Stack spacing={10}>
-                  <Stack
-                    direction={{ base: "column", sm: "row" }}
-                    align={"start"}
-                    justify={"space-between"}
-                  >
-                    <Checkbox
-                      checked={rememberMe}
-                      onChange={(e) => {
-                        setRememberMe(e.currentTarget.checked);
+                <FormControl id="submit-button">
+                  <Stack spacing={10}>
+                    <Stack
+                      direction={{ base: "column", sm: "row" }}
+                      align={"start"}
+                      justify={"space-between"}
+                    >
+                      <Checkbox
+                        checked={rememberMe}
+                        onChange={(e) => {
+                          setRememberMe(e.currentTarget.checked);
+                        }}
+                      >
+                        Remember me
+                      </Checkbox>
+                      <Link
+                        as={RouterLink}
+                        to="/forgot-password"
+                        color={"blue.400"}
+                      >
+                        Forgot password?
+                      </Link>
+                    </Stack>
+                    <Button
+                      bg={"blue.400"}
+                      color={"white"}
+                      _hover={{
+                        bg: "blue.500",
                       }}
+                      _focus={{
+                        bg: "blue.500",
+                      }}
+                      type="submit"
+                      isLoading={isLoggingIn}
                     >
-                      Remember me
-                    </Checkbox>
-                    <Link
-                      as={RouterLink}
-                      to="/forgot-password"
-                      color={"blue.400"}
-                    >
-                      Forgot password?
-                    </Link>
+                      Sign in
+                    </Button>
                   </Stack>
-                  <Button
-                    bg={"blue.400"}
-                    color={"white"}
-                    _hover={{
-                      bg: "blue.500",
-                    }}
-                    _focus={{
-                      bg: "blue.500",
-                    }}
-                    type="submit"
-                    isLoading={isLoggingIn}
-                  >
-                    Sign in
-                  </Button>
-                </Stack>
+                </FormControl>
               </form>
             </Stack>
           </Box>
