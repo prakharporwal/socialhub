@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name www.yogveda.live api.yogveda.live;
+    server_name www.prakhar.works api.prakhar.works;
     return 301 https://$host$request_uri;
 }
 
@@ -12,7 +12,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    server_name www.yogveda.live;
+    server_name www.prakhar.works;
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
@@ -34,7 +34,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    server_name api.yogveda.live;
+    server_name api.prakhar.works;
 
     location / {
         # Your API server configuration goes here
