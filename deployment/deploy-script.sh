@@ -5,6 +5,7 @@ echo "Deploying from bash script!"
 #go build -o build/socialhub .
 echo "Build is present"
 
+cp ~/github/socialhub/src/env/configs/prod.sample ~/github/socialhub/src/env/env.go
 cd ~/github/socialhub/deployment
 #chmod u+x ~/github/socialhub/src/build/socialhub
 
