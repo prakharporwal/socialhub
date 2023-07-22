@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"socialhub-server/env"
 	"socialhub-server/jobs/crons"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/server"
@@ -16,8 +17,9 @@ func init() {
 }
 
 func main() {
-	srv := server.NewServer()
+	srv := server.NewServer(env.ServerPort)
 
+	plogger.Warn("Starting server on port: ", env.ServerPort)
+	// line block at start not execute after it until process killed
 	srv.Start()
-	plogger.Info("Server started on 8080")
 }

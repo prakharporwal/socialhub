@@ -71,27 +71,27 @@ func (q *Queries) GetUserDetails(ctx context.Context, arg GetUserDetailsParams) 
 	return i, err
 }
 
-const resetUserPassword = `-- name: ResetUserPassword :one
+const users_updatePassword = `-- name: Users_updatePassword :one
 UPDATE socialhub.users
 SET password_hash=($3)
 WHERE user_email=($1) and organisation_group_id=($2)
 RETURNING user_email, organisation_group_id
 `
 
-type ResetUserPasswordParams struct {
+type Users_updatePasswordParams struct {
 	UserEmail           string `json:"user_email"`
 	OrganisationGroupID string `json:"organisation_group_id"`
 	PasswordHash        string `json:"password_hash"`
 }
 
-type ResetUserPasswordRow struct {
+type Users_updatePasswordRow struct {
 	UserEmail           string `json:"user_email"`
 	OrganisationGroupID string `json:"organisation_group_id"`
 }
 
-func (q *Queries) ResetUserPassword(ctx context.Context, arg ResetUserPasswordParams) (ResetUserPasswordRow, error) {
-	row := q.db.QueryRowContext(ctx, resetUserPassword, arg.UserEmail, arg.OrganisationGroupID, arg.PasswordHash)
-	var i ResetUserPasswordRow
+func (q *Queries) Users_updatePassword(ctx context.Context, arg Users_updatePasswordParams) (Users_updatePasswordRow, error) {
+	row := q.db.QueryRowContext(ctx, users_updatePassword, arg.UserEmail, arg.OrganisationGroupID, arg.PasswordHash)
+	var i Users_updatePasswordRow
 	err := row.Scan(&i.UserEmail, &i.OrganisationGroupID)
 	return i, err
 }

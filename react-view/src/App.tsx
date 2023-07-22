@@ -1,15 +1,18 @@
 import React from "react";
 
 import { Route, Routes } from "react-router";
-import SignInForm from "./components/SignInForm";
 import LinkedPostForm from "./components/LinkedPostForm";
 import PostingHistoryList from "./components/PostingHistoryList";
 import MarketingPage from "./pages/MarketingPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import SignUpForm from "./components/SignUpForm";
 import TwitterPage from "./pages/TwitterPage";
 import InstagramPage from "./pages/InstagramPage";
 import FacebookPage from "./pages/FacebookPage";
+import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
+import SignInForm from "./components/SignInForm";
+import ForgotPasswordResetPage from "./pages/ForgotPasswordResetPage.tsx";
+import ForgotPasswordRequestPage from "./pages/ForgotPasswordPage";
 
 export const App = () => {
   return (
@@ -22,8 +25,17 @@ export const App = () => {
         <Route path="/facebook" element={<FacebookPage />}></Route>
         <Route path="/post/new" element={<LinkedPostForm />}></Route>
         <Route path="/posts" element={<PostingHistoryList />}></Route>
-        <Route path="/signin" element={<SignInForm />}></Route>
-        <Route path="/signup" element={<SignUpForm />}></Route>
+        <Route path="/signin" element={<SignInPage />}></Route>
+        <Route path="/signinf" element={<SignInForm />}></Route>
+        <Route path="/signup" element={<SignUpPage />}></Route>
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordRequestPage />}
+        ></Route>
+        <Route
+          path="/forgot-password-reset"
+          element={<ForgotPasswordResetPage />}
+        ></Route>
       </Routes>
     </>
   );

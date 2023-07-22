@@ -9,6 +9,7 @@ import (
 	"socialhub-server/api/auth"
 	"socialhub-server/api/auth/oauth2/linkedin"
 	"socialhub-server/api/auth/oauth2/twitter"
+	"socialhub-server/api/auth/password"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/api/twitterapi"
 	"socialhub-server/pkg/plogger"
@@ -45,7 +46,9 @@ func InitRouter() *gin.Engine {
 
 	public.POST("/v1/login", auth.Login)
 	public.POST("/v1/signup", auth.SignUp)
-	public.POST("/v1/reset-password", auth.ResetPassword)
+	public.POST("/v1/password/change", password.ChangePassword)
+	public.POST("/v1/password/forgot/request", password.ForgotPasswordRequest)
+	public.POST("/v1/password/forgot/reset", password.ForgotPasswordReset)
 
 	type Todo struct {
 		Title string

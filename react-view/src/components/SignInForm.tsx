@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  Spacer,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
@@ -132,7 +133,7 @@ export default function SignInForm() {
             {/* // Todo: Form Validate and sanitize input for xss and sql injection  */}
             <Stack spacing={4}>
               <form onSubmit={submitSignInForm}>
-                <FormControl id="organisation-id">
+                <FormControl id="organisation-id" isRequired>
                   <FormLabel>Organisation Id</FormLabel>
                   <Input
                     type="text"
@@ -142,7 +143,8 @@ export default function SignInForm() {
                     }}
                   />
                 </FormControl>
-                <FormControl id="email">
+                <Spacer h="4"></Spacer>
+                <FormControl id="email" isRequired>
                   <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
@@ -152,6 +154,7 @@ export default function SignInForm() {
                     }}
                   />
                 </FormControl>
+                <Spacer h="4"></Spacer>
                 <FormControl id="password">
                   <FormLabel>Password</FormLabel>
                   <Input

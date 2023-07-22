@@ -182,3 +182,24 @@ CREATE TABLE IF NOT EXISTS socialhub.sessions(
     is_blocked bool NOT NULL default false,
     created_at timestamptz NOT NULL DEFAULT NOW()
 );
+
+
+-- user_password_reset_tokens table
+CREATE TABLE IF NOT EXISTS socialhub.user_password_reset_tokens(
+    organisation_group_id varchar NOT NULL,
+    user_id                varchar     NOT NULL,
+    token                  varchar     NOT NULL UNIQUE,
+    expires_at             timestamptz NOT NULL,
+    is_expired             bool        NOT NULL default false,
+    requested_by_client_ip varchar     NOT NULL,
+    created_at             timestamptz NOT NULL DEFAULT NOW(),
+    updated_at             timestamptz not null default now(),
+    PRIMARY KEY (organisation_group_id,user_id, token)
+);
+
+-- setting trigger to update timestamp accounts table
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.user_password_reset_tokens
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();

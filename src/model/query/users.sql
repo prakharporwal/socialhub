@@ -7,8 +7,7 @@ RETURNING user_email, username, organisation_group_id;
 SELECT user_email, username, organisation_group_id, password_hash
 FROM socialhub.users WHERE (user_email=($1) or username=($1)) and organisation_group_id=($2);
 
-
--- name: ResetUserPassword :one
+-- name: Users_updatePassword :one
 UPDATE socialhub.users
 SET password_hash=($3)
 WHERE user_email=($1) and organisation_group_id=($2)

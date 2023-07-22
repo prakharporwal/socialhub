@@ -10,17 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Session struct {
-	SessionID    uuid.UUID `json:"session_id"`
-	Email        string    `json:"email"`
-	UserAgent    string    `json:"user_agent"`
-	ClientIp     string    `json:"client_ip"`
-	RefreshToken string    `json:"refresh_token"`
-	ExpiresAt    time.Time `json:"expires_at"`
-	IsBlocked    bool      `json:"is_blocked"`
-	CreatedAt    time.Time `json:"created_at"`
-}
-
 type SocialhubAccount struct {
 	ID         int64     `json:"id"`
 	OwnerEmail string    `json:"owner_email"`
@@ -93,6 +82,17 @@ type SocialhubUser struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	PasswordHash        string    `json:"password_hash"`
 	IsVerified          bool      `json:"is_verified"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
+}
+
+type SocialhubUserPasswordResetToken struct {
+	OrganisationGroupID string    `json:"organisation_group_id"`
+	UserID              string    `json:"user_id"`
+	Token               string    `json:"token"`
+	ExpiresAt           time.Time `json:"expires_at"`
+	IsExpired           bool      `json:"is_expired"`
+	RequestedByClientIp string    `json:"requested_by_client_ip"`
 	CreatedAt           time.Time `json:"created_at"`
 	UpdatedAt           time.Time `json:"updated_at"`
 }

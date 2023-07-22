@@ -22,12 +22,16 @@ type Querier interface {
 	FindTwitterAccountAccessToken(ctx context.Context, arg FindTwitterAccountAccessTokenParams) (SocialhubTwitterAccountAccessToken, error)
 	GetSession(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error)
 	GetUserDetails(ctx context.Context, arg GetUserDetailsParams) (GetUserDetailsRow, error)
-	ResetUserPassword(ctx context.Context, arg ResetUserPasswordParams) (ResetUserPasswordRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
 	SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAccessTokenParams) (SaveTwitterAccessTokenRow, error)
 	ScheduleAUserPostOnLinkedin(ctx context.Context, arg ScheduleAUserPostOnLinkedinParams) (ScheduleAUserPostOnLinkedinRow, error)
 	UpdatePostStatus(ctx context.Context, arg UpdatePostStatusParams) (UpdatePostStatusRow, error)
+	UserPasswordResetTokens_blockToken(ctx context.Context, arg UserPasswordResetTokens_blockTokenParams) (UserPasswordResetTokens_blockTokenRow, error)
+	UserPasswordResetTokens_delete(ctx context.Context, token string) error
+	UserPasswordResetTokens_findUserIdByToken(ctx context.Context, token string) (UserPasswordResetTokens_findUserIdByTokenRow, error)
+	UserPasswordResetTokens_insert(ctx context.Context, arg UserPasswordResetTokens_insertParams) (UserPasswordResetTokens_insertRow, error)
+	Users_updatePassword(ctx context.Context, arg Users_updatePasswordParams) (Users_updatePasswordRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

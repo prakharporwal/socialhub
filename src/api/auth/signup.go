@@ -37,9 +37,16 @@ func SignUp(ctx *gin.Context) {
 	// TODO: add email validation
 	// TODO: validate password strength
 
+	if len(request.Password) < 8 {
+		plogger.Error("Password length less than 8 characters")
+		ctx.JSON(http.StatusBadRequest, apierror.PasswordValidationFailed)
+		return
+	}
+
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(request.Password), 15)
 	if err != nil {
 		plogger.Error("Failed encrypting password", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
 
