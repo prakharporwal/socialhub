@@ -17,7 +17,7 @@ func TestJWTMaker(t *testing.T) {
 	issuedAt := time.Now()
 	expiredAt := issuedAt.Add(duration)
 
-	token, err := maker.CreateToken(username, duration)
+	token, err := maker.CreateToken(username, "random_org", duration)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 

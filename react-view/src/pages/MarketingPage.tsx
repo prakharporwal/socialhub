@@ -57,7 +57,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
 
   return (
     <Box overflowY="auto">
-      <Container maxW={"5xl"} h="100vh">
+      <Container maxW={"5xl"} h="80vh">
         <Stack
           as={Box}
           textAlign={"center"}
@@ -145,10 +145,9 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
             >
               Our Story
             </Text>
-            <Heading>A digital Product design agency</Heading>
+            <Heading>A Social Media Management Tool</Heading>
             <Text color={"gray.500"} fontSize={"lg"}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore
+              Manage all the social media accounts from one place
             </Text>
             <Stack
               spacing={4}
