@@ -22,6 +22,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          rm: true
           source: "."  # Path to the code to be copied
           target: "~/github/socialhub"  # Destination path on the EC2 instance
 
