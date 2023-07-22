@@ -125,7 +125,7 @@ func GetAccessToken(ctx *gin.Context) {
 	//TODO : Make secret storage more secure using hashing, HMAC, or some other algo
 
 	// redirectURI := "https://www.yogveda.live"
-	redirectURI := "https://api.yogveda.live/linkedin/oauth/access/callback"
+	redirectURI := env.LINKEDIN_OAUTH_REDIRECT_URL
 
 	postData := url.Values{}
 	postData.Set("grant_type", "authorization_code")
