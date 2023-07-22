@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -9,19 +9,16 @@ import {
   Stack,
   Link,
   Button,
-  Heading,
-  Text,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../CONSTANTS";
 
 import FormContainer from "../../components/FormContainer";
 
 import "./signin.css";
+import { useAuth } from "../../hooks/useAuth";
 
 const SignInPage: React.FunctionComponent<any> = (props) => {
   const [organisationId, setOrganisationId] = useState<string>("");
@@ -30,6 +27,8 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const toast = useToast();
+
+  const auth = useAuth();
 
   const navigate = useNavigate();
 
@@ -110,6 +109,12 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
         setIsLoggingIn(false);
       });
   }
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate("/home");
+    }
+  }, [auth]);
 
   return (
     <FormContainer headingText={"Signin into Organisation"}>

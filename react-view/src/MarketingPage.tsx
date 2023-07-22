@@ -16,7 +16,7 @@ import {
 import { Box } from "@chakra-ui/layout";
 import { IoMdAnalytics, IoLogoBitcoin, IoMdSearch } from "react-icons/io";
 import "./marketing.css";
-import MarketingFooter from "./components/MarketingFooter";
+import MarketingFooter from "./pages/MarketingPage/MarketingFooter";
 import { useNavigate } from "react-router";
 import { useAuth } from "./hooks/useAuth";
 

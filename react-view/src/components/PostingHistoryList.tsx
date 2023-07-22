@@ -145,7 +145,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   return (
     <Box w="100%" p={4} color="white" as={"div"}>
       <Heading color={"black"}>Your Posts</Heading>
-      <ConnectLinkedinAccountButton />
+      {/* <ConnectLinkedinAccountButton /> */}
 
       <List>
         {posts &&

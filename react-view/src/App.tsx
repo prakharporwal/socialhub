@@ -10,7 +10,6 @@ import InstagramPage from "./pages/InstagramPage";
 import FacebookPage from "./pages/FacebookPage";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-import SignInForm from "./components/SignInForm";
 import ForgotPasswordResetPage from "./pages/ForgotPasswordResetPage.tsx";
 import ForgotPasswordRequestPage from "./pages/ForgotPasswordPage";
 import { BrowserRouter } from "react-router-dom";
@@ -30,9 +29,8 @@ export const App = () => {
               <Route path="/instagram" element={<InstagramPage />}></Route>
               <Route path="/facebook" element={<FacebookPage />}></Route>
               <Route path="/post/new" element={<LinkedPostForm />}></Route>
-              <Route path="/posts" element={<PostingHistoryList />}></Route>
+              <Route path="/home" element={<PostingHistoryList />}></Route>
               <Route path="/signin" element={<SignInPage />}></Route>
-              <Route path="/signinf" element={<SignInForm />}></Route>
               <Route path="/signup" element={<SignUpPage />}></Route>
               <Route
                 path="/forgot-password"

@@ -23,12 +23,21 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 
-import { NavLink as RouterNavLink, useNavigate } from "react-router-dom";
+import {
+  Link as ReactLink,
+  NavLink as RouterNavLink,
+  useNavigate,
+} from "react-router-dom";
 
 import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
-import { FaLinkedinIn } from "react-icons/fa";
+import {
+  FaAddressCard,
+  FaDochub,
+  FaLinkedinIn,
+  FaPlusCircle,
+} from "react-icons/fa";
 import { SiFacebook, SiInstagram, SiTwitter } from "react-icons/si";
 
 interface LinkItemProps {
@@ -37,11 +46,11 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, linkTo: "/post/new" },
-  { name: "Linkedin", icon: FaLinkedinIn, linkTo: "/posts" },
-  { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
-  { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
-  { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
+  { name: "Home", icon: FiHome, linkTo: "/home" },
+  { name: "Create Post", icon: FaPlusCircle, linkTo: "/post/new" },
+  // { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
+  // { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
+  // { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
 
 export default function SidebarWithHeader({
@@ -103,9 +112,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Socialhub
-        </Text>
+        <Link as={ReactLink} to="/">
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+            Socialhub
+          </Text>
+        </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
@@ -237,8 +248,8 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
               <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              {/* <MenuItem>Settings</MenuItem>
+              <MenuItem>Billing</MenuItem> */}
               <MenuDivider />
               <MenuItem
                 onClick={() => {

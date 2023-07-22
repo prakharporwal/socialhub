@@ -20,6 +20,8 @@ import {
   Center,
   RadioGroup,
   Radio,
+  ButtonGroup,
+  Switch,
 } from "@chakra-ui/react";
 import { SiLinkedin } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
@@ -281,7 +283,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                 </>
               ) : (
                 <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
-                  <FormLabel
+                  {/* <FormLabel
                     fontSize="sm"
                     fontWeight="md"
                     color="gray.700"
@@ -290,7 +292,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     }}
                   >
                     Content
-                  </FormLabel>
+                  </FormLabel> */}
                   <Textarea
                     p={2}
                     placeholder="Hey guys I just started using Socialhub"
@@ -306,13 +308,24 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     }}
                   ></Textarea>
 
-                  <FormHelperText>
-                    Brief description for your profile. URLs are hyperlinked.
-                  </FormHelperText>
+                  <FormHelperText> </FormHelperText>
                 </FormControl>
               )}
 
               <FormControl>
+                <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
+                  <FormLabel htmlFor="isChecked">Twitter</FormLabel>
+                  <Switch id="isChecked" isChecked marginRight={"auto"} />
+
+                  <FormLabel htmlFor="isDisabled">Linkedin</FormLabel>
+                  <Switch id="isDisabled" defaultChecked marginRight={"auto"} />
+
+                  <FormLabel htmlFor="isFocusable">Instagram</FormLabel>
+                  <Switch id="isFocusable" isFocusable marginRight={"auto"} />
+
+                  <FormLabel htmlFor="isInvalid">Facebook</FormLabel>
+                  <Switch id="isInvalid" isInvalid marginRight={"auto"} />
+                </FormControl>
                 <Stack spacing={10}>
                   <Spacer />
                   <Button

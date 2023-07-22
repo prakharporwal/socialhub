@@ -12,7 +12,7 @@ const NotFoundPage: React.FunctionComponent<any> = () => {
     "notfound_coffee.svg",
     "notfound_campfire.svg",
   ];
-  const index = Math.round(Math.random() * 5);
+  const index = Math.round(Math.random() * 4);
 
   console.log(index);
   return (
