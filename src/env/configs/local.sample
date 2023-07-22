@@ -9,6 +9,7 @@ const (
 )
 
 const (
+	LINKEDIN_OAUTH_REDIRECT_URL         = "https://api.prakhar.works/app/linkedin/oauth/access/callback"
 	LINKEDIN_GET_AUTHORISATION_CODE_URL = "https://www.linkedin.com/oauth/v2/authorization"
 	AESEncryptionKey                    = "lmov567IN6&hj87Hko^$*IUNu3kwp+85"
 )

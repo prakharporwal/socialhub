@@ -104,7 +104,7 @@ func FetchLinkedinAccountAccessToken() (string, error) {
 
 	row, err := store.GetInstance().FindLinkedInAccountAccessToken(context.Background(), args)
 	if err != nil {
-		plogger.Error("Error getting access token for linkedin!", err)
+		plogger.Error("Error getting access token for linkedin! ", err)
 		return ",", ErrNotFound
 	}
 	//

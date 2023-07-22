@@ -45,7 +45,7 @@ func FetchAuthCode(ctx *gin.Context) {
 	}
 
 	responseType := "code"
-	redirectURI := "https://api.yogveda.live/linkedin/oauth/access/callback"
+	redirectURI := env.LINKEDIN_OAUTH_REDIRECT_URL
 
 	scopeForPosting := "w_member_social"
 	scopeForProfileInfo := "r_liteprofile"

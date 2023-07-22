@@ -165,6 +165,8 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) error
 
 	defer resp.Body.Close()
 
+	plogger.Debug("Status code is ", resp.StatusCode)
+
 	if resp.StatusCode != http.StatusOK || resp.StatusCode != http.StatusCreated {
 		plogger.Error("Error creating post on linkedin :")
 		plogger.Debug("resp status code ", resp.StatusCode)
