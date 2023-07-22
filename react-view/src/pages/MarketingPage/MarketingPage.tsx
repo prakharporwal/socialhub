@@ -64,7 +64,6 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
             colorScheme={"green"}
             rounded={"full"}
             px={6}
-            w={{ sm: "12" }}
             _hover={{
               bg: "green.500",
             }}

@@ -14,6 +14,7 @@ import ForgotPasswordResetPage from "./pages/ForgotPasswordResetPage.tsx";
 import ForgotPasswordRequestPage from "./pages/ForgotPasswordPage";
 import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import LinkedinPage from "./pages/LinkedinPage";
 
 export const App = () => {
   return (
@@ -26,6 +27,7 @@ export const App = () => {
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/" element={<MarketingPage />}></Route>
               <Route path="/twitter" element={<TwitterPage />}></Route>
+              <Route path="/linkedin" element={<LinkedinPage />}></Route>
               <Route path="/instagram" element={<InstagramPage />}></Route>
               <Route path="/facebook" element={<FacebookPage />}></Route>
               <Route path="/post/new" element={<LinkedPostForm />}></Route>

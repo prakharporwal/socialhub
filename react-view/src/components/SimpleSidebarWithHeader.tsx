@@ -38,7 +38,7 @@ import {
   FaLinkedinIn,
   FaPlusCircle,
 } from "react-icons/fa";
-import { SiFacebook, SiInstagram, SiTwitter } from "react-icons/si";
+import { SiFacebook, SiInstagram, SiLinkedin, SiTwitter } from "react-icons/si";
 
 interface LinkItemProps {
   name: string;
@@ -48,9 +48,10 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, linkTo: "/home" },
   { name: "Create Post", icon: FaPlusCircle, linkTo: "/post/new" },
-  // { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
-  // { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
-  // { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
+  { name: "Linkedin", icon: SiLinkedin, linkTo: "/linkedin" },
+  { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
+  { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
+  { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
 
 export default function SidebarWithHeader({

@@ -116,13 +116,17 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         },
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok || res.status === 201) {
           return res.json();
         }
-        console.log(res.status);
-        console.log(res.text);
-        throw new Error("creating post request failed!");
+
+        let resp = {};
+        await res.json().then((body) => {
+          resp = body;
+        });
+
+        throw new Error(JSON.stringify(resp));
       })
       .then((data) => {
         if (!toast.isActive("post-submit-api-success")) {
@@ -135,12 +139,13 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         }
       })
       .catch((err) => {
+        console.log("error", JSON.parse(err?.message).error);
         if (!toast.isActive("post-submit-api-error")) {
           toast({
             id: "post-submit-api-error",
             status: "error",
             title: "Posting Failed",
-            description: "Try again sometime later!",
+            description: JSON.parse(err?.message).error,
           });
         }
       })
@@ -200,7 +205,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
             borderWidth="2px"
             rounded="lg"
             shadow="2px 2px 3px rgba(0,0,0,0.3)"
-            maxWidth={800}
+            minWidth={{ sm: 80, md: 96 }}
             bg={useColorModeValue("white", "gray.700")}
             p={8}
             m="10px auto"
