@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	"socialhub-server/env"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -72,7 +73,7 @@ func Login(ctx *gin.Context) {
 	plogger.Debug(request.UserId, " is logged in successfully!")
 
 	// not working IDK why
-	ctx.SetCookie("AccessToken", response.AccessToken, TokenAgeInSeconds, "/", "www.yogveda.live", false, false)
+	ctx.SetCookie("AccessToken", response.AccessToken, TokenAgeInSeconds, "/", env.WebsiteURL, false, false)
 	ctx.JSON(http.StatusOK, response)
 }
 
