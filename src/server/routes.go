@@ -88,7 +88,7 @@ func InitRouter() *gin.Engine {
 
 	protected.GET("/linkedin/oauth/access/initiate", linkedin.FetchAuthCode)
 
-	public.GET("/app/linkedin/oauth/access/callback", linkedin.GetAccessToken)
+	public.GET("/linkedin/oauth/access/callback", linkedin.GetAccessToken)
 	//protected.GET("/twitter/oauth/access/initiate", twitter.AccessTokenAPI)
 	protected.GET("/twitter/oauth2/access/initiate", twitter.OAuth2Initiate)
 	//protected.GET("/twitter/oauth/access", twitter.RequestAccess)
