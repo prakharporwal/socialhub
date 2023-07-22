@@ -13,30 +13,39 @@ import SignInPage from "./pages/SignInPage";
 import SignInForm from "./components/SignInForm";
 import ForgotPasswordResetPage from "./pages/ForgotPasswordResetPage.tsx";
 import ForgotPasswordRequestPage from "./pages/ForgotPasswordPage";
+import { BrowserRouter } from "react-router-dom";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 
 export const App = () => {
   return (
     <>
-      <Routes>
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/" element={<MarketingPage />}></Route>
-        <Route path="/twitter" element={<TwitterPage />}></Route>
-        <Route path="/instagram" element={<InstagramPage />}></Route>
-        <Route path="/facebook" element={<FacebookPage />}></Route>
-        <Route path="/post/new" element={<LinkedPostForm />}></Route>
-        <Route path="/posts" element={<PostingHistoryList />}></Route>
-        <Route path="/signin" element={<SignInPage />}></Route>
-        <Route path="/signinf" element={<SignInForm />}></Route>
-        <Route path="/signup" element={<SignUpPage />}></Route>
-        <Route
-          path="/forgot-password"
-          element={<ForgotPasswordRequestPage />}
-        ></Route>
-        <Route
-          path="/forgot-password-reset"
-          element={<ForgotPasswordResetPage />}
-        ></Route>
-      </Routes>
+      <React.StrictMode>
+        <BrowserRouter>
+          <ChakraProvider>
+            <ColorModeScript />
+            <Routes>
+              <Route path="*" element={<NotFoundPage />} />
+              <Route path="/" element={<MarketingPage />}></Route>
+              <Route path="/twitter" element={<TwitterPage />}></Route>
+              <Route path="/instagram" element={<InstagramPage />}></Route>
+              <Route path="/facebook" element={<FacebookPage />}></Route>
+              <Route path="/post/new" element={<LinkedPostForm />}></Route>
+              <Route path="/posts" element={<PostingHistoryList />}></Route>
+              <Route path="/signin" element={<SignInPage />}></Route>
+              <Route path="/signinf" element={<SignInForm />}></Route>
+              <Route path="/signup" element={<SignUpPage />}></Route>
+              <Route
+                path="/forgot-password"
+                element={<ForgotPasswordRequestPage />}
+              ></Route>
+              <Route
+                path="/forgot-password-reset"
+                element={<ForgotPasswordResetPage />}
+              ></Route>
+            </Routes>
+          </ChakraProvider>
+        </BrowserRouter>
+      </React.StrictMode>
     </>
   );
 };
