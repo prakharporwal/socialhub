@@ -4,15 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
 	"socialhub-server/api/auth"
 	"socialhub-server/model/models"
 	"socialhub-server/model/models/linkedin"
-	db "socialhub-server/model/sqlc"
+	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
 	"strings"
+	"time"
 )
 
 type service interface {
@@ -103,7 +105,7 @@ var responseBody struct {
 func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
-	args := db.SaveLinkedinURNParams{
+	args := sqlcmodels.SaveLinkedinURNParams{
 		OrganisationGroupID: "org_yogveda",
 		UserEmail:           auth.GetCurrentUser(),
 		LinkedinUrn:         createURN("person", urnId),
@@ -124,6 +126,26 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		plogger.Error("Failed while sending post to linkedin ", err)
 		return "", err
 	}
+
+	argsPersistPost := sqlcmodels.ScheduleAUserPostOnLinkedinParams{
+		ScheduledPostID:  uuid.NewString(),
+		AccountID:        1234,
+		AuthorUrn:        content.Author,
+		PostType:         "text",
+		PostIDOnLinkedin: "lol",
+		PostJsonString:   string(body),
+		Status:           "SUBMITTED",
+		CreatedBy:        auth.GetCurrentUser(),
+		ScheduledTime:    time.Now().UTC().Add(10 * time.Minute),
+	}
+
+	out2, err := store.GetInstance().ScheduleAUserPostOnLinkedin(context.Background(), argsPersistPost)
+	if err != nil {
+		plogger.Error("failed to add post for scheduling in database ", err)
+		//return
+	}
+
+	plogger.Info("post added to db!", out2.ScheduledPostID)
 
 	return "success", nil
 }
