@@ -18,7 +18,7 @@ const (
 	TwitterAppClientId     = "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
 	TwitterAppClientSecret = "2Qf7eGgae5W0J95J6eVoAm2lOfM58pXh1-Kzqy5yESc_f83dGO"
 	TwitterAccessTokenUrl  = "https://api.twitter.com/2/oauth2/token"
-	TwitterOAuthCallback   = "http://localhost:8080/twitter/oauth2/access/callback"
+	TwitterOAuth2Callback  = "https://api.prakhar.works/twitter/oauth2/access/callback"
 )
 
 const (

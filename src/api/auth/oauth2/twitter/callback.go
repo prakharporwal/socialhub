@@ -30,7 +30,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 	queryData.Add("code", twitterOAuthToken)
 	queryData.Add("grant_type", "authorization_code")
 	queryData.Add("client_id", clientId)
-	queryData.Add("redirect_uri", env.TwitterOAuthCallback)
+	queryData.Add("redirect_uri", env.TwitterOAuth2Callback)
 	// todo: use a complex code_verifier
 	queryData.Add("code_verifier", "challenge")
 
