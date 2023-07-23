@@ -237,7 +237,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
             <Image
               rounded={"md"}
               alt={"feature image"}
-              src={"marketing_img.jpeg"}
+              src={"images/marketing_img.jpeg"}
               objectFit={"cover"}
             />
           </Flex>

@@ -3,16 +3,15 @@ package server
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"html/template"
 	"net/http"
 	"socialhub-server/api"
 	"socialhub-server/api/auth"
+	"socialhub-server/api/auth/oauth2/google"
 	"socialhub-server/api/auth/oauth2/linkedin"
 	"socialhub-server/api/auth/oauth2/twitter"
 	"socialhub-server/api/auth/password"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/api/twitterapi"
-	"socialhub-server/pkg/plogger"
 	"socialhub-server/server/middleware"
 )
 
@@ -49,35 +48,7 @@ func InitRouter() *gin.Engine {
 	public.POST("/v1/password/change", password.ChangePassword)
 	public.POST("/v1/password/forgot/request", password.ForgotPasswordRequest)
 	public.POST("/v1/password/forgot/reset", password.ForgotPasswordReset)
-
-	type Todo struct {
-		Title string
-		Done  bool
-	}
-
-	type TodoPageData struct {
-		PageTitle string
-		Todos     []Todo
-	}
-
-	public.GET("/login", func(context *gin.Context) {
-		tmpl := template.Must(template.ParseFiles("templates/login.html"))
-
-		data := TodoPageData{
-			PageTitle: "My TODO list",
-			Todos: []Todo{
-				{Title: "Task 1", Done: false},
-				{Title: "Task 2", Done: true},
-				{Title: "Task 3", Done: true},
-			},
-		}
-
-		err := tmpl.Execute(context.Writer, data)
-		if err != nil {
-			plogger.Error(err)
-			_, _ = context.Writer.Write([]byte("Failed to generate template!"))
-		}
-	})
+	public.GET("/google/oauth2/login", google.SignIn)
 
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))

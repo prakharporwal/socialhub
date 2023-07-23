@@ -6,11 +6,11 @@ import { SiGmail, SiMaas, SiMailDotRu } from "react-icons/si";
 
 const NotFoundPage: React.FunctionComponent<any> = () => {
   const images = [
-    "notfound_relaxation.svg",
-    "notfound_page_travelling.svg",
-    "notfound_writer.svg",
-    "notfound_coffee.svg",
-    "notfound_campfire.svg",
+    "images/notfound_relaxation.svg",
+    "images/notfound_page_travelling.svg",
+    "images/notfound_writer.svg",
+    "images/notfound_coffee.svg",
+    "images/notfound_campfire.svg",
   ];
   const index = Math.round(Math.random() * 4);
 

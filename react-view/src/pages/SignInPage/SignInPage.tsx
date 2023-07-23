@@ -182,6 +182,8 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             >
               Sign in
             </Button>
+            <div className="g-signin2" data-onsuccess="onSignIn">
+            </div>
           </Stack>
         </FormControl>
       </form>

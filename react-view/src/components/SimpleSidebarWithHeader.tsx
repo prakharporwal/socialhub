@@ -49,8 +49,8 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Create Post", icon: FaPlusCircle, linkTo: "/post/new" },
   { name: "Linkedin", icon: SiLinkedin, linkTo: "/linkedin" },
   { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
-  { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
-  { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
+  // { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
+  // { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
 
 export default function SidebarWithHeader({
