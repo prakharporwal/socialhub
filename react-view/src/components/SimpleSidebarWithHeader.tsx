@@ -21,6 +21,10 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Image,
+  DrawerOverlay,
+  DrawerBody,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 
 import {
@@ -32,12 +36,7 @@ import {
 import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
-import {
-  FaAddressCard,
-  FaDochub,
-  FaLinkedinIn,
-  FaPlusCircle,
-} from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import { SiFacebook, SiInstagram, SiLinkedin, SiTwitter } from "react-icons/si";
 
 interface LinkItemProps {
@@ -61,7 +60,7 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.800")}>
+    <Box minH="100vh">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -73,9 +72,10 @@ export default function SidebarWithHeader({
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full"
+        size={"xs"}
       >
-        <DrawerContent>
+        <DrawerOverlay />
+        <DrawerContent width={"100px"}>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
@@ -83,7 +83,9 @@ export default function SidebarWithHeader({
       <MobileNav
         onOpen={onOpen}
         user={{
-          username: window.localStorage.getItem("current_username"),
+          username: window.localStorage
+            .getItem("current_username")
+            ?.toUpperCase(),
           userType: window.localStorage.getItem("organisation_group_id"),
           imagSrc:
             "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80",
@@ -103,7 +105,6 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      // transition="3s ease"
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
@@ -112,11 +113,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex h="20" alignItems="center" mx={8} justifyContent="space-between">
         <Link as={ReactLink} to="/">
-          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-            Socialhub
-          </Text>
+          <Image src="/logo.png" alt="Logo" w={36} />
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -180,8 +179,19 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
   user: any;
 }
+
 const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
   let navigate = useNavigate();
+
+  function handleLogout() {
+    window.localStorage.removeItem("authenticated");
+    window.localStorage.removeItem("access_token");
+    window.localStorage.removeItem("username");
+    window.localStorage.removeItem("organisation_group_id");
+
+    document.cookie = `access_token=; Path=/;`;
+    navigate("/signin");
+  }
 
   return (
     <Flex
@@ -203,14 +213,12 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
         icon={<FiMenu />}
       />
 
-      <Text
+      <Image
         display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
-      >
-        Socialhub
-      </Text>
+        src="/logo.png"
+        alt="Logo"
+        w={32}
+      />
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
           size="lg"
@@ -254,13 +262,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               <MenuDivider />
               <MenuItem
                 onClick={() => {
-                  window.localStorage.removeItem("authenticated");
-                  window.localStorage.removeItem("access_token");
-                  window.localStorage.removeItem("username");
-                  window.localStorage.removeItem("organisation_group_id");
-
-                  document.cookie = `access_token=; Path=/;`;
-                  navigate("/signin");
+                  handleLogout();
                 }}
               >
                 Sign out

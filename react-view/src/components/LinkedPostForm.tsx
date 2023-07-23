@@ -34,6 +34,8 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTwitterPost, setIsTwitterPost] = useState(false);
+  const [isLinkedinPost, setIsLinkedinPost] = useState(false);
   const [isSubmittingScheduled, setIsSubmittingScheduled] = useState(false);
   const [scheduledTime, setScheduledTime] = useState(
     new Date().toISOString().substring(0, 16)
@@ -93,66 +95,117 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     //   })
     //   .catch()
     //   .finally();
-
-    await fetch(CONSTANTS.api_server_url + "/app/linkedin/post", {
-      headers: {
-        "access-token": auth.accessToken || "",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        content_type: type,
-        text: content,
-        data: {
-          author: "",
-          commentary: content,
-          visibility: "PUBLIC",
-          distribution: {
-            feedDistribution: "MAIN_FEED",
-            targetEntities: [],
-            thirdPartyDistributionChannels: [],
-          },
-          lifecycleState: "PUBLISHED",
-          isReshareDisabledByAuthor: false,
+    if (isLinkedinPost) {
+      await fetch(CONSTANTS.api_server_url + "/app/linkedin/post", {
+        headers: {
+          "access-token": auth.accessToken || "",
         },
-      }),
-    })
-      .then(async (res) => {
-        if (res.ok || res.status === 201) {
-          return res.json();
-        }
+        method: "POST",
+        body: JSON.stringify({
+          content_type: type,
+          text: content,
+          data: {
+            author: "",
+            commentary: content,
+            visibility: "PUBLIC",
+            distribution: {
+              feedDistribution: "MAIN_FEED",
+              targetEntities: [],
+              thirdPartyDistributionChannels: [],
+            },
+            lifecycleState: "PUBLISHED",
+            isReshareDisabledByAuthor: false,
+          },
+        }),
+      })
+        .then(async (res) => {
+          if (res.ok || res.status === 201) {
+            return res.json();
+          }
 
-        let resp = {};
-        await res.json().then((body) => {
-          resp = body;
+          let resp = {};
+          await res.json().then((body) => {
+            resp = body;
+          });
+
+          throw new Error(JSON.stringify(resp));
+        })
+        .then((data) => {
+          if (!toast.isActive("post-submit-api-success")) {
+            toast({
+              id: "post-submit-api-success",
+              status: "success",
+              title: "Submitted Post to Linkedin",
+              description: "Posting now depends on linkedin",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", JSON.parse(err?.message).error);
+          if (!toast.isActive("post-submit-api-error")) {
+            toast({
+              id: "post-submit-api-error",
+              status: "error",
+              title: "Posting Failed for Linkedin",
+              description: JSON.parse(err?.message).error,
+            });
+          }
+        })
+        .finally(() => {
+          console.log(content, type);
+          setIsSubmitting(false);
         });
+    }
 
-        throw new Error(JSON.stringify(resp));
+    // POST ON TWITTER API ALSO
+    if (isTwitterPost) {
+      await fetch(CONSTANTS.api_server_url + "/app/twitter/tweets/create", {
+        headers: {
+          "access-token": auth.accessToken || "",
+        },
+        method: "POST",
+        body: JSON.stringify({ text: content }),
       })
-      .then((data) => {
-        if (!toast.isActive("post-submit-api-success")) {
-          toast({
-            id: "post-submit-api-success",
-            status: "success",
-            title: "Submitted Post to Linkedin",
-            description: "Posting now depends on linkedin",
+        .then(async (res) => {
+          if (res.ok || res.status === 201) {
+            return res.json();
+          }
+
+          let resp = {};
+          await res.json().then((body) => {
+            resp = body;
           });
-        }
-      })
-      .catch((err) => {
-        console.log("error", JSON.parse(err?.message).error);
-        if (!toast.isActive("post-submit-api-error")) {
-          toast({
-            id: "post-submit-api-error",
-            status: "error",
-            title: "Posting Failed",
-            description: JSON.parse(err?.message).error,
-          });
-        }
-      })
-      .finally(() => {
-        console.log(content, type);
-        setIsSubmitting(false);
-      });
+
+          throw new Error(JSON.stringify(resp));
+        })
+        .then((data) => {
+          if (!toast.isActive("post-submit-api-success")) {
+            toast({
+              id: "twitter-submit-api-success",
+              status: "success",
+              title: "Submitted Post to Twitter",
+              description: "Posting now depends on twitter",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", JSON.parse(err?.message).error);
+          if (!toast.isActive("post-submit-api-error")) {
+            toast({
+              id: "twitter-submit-api-error",
+              status: "error",
+              title: "Posting Failed For Twitter!",
+              description: JSON.parse(err?.message).error,
+            });
+          }
+        })
+        .finally(() => {
+          console.log(content, type);
+          setIsSubmitting(false);
+        });
+    } else {
+      setIsSubmitting(false);
+    }
 
     return;
   };
@@ -235,8 +288,12 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     setType(e.currentTarget.value);
                   }}
                 >
-                  <option value="image">Image</option>
-                  <option value="poll">Create a Poll</option>
+                  <option value="image" disabled aria-disabled>
+                    Image
+                  </option>
+                  <option value="poll" disabled aria-disabled>
+                    Create a Poll
+                  </option>
                   <option value="text">Text</option>
                 </Select>
               </FormControl>
@@ -320,16 +377,30 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
               <FormControl>
                 <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
                   <FormLabel htmlFor="isChecked">Twitter</FormLabel>
-                  <Switch id="isChecked" isChecked marginRight={"auto"} />
+                  <Switch
+                    id="isChecked"
+                    marginRight={"auto"}
+                    onChange={(e) => {
+                      console.log(e.currentTarget.checked);
+                      setIsTwitterPost(e.currentTarget.checked);
+                    }}
+                  />
 
                   <FormLabel htmlFor="isDisabled">Linkedin</FormLabel>
-                  <Switch id="isDisabled" defaultChecked marginRight={"auto"} />
+                  <Switch
+                    id="isDisabled"
+                    marginRight={"auto"}
+                    onChange={(e) => {
+                      console.log(e.currentTarget.checked);
+                      setIsLinkedinPost(e.currentTarget.checked);
+                    }}
+                  />
 
                   <FormLabel htmlFor="isFocusable">Instagram</FormLabel>
-                  <Switch id="isFocusable" isFocusable marginRight={"auto"} />
+                  <Switch id="isFocusable" marginRight={"auto"} isDisabled />
 
                   <FormLabel htmlFor="isInvalid">Facebook</FormLabel>
-                  <Switch id="isInvalid" isInvalid marginRight={"auto"} />
+                  <Switch id="isInvalid" marginRight={"auto"} isDisabled />
                 </FormControl>
                 <Stack spacing={10}>
                   <Spacer />

@@ -13,15 +13,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import CONSTANTS from "../../CONSTANTS";
-import { useLocation } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery() {
-  const { search } = useLocation();
-  return useMemo(() => new URLSearchParams(search), [search]);
-}
+import { useQuery } from "../../hooks/useQuery";
 
 const ForgotPasswordResetPage = () => {
   const [newPassword, setNewPassword] = useState("");

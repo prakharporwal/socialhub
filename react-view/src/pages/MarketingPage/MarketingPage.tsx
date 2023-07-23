@@ -11,6 +11,7 @@ import {
   Image,
   SimpleGrid,
   StackDivider,
+  useToast,
 } from "@chakra-ui/react";
 
 import { Box } from "@chakra-ui/layout";
@@ -19,6 +20,7 @@ import "./marketing.css";
 import MarketingFooter from "./MarketingFooter";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
+import { useQuery } from "../../hooks/useQuery";
 
 interface FeatureProps {
   text: string;
@@ -48,9 +50,27 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
   let moreInfoRef = useRef<HTMLDivElement>(null);
   let navigate = useNavigate();
   let auth = useAuth();
-
+  const toast = useToast();
+  const query = useQuery();
   useEffect(() => {
     if (auth.isAuthenticated) {
+      let connectedLinkedin = query.get("linkedin");
+      let connectedTwitter = query.get("twitter");
+
+      if (connectedLinkedin === "success") {
+        toast({
+          status: "success",
+          title: "Linkedin Account Connected!",
+          duration: 6000,
+        });
+      }
+      if (connectedTwitter === "success") {
+        toast({
+          status: "success",
+          title: "Twitter Account Connected!",
+          duration: 6000,
+        });
+      }
       navigate("/home");
     }
   }, [auth]);

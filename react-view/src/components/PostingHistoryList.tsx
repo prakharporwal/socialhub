@@ -184,6 +184,11 @@ const PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
         <Text>{post.scheduled_post_id}</Text>
         <Text>{post.created_by}</Text>
         <Text>{post.status}</Text>
+        <Text>
+          {new Date(post.created_at).toLocaleDateString() +
+            "  " +
+            new Date(post.created_at).toLocaleTimeString()}
+        </Text>
       </CardFooter>
     </Card>
   );

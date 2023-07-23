@@ -89,7 +89,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
           isClosable: true,
         });
 
-        navigate("/posts");
+        navigate("/home");
       })
       .catch((err) => {
         console.log(err);
