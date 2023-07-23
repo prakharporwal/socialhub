@@ -18,7 +18,7 @@ type Querier interface {
 	FetchLinkedinURNbyAccountId(ctx context.Context, arg FetchLinkedinURNbyAccountIdParams) (string, error)
 	FetchPostsToBePublished(ctx context.Context, limit int32) ([]FetchPostsToBePublishedRow, error)
 	FindLinkedInAccountAccessToken(ctx context.Context, arg FindLinkedInAccountAccessTokenParams) (SocialhubLinkedinAccountAccessToken, error)
-	FindTwitterAccountAccessToken(ctx context.Context, arg FindTwitterAccountAccessTokenParams) (SocialhubTwitterAccountAccessToken, error)
+	FindTwitterAccountAccessToken(ctx context.Context, arg FindTwitterAccountAccessTokenParams) (string, error)
 	GetSession(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error)
 	GetUserDetails(ctx context.Context, arg GetUserDetailsParams) (GetUserDetailsRow, error)
 	LinkedinScheduledUserPosts_fetchAllPosts(ctx context.Context, arg LinkedinScheduledUserPosts_fetchAllPostsParams) ([]SocialhubLinkedinScheduledUserPost, error)
@@ -26,6 +26,8 @@ type Querier interface {
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
 	SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAccessTokenParams) (SaveTwitterAccessTokenRow, error)
 	ScheduleAUserPostOnLinkedin(ctx context.Context, arg ScheduleAUserPostOnLinkedinParams) (ScheduleAUserPostOnLinkedinRow, error)
+	TwitterAccountAccessTokens_fetchAccountInfoByUserEmail(ctx context.Context, arg TwitterAccountAccessTokens_fetchAccountInfoByUserEmailParams) (TwitterAccountAccessTokens_fetchAccountInfoByUserEmailRow, error)
+	TwitterAccountAccessTokens_updateUsernameAndId(ctx context.Context, arg TwitterAccountAccessTokens_updateUsernameAndIdParams) (TwitterAccountAccessTokens_updateUsernameAndIdRow, error)
 	UpdatePostStatus(ctx context.Context, arg UpdatePostStatusParams) (UpdatePostStatusRow, error)
 	UserPasswordResetTokens_blockToken(ctx context.Context, arg UserPasswordResetTokens_blockTokenParams) (UserPasswordResetTokens_blockTokenRow, error)
 	UserPasswordResetTokens_delete(ctx context.Context, token string) error

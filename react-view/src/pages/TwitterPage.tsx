@@ -8,7 +8,7 @@ import {
   Flex,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlug } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
@@ -22,8 +22,9 @@ type TweetType = {
 const TwitterPage: React.FunctionComponent<any> = (props) => {
   const toast = useToast();
   const auth = useAuth();
-  let [isConnecting, setIsConnecting] = useState(false);
-
+  let [isSubmitting, setIsSubmitting] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [twitterUsername, setTwitterUsername] = useState("");
   const [tweets, setTweets] = useState<TweetType[]>([
     {
       id: "hello",
@@ -32,7 +33,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   ]);
 
   function handleConnectToTwitter(e: React.MouseEvent) {
-    setIsConnecting(true);
+    setIsSubmitting(true);
 
     fetch(CONSTANTS.api_server_url + "/app/twitter/oauth2/access/initiate", {
       headers: {
@@ -64,7 +65,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
         });
       })
       .finally(() => {
-        setIsConnecting(false);
+        setIsSubmitting(false);
       });
   }
 
@@ -89,6 +90,31 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
       .finally(() => {});
   }
 
+  useEffect(() => {
+    fetch(CONSTANTS.api_server_url + "/app/twitter/account/info", {
+      method: "get",
+      headers: {
+        "access-token": auth.accessToken || "",
+      },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((body) => {
+        if (
+          body.account?.username !== undefined &&
+          body.account?.username !== ""
+        ) {
+          setIsConnected(true);
+          setTwitterUsername(body.account?.username);
+          console.log(body.account?.username);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Box h="80vh">
       <Flex
@@ -99,12 +125,12 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
         gap={"8"}
       >
         <Button
-          isLoading={isConnecting}
-          colorScheme={"twitter"}
+          isLoading={isSubmitting}
+          colorScheme={isConnected ? "green" : "twitter"}
           onClick={handleConnectToTwitter}
         >
           <FaPlug />
-          Connect Twitter
+          {isConnected ? `Connected to ${twitterUsername}` : "Connect Twitter"}
         </Button>
 
         <Button colorScheme={"twitter"} onClick={handleFetchTweets}>

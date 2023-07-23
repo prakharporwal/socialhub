@@ -22,7 +22,7 @@ func FetchTweets(ctx *gin.Context) {
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
-	row, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	accessToken, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
@@ -34,7 +34,7 @@ func FetchTweets(ctx *gin.Context) {
 		plogger.Error("Error creating request to fetch tweets from twitter! ", err)
 	}
 
-	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
+	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -74,7 +74,7 @@ func WriteTweet(ctx *gin.Context) {
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
-	row, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	accessToken, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
@@ -87,7 +87,7 @@ func WriteTweet(ctx *gin.Context) {
 
 	req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
 
-	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
+	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	http.DefaultClient.Do(req)
 

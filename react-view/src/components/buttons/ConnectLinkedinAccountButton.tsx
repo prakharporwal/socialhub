@@ -1,20 +1,41 @@
 import { Button, Center, Text, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { SiAppstore, SiGrafana, SiLinkedin, SiLinode } from "react-icons/si";
+import { SiGrafana, SiLinkedin } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
 import CONSTANTS from "../../CONSTANTS";
 
 const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
-  const [isConnectingLinkedin, setIsConnectingLinkedin] =
-    useState<boolean>(false);
-  const auth = useAuth();
-  const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [urn, setUrn] = useState("");
 
-  const [isAccountConnected, setIsAccountConnected] = useState(true);
+  const auth = useAuth();
+
+  const [isAccountConnected, setIsAccountConnected] = useState(false);
+
+  useEffect(() => {
+    fetch(CONSTANTS.api_server_url + "/app/linkedin/account/info", {
+      headers: {
+        "access-token": auth.accessToken || "",
+      },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+
+        throw new Error("Failed to get linkedin account info!");
+      })
+      .then((body) => {
+        if (body.account?.urn !== undefined && body.account?.urn !== "") {
+          setUrn(body.account?.urn);
+          setIsAccountConnected(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   async function handleConnectLinkedinAccount() {
-    setIsConnectingLinkedin(true);
-
+    setIsSubmitting(true);
     await fetch(
       CONSTANTS.api_server_url + "/app/linkedin/oauth/access/initiate",
       {
@@ -38,29 +59,37 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
         console.log(err);
       })
       .finally(() => {
-        setIsConnectingLinkedin(false);
+        setIsSubmitting(false);
       });
   }
 
   return (
     <Button
-      bg={isAccountConnected ? "teal.500" : "blue.400"}
+      bg={isAccountConnected ? "green.500" : "blue.400"}
       color={"white"}
       _hover={{
-        bg: isAccountConnected ? "teal.500" : "blue.500",
+        bg: isAccountConnected ? "green.500" : "blue.500",
       }}
       colorScheme={"linkedin"}
       w={"full"}
       maxW={"md"}
-      leftIcon={isAccountConnected ? <SiGrafana /> : <SiLinkedin />}
-      isLoading={isConnectingLinkedin}
+      leftIcon={<SiLinkedin />}
+      isLoading={isSubmitting}
       onClick={handleConnectLinkedinAccount}
     >
       <Center>
-        <Text>Connect Linkedin Account</Text>
+        <Text>
+          {isAccountConnected
+            ? "Connected to " + urn
+            : "Connect Linkedin Account"}
+        </Text>
       </Center>
     </Button>
   );
+};
+
+const ConnectedAccountButton: React.FunctionComponent<any> = (props) => {
+  return <Button></Button>;
 };
 
 export default ConnectLinkedinAccountButton;

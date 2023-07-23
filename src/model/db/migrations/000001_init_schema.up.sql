@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS socialhub.users
     created_at    timestamptz    NOT NULL DEFAULT now(),
     updated_at    timestamptz    NOT NULL DEFAULT now(),
     PRIMARY KEY(user_email,organisation_group_id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS socialhub.organisation_group
 (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS socialhub.organisation_group
     created_by            varchar        NOT NULL,
     created_at            timestamptz    NOT NULL DEFAULT now(),
     updated_at            timestamptz    NOT NULL DEFAULT now()
-    );
+);
 
 CREATE TABLE IF NOT EXISTS socialhub.user_role
 (
@@ -49,21 +49,21 @@ CREATE TABLE IF NOT EXISTS socialhub.user_role
     created_by            varchar     NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz NOT NULL DEFAULT now()
-    );
+);
 
 CREATE TABLE IF NOT EXISTS socialhub.linkedin_scheduled_user_posts(
-                                                                      scheduled_post_id varchar PRIMARY KEY,
-                                                                      account_id        BIGSERIAL   NOT NULL,
-                                                                      author_urn        varchar     NOT NULL,
-                                                                      post_id_on_linkedin  varchar     NOT NULL,
-                                                                      post_json_string  varchar     NOT NULL,
-                                                                      post_type         varchar     NOT NULL,
-                                                                      scheduled_time    timestamptz NOT NULL,
-                                                                      status            varchar     NOT NULL,
-                                                                      created_by        varchar     NOT NULL,
-                                                                      created_at        timestamptz NOT NULL DEFAULT now(),
+    scheduled_post_id varchar PRIMARY KEY,
+    account_id        BIGSERIAL   NOT NULL,
+    author_urn        varchar     NOT NULL,
+    post_id_on_linkedin  varchar     NOT NULL,
+    post_json_string  varchar     NOT NULL,
+    post_type         varchar     NOT NULL,
+    scheduled_time    timestamptz NOT NULL,
+    status            varchar     NOT NULL,
+    created_by        varchar     NOT NULL,
+    created_at        timestamptz NOT NULL DEFAULT now(),
     updated_at        timestamptz NOT NULL DEFAULT now()
-    );
+);
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -154,6 +154,7 @@ CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
     organisation_group_id varchar     NOT NULL,
     user_email            varchar     NOT NULL,
     twitter_id          varchar     NOT NULL DEFAULT '',
+    twitter_username    varchar     NOT NULL DEFAULT '',
     access_token          varchar     NOT NULL,
     token_scope                 varchar     NOT NULL,
     expires_at            timestamptz NOT NULL,

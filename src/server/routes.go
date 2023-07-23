@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api"
+	"socialhub-server/api/accounts"
 	"socialhub-server/api/auth"
 	"socialhub-server/api/auth/oauth2/google"
 	"socialhub-server/api/auth/oauth2/linkedin"
@@ -70,6 +71,9 @@ func InitRouter() *gin.Engine {
 	protected.POST("/linkedin/post", linkedinpost.CreatePostForFeed)
 	protected.POST("/linkedin/schedule/post", linkedinpost.SchedulePost)
 	protected.GET("/linkedin/posts/fetchall", linkedinpost.PostsHistoryList)
+
+	protected.GET("/linkedin/account/info", accounts.LinkedinConnectedAccountInfo)
+	protected.GET("/twitter/account/info", accounts.TwitterConnectedAccountInfo)
 
 	return router
 }
