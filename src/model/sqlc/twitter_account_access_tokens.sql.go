@@ -10,64 +10,6 @@ import (
 	"time"
 )
 
-const findTwitterAccountAccessToken = `-- name: FindTwitterAccountAccessToken :one
-SELECT access_token FROM socialhub.twitter_account_access_tokens
-WHERE organisation_group_id=($1) and user_email=($2)
-`
-
-type FindTwitterAccountAccessTokenParams struct {
-	OrganisationGroupID string `json:"organisation_group_id"`
-	UserEmail           string `json:"user_email"`
-}
-
-func (q *Queries) FindTwitterAccountAccessToken(ctx context.Context, arg FindTwitterAccountAccessTokenParams) (string, error) {
-	row := q.db.QueryRowContext(ctx, findTwitterAccountAccessToken, arg.OrganisationGroupID, arg.UserEmail)
-	var access_token string
-	err := row.Scan(&access_token)
-	return access_token, err
-}
-
-const saveTwitterAccessToken = `-- name: SaveTwitterAccessToken :one
-INSERT INTO socialhub.twitter_account_access_tokens(
-    organisation_group_id ,
-    user_email            ,
-    access_token          ,
-    token_scope           ,
-    expires_at
-)
-VALUES ($1,$2,$3,$4,$5)
-    ON CONFLICT (organisation_group_id,user_email)
-DO
-UPDATE SET access_token=($3), token_scope=($4), expires_at=($5)
-    RETURNING user_email, token_scope
-`
-
-type SaveTwitterAccessTokenParams struct {
-	OrganisationGroupID string    `json:"organisation_group_id"`
-	UserEmail           string    `json:"user_email"`
-	AccessToken         string    `json:"access_token"`
-	TokenScope          string    `json:"token_scope"`
-	ExpiresAt           time.Time `json:"expires_at"`
-}
-
-type SaveTwitterAccessTokenRow struct {
-	UserEmail  string `json:"user_email"`
-	TokenScope string `json:"token_scope"`
-}
-
-func (q *Queries) SaveTwitterAccessToken(ctx context.Context, arg SaveTwitterAccessTokenParams) (SaveTwitterAccessTokenRow, error) {
-	row := q.db.QueryRowContext(ctx, saveTwitterAccessToken,
-		arg.OrganisationGroupID,
-		arg.UserEmail,
-		arg.AccessToken,
-		arg.TokenScope,
-		arg.ExpiresAt,
-	)
-	var i SaveTwitterAccessTokenRow
-	err := row.Scan(&i.UserEmail, &i.TokenScope)
-	return i, err
-}
-
 const twitterAccountAccessTokens_fetchAccountInfoByUserEmail = `-- name: TwitterAccountAccessTokens_fetchAccountInfoByUserEmail :one
 SELECT twitter_id, twitter_username, access_token FROM socialhub.twitter_account_access_tokens
 WHERE organisation_group_id=($1) and user_email=($2)
@@ -88,6 +30,115 @@ func (q *Queries) TwitterAccountAccessTokens_fetchAccountInfoByUserEmail(ctx con
 	row := q.db.QueryRowContext(ctx, twitterAccountAccessTokens_fetchAccountInfoByUserEmail, arg.OrganisationGroupID, arg.UserEmail)
 	var i TwitterAccountAccessTokens_fetchAccountInfoByUserEmailRow
 	err := row.Scan(&i.TwitterID, &i.TwitterUsername, &i.AccessToken)
+	return i, err
+}
+
+const twitterAccountAccessTokens_fetchAll = `-- name: TwitterAccountAccessTokens_fetchAll :many
+SELECT organisation_group_id, user_email,twitter_username, access_token, refresh_token
+FROM socialhub.twitter_account_access_tokens
+LIMIT ($1)
+`
+
+type TwitterAccountAccessTokens_fetchAllRow struct {
+	OrganisationGroupID string `json:"organisation_group_id"`
+	UserEmail           string `json:"user_email"`
+	TwitterUsername     string `json:"twitter_username"`
+	AccessToken         string `json:"access_token"`
+	RefreshToken        string `json:"refresh_token"`
+}
+
+func (q *Queries) TwitterAccountAccessTokens_fetchAll(ctx context.Context, limit int32) ([]TwitterAccountAccessTokens_fetchAllRow, error) {
+	rows, err := q.db.QueryContext(ctx, twitterAccountAccessTokens_fetchAll, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []TwitterAccountAccessTokens_fetchAllRow{}
+	for rows.Next() {
+		var i TwitterAccountAccessTokens_fetchAllRow
+		if err := rows.Scan(
+			&i.OrganisationGroupID,
+			&i.UserEmail,
+			&i.TwitterUsername,
+			&i.AccessToken,
+			&i.RefreshToken,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const twitterAccountAccessTokens_findAccessToken = `-- name: TwitterAccountAccessTokens_findAccessToken :one
+SELECT access_token, refresh_token FROM socialhub.twitter_account_access_tokens
+WHERE organisation_group_id=($1) and user_email=($2)
+`
+
+type TwitterAccountAccessTokens_findAccessTokenParams struct {
+	OrganisationGroupID string `json:"organisation_group_id"`
+	UserEmail           string `json:"user_email"`
+}
+
+type TwitterAccountAccessTokens_findAccessTokenRow struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+func (q *Queries) TwitterAccountAccessTokens_findAccessToken(ctx context.Context, arg TwitterAccountAccessTokens_findAccessTokenParams) (TwitterAccountAccessTokens_findAccessTokenRow, error) {
+	row := q.db.QueryRowContext(ctx, twitterAccountAccessTokens_findAccessToken, arg.OrganisationGroupID, arg.UserEmail)
+	var i TwitterAccountAccessTokens_findAccessTokenRow
+	err := row.Scan(&i.AccessToken, &i.RefreshToken)
+	return i, err
+}
+
+const twitterAccountAccessTokens_saveAccessToken = `-- name: TwitterAccountAccessTokens_saveAccessToken :one
+INSERT INTO socialhub.twitter_account_access_tokens(
+    organisation_group_id ,
+    user_email            ,
+    access_token          ,
+    refresh_token         ,
+    token_scope           ,
+    expires_at
+)
+VALUES ($1,$2,$3,$4,$5,$6)
+    ON CONFLICT (organisation_group_id,user_email)
+DO
+UPDATE SET access_token=($3), refresh_token=($4),token_scope=($5), expires_at=($6)
+    RETURNING user_email, token_scope
+`
+
+type TwitterAccountAccessTokens_saveAccessTokenParams struct {
+	OrganisationGroupID string    `json:"organisation_group_id"`
+	UserEmail           string    `json:"user_email"`
+	AccessToken         string    `json:"access_token"`
+	RefreshToken        string    `json:"refresh_token"`
+	TokenScope          string    `json:"token_scope"`
+	ExpiresAt           time.Time `json:"expires_at"`
+}
+
+type TwitterAccountAccessTokens_saveAccessTokenRow struct {
+	UserEmail  string `json:"user_email"`
+	TokenScope string `json:"token_scope"`
+}
+
+func (q *Queries) TwitterAccountAccessTokens_saveAccessToken(ctx context.Context, arg TwitterAccountAccessTokens_saveAccessTokenParams) (TwitterAccountAccessTokens_saveAccessTokenRow, error) {
+	row := q.db.QueryRowContext(ctx, twitterAccountAccessTokens_saveAccessToken,
+		arg.OrganisationGroupID,
+		arg.UserEmail,
+		arg.AccessToken,
+		arg.RefreshToken,
+		arg.TokenScope,
+		arg.ExpiresAt,
+	)
+	var i TwitterAccountAccessTokens_saveAccessTokenRow
+	err := row.Scan(&i.UserEmail, &i.TokenScope)
 	return i, err
 }
 

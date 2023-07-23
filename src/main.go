@@ -14,6 +14,7 @@ func init() {
 
 	plogger.Info("Setting Up Cron")
 	crons.PublishPostsToLinkedin()
+	crons.RefreshJob()
 }
 
 func main() {

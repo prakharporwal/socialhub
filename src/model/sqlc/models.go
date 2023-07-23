@@ -70,6 +70,7 @@ type SocialhubTwitterAccountAccessToken struct {
 	TwitterID           string    `json:"twitter_id"`
 	TwitterUsername     string    `json:"twitter_username"`
 	AccessToken         string    `json:"access_token"`
+	RefreshToken        string    `json:"refresh_token"`
 	TokenScope          string    `json:"token_scope"`
 	ExpiresAt           time.Time `json:"expires_at"`
 	CreatedAt           time.Time `json:"created_at"`

@@ -66,24 +66,21 @@ func OAuthCallbackController(ctx *gin.Context) {
 
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 	if err != nil {
-		plogger.Info("error decoding resp body ", err)
-	}
-
-	if err != nil {
-		plogger.Error("Failed JSON decoding of response")
+		plogger.Error("Failed JSON decoding of response ", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting the oauth token!"})
 		return
 	}
 
-	args := sqlcmodels.SaveTwitterAccessTokenParams{
+	args := sqlcmodels.TwitterAccountAccessTokens_saveAccessTokenParams{
 		AccessToken:         respBody.AccessToken,
+		RefreshToken:        respBody.RefreshToken,
 		UserEmail:           auth.GetCurrentUser(),
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		TokenScope:          respBody.Scope,
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}
 
-	row, err := store.GetInstance().SaveTwitterAccessToken(ctx, args)
+	row, err := store.GetInstance().TwitterAccountAccessTokens_saveAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error saving the token to database ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)

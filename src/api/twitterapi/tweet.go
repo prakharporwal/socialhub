@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api/auth"
-	models "socialhub-server/model/sqlc"
+	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
@@ -17,12 +17,12 @@ const twitterFetchTweetsUrl = "https://api.twitter.com/2/tweets"
 
 func FetchTweets(ctx *gin.Context) {
 
-	args := models.FindTwitterAccountAccessTokenParams{
+	args := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
-	accessToken, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
@@ -34,7 +34,7 @@ func FetchTweets(ctx *gin.Context) {
 		plogger.Error("Error creating request to fetch tweets from twitter! ", err)
 	}
 
-	req.Header.Add("Authorization", "Bearer "+accessToken)
+	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -69,12 +69,12 @@ func WriteTweet(ctx *gin.Context) {
 	}
 
 	// get access token to make api call
-	args := models.FindTwitterAccountAccessTokenParams{
+	args := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
 		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
-	accessToken, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
@@ -87,7 +87,7 @@ func WriteTweet(ctx *gin.Context) {
 
 	req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
 
-	req.Header.Add("Authorization", "Bearer "+accessToken)
+	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
 
 	http.DefaultClient.Do(req)
 

@@ -9,10 +9,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FaPlug } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import CONSTANTS from "../CONSTANTS";
+import { SiTwitter } from "react-icons/si";
 
 type TweetType = {
   id: string;
@@ -127,16 +127,14 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
         <Button
           isLoading={isSubmitting}
           colorScheme={isConnected ? "green" : "twitter"}
+          leftIcon={<SiTwitter />}
           onClick={handleConnectToTwitter}
         >
-          <FaPlug />
           {isConnected ? `Connected to ${twitterUsername}` : "Connect Twitter"}
         </Button>
-
-        <Button colorScheme={"twitter"} onClick={handleFetchTweets}>
-          <FaPlug />
+        {/* <Button colorScheme={"twitter"} onClick={handleFetchTweets}>
           Get Tweets Twitter
-        </Button>
+        </Button> */}
       </Flex>
       <Container>
         {tweets.map((tweet) => {
