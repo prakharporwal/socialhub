@@ -4,7 +4,7 @@ const (
 	DBSource     = "postgres://admin:I89Yn4ebUIrxDvtUba@localhost:5432/postgres?sslmode=disable"
 	DBDriver     = "postgres"
 	SymmetricKey = "TjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8"
-	WebsiteURL  = "www.prakhar.works"
+	WebsiteURL  = "https://www.prakhar.works"
     ServerPort   = 8080
 )
 

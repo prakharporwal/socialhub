@@ -57,7 +57,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 		PostType:        reqBody.ContentType.String(),
 		ScheduledTime:   time.Now(),
 		Status:          "PUBLISHED",
-		CreatedBy:       auth.GetCurrentUser(),
+		CreatedBy:       auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
 	}
 
 	_, err = store.GetInstance().ScheduleAUserPostOnLinkedin(ctx, args)
@@ -98,8 +98,8 @@ var ErrNotFound = errors.New("token not found!")
 
 func FetchLinkedinAccountAccessToken() (string, error) {
 	args := sqlcmodels.FindLinkedInAccountAccessTokenParams{
-		OrganisationGroupID: "org_yogveda",
-		UserEmail:           "prakharporwal99@gmail.com",
+		OrganisationGroupID: auth.GetCurrentOrganisationId(),
+		UserEmail:           auth.GetCurrentUser(),
 	}
 
 	row, err := store.GetInstance().FindLinkedInAccountAccessToken(context.Background(), args)

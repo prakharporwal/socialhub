@@ -32,7 +32,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		plogger.Info("current user ", payload.Username)
 		auth.SetCurrentUser(payload.Username)
 		auth.SetCurrentOrganisationId(payload.OrganisationGroupID)
 		ctx.Set("current_user", payload.Username)

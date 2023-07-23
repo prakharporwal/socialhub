@@ -68,11 +68,28 @@ func WriteTweet(ctx *gin.Context) {
 		return
 	}
 
-	tweetObj := map[string]interface{}{
-		"tweet": reqBody.Text,
+	// get access token to make api call
+	args := models.FindTwitterAccountAccessTokenParams{
+		OrganisationGroupID: auth.GetCurrentOrganisationId(),
+		UserEmail:           auth.GetCurrentUser(),
 	}
 
-	http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
+	row, err := store.GetInstance().FindTwitterAccountAccessToken(ctx, args)
+	if err != nil {
+		plogger.Error("Error getting bearer token from db! ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
+
+	tweetObj := map[string]interface{}{
+		"text": reqBody.Text,
+	}
+
+	req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
+
+	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
+
+	http.DefaultClient.Do(req)
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "posted successfully"})
 }

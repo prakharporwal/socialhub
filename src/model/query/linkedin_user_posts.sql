@@ -23,7 +23,8 @@ UPDATE socialhub.linkedin_scheduled_user_posts
 SET status=($1) WHERE scheduled_post_id=($2)
 RETURNING scheduled_post_id, scheduled_time, status;
 
--- name: FetchAllPosts :many
+-- name: LinkedinScheduledUserPosts_fetchAllPosts :many
 SELECT * FROM socialhub.linkedin_scheduled_user_posts
 WHERE created_by=($1)
-LIMIT 10;
+ORDER BY created_at DESC
+LIMIT ($2);
