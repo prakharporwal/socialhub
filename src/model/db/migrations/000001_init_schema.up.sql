@@ -158,6 +158,7 @@ CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
     access_token          varchar     NOT NULL,
     refresh_token          varchar     NOT NULL,
     token_scope                 varchar     NOT NULL,
+    token_type              varchar     NOT NULL,
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),

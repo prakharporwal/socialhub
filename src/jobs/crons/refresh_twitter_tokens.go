@@ -6,7 +6,6 @@ import (
 	"github.com/robfig/cron/v3"
 	"net/http"
 	"net/url"
-	"socialhub-server/api/auth"
 	"socialhub-server/env"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
@@ -29,10 +28,12 @@ func RefreshJob() {
 	c.Start()
 }
 
-// TriggerRefreshJob triggers the cron job
+// fetchFromDBAndRefresh triggers the cron job
 // pull all rows in twitter_account_access_tokens table
 // request new tokens
 func fetchFromDBAndRefresh() {
+	// fetch refresh token from db
+	// fetch all from the db as it is cron job we don't have a current user
 	rows, err := store.GetInstance().TwitterAccountAccessTokens_fetchAll(context.Background(), tokenRefreshedInSingleRun)
 	if err != nil {
 		plogger.Error("Failed to fetch twitter accounts from db! ", err)
@@ -41,15 +42,13 @@ func fetchFromDBAndRefresh() {
 
 	for _, row := range rows {
 		plogger.Info("running for ", row.TwitterUsername)
-		refreshTokenAPICall(row.OrganisationGroupID, row.UserEmail, row.AccessToken, row.RefreshToken)
+		refreshTokenAPICall(row.OrganisationGroupID, row.UserEmail, row.RefreshToken)
 	}
 }
 
-// refreshTokenCron is for fetching token from twitter in
+// refreshTokenAPICall is for fetching token from twitter in
 // exchange for existing accessToken and refreshToken
-func refreshTokenAPICall(organisationGroupId string, userEmail string, accessToken string, refreshToken string) {
-	// fetch refresh token from db
-	// fetch all from the db as it is cron job we don't have a current user
+func refreshTokenAPICall(organisationGroupId string, userEmail string, refreshToken string) {
 
 	// call twitter to get a new refresh token
 	queryData := url.Values{}
@@ -62,7 +61,7 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, accessTok
 
 	req, err := http.NewRequest("POST", reqUrl, nil)
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
-	//req.Header.Add("Authorization", accessToken)
+	req.SetBasicAuth(env.TwitterAppClientId, env.TwitterAppClientSecret)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -96,9 +95,10 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, accessTok
 	args := sqlcmodels.TwitterAccountAccessTokens_saveAccessTokenParams{
 		AccessToken:         respBody.AccessToken,
 		RefreshToken:        respBody.RefreshToken,
-		UserEmail:           auth.GetCurrentUser(),
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
+		UserEmail:           userEmail,
+		OrganisationGroupID: organisationGroupId,
 		TokenScope:          respBody.Scope,
+		TokenType:           respBody.TokenType,
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}
 

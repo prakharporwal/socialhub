@@ -5,13 +5,14 @@ INSERT INTO socialhub.twitter_account_access_tokens(
     access_token          ,
     refresh_token         ,
     token_scope           ,
+    token_type            ,
     expires_at
 )
-VALUES ($1,$2,$3,$4,$5,$6)
+VALUES ($1,$2,$3,$4,$5,$6,$7)
     ON CONFLICT (organisation_group_id,user_email)
 DO
-UPDATE SET access_token=($3), refresh_token=($4),token_scope=($5), expires_at=($6)
-    RETURNING user_email, token_scope;
+UPDATE SET access_token=($3), refresh_token=($4),token_scope=($5), token_type=($6), expires_at=($7)
+    RETURNING twitter_username, organisation_group_id,user_email, token_scope;
 
 -- name: TwitterAccountAccessTokens_findAccessToken :one
 SELECT access_token, refresh_token FROM socialhub.twitter_account_access_tokens
