@@ -23,7 +23,7 @@ import {
   ButtonGroup,
   Switch,
 } from "@chakra-ui/react";
-import { SiLinkedin } from "react-icons/si";
+import { SiLinkedin, SiPeertube } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import CONSTANTS from "../CONSTANTS";
@@ -413,12 +413,12 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     colorScheme={"linkedin"}
                     w={"full"}
                     maxW={"md"}
-                    leftIcon={<SiLinkedin />}
+                    leftIcon={<SiPeertube />}
                     isLoading={isSubmitting}
                     onClick={handleSubmitPost}
                   >
                     <Center>
-                      <Text>Send to Linkedin</Text>
+                      <Text>Post on Socials</Text>
                     </Center>
                   </Button>
                   {/* <Input

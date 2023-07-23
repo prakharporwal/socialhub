@@ -143,15 +143,17 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   }, []);
 
   return (
-    <Box w="100%" p={4} color="white" as={"div"}>
+    <Box w="100%" p={4} as={"div"}>
       <Heading color={"black"}>Your Posts</Heading>
       {/* <ConnectLinkedinAccountButton /> */}
-
       <List>
-        {posts &&
+        {posts.length > 0 ? (
           posts.map((item, idx) => {
             return <PostHistory key={item.scheduled_post_id} post={item} />;
-          })}
+          })
+        ) : (
+          <Text textAlign={"center"}>No Posts</Text>
+        )}
       </List>
     </Box>
   );
