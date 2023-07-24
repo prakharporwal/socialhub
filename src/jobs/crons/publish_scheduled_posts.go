@@ -4,12 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/robfig/cron/v3"
+	"net/http"
+	"socialhub-server/api/auth"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/model/models"
-	db "socialhub-server/model/sqlc"
+	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
+	"strings"
 )
 
 type PostStatus string
@@ -35,6 +39,7 @@ func PublishPostsToLinkedin() {
 }
 
 const PostCountInSingleRun = 100
+const twitterPostTweetUrl = "https://api.twitter.com/2/tweets"
 
 func pickScheduledPosts() {
 	rows, err := store.GetInstance().FetchPostsToBePublished(context.Background(), PostCountInSingleRun)
@@ -46,6 +51,7 @@ func pickScheduledPosts() {
 		//plogger.Debug("No Posts Scheduled!")
 	}
 
+	// post on linkedin
 	for i, row := range rows {
 		if i >= 1 {
 			continue
@@ -70,15 +76,36 @@ func pickScheduledPosts() {
 		if err != nil {
 			plogger.Error("failed while sending posting to linkedin -", err)
 		}
-		args := db.UpdatePostStatusParams{
+
+		args := sqlcmodels.UpdatePostStatusParams{
 			ScheduledPostID: row.ScheduledPostID,
 			Status:          PUBLISHED,
 		}
-
 		updatedRow, err := store.GetInstance().UpdatePostStatus(context.Background(), args)
 		if err != nil {
 			plogger.Error("Failed to update post status ", err)
 		}
 		plogger.Debug(updatedRow.ScheduledPostID, " ", updatedRow.Status)
+
+		//post on twitter
+		// get access token to make api call
+		twitterTokenArgs := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
+			OrganisationGroupID: auth.GetCurrentOrganisationId(),
+			UserEmail:           auth.GetCurrentUser(),
+		}
+
+		row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(context.Background(), twitterTokenArgs)
+		if err != nil {
+			plogger.Error("Error getting bearer token from db! ", err)
+			return
+		}
+
+		tweetObj := map[string]interface{}{
+			"text": post.Commentary,
+		}
+
+		req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
+		req.Header.Add("Authorization", "Bearer "+row.AccessToken)
+		http.DefaultClient.Do(req)
 	}
 }

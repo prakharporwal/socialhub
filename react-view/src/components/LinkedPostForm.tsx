@@ -22,11 +22,13 @@ import {
   Radio,
   ButtonGroup,
   Switch,
+  IconButton,
 } from "@chakra-ui/react";
-import { SiLinkedin, SiPeertube } from "react-icons/si";
+import { SiPeertube } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import CONSTANTS from "../CONSTANTS";
+import { FaClock } from "react-icons/fa";
 
 const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
@@ -38,17 +40,15 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
   const [isLinkedinPost, setIsLinkedinPost] = useState(false);
   const [isSubmittingScheduled, setIsSubmittingScheduled] = useState(false);
   const [scheduledTime, setScheduledTime] = useState(
-    new Date().toISOString().substring(0, 16)
+    convertToLocalTimeString(new Date())
   );
+
+  const [showScheduleSection, setShowScheduleSection] = useState(false);
 
   const [pollOptions, setPollOptions] = useState([
     { value: "monday", id: 1 },
     { value: "tuesday", id: 2 },
   ]);
-
-  useEffect(() => {
-    console.log(scheduledTime);
-  }, [scheduledTime]);
 
   const handleSubmitPost = async () => {
     setIsSubmitting(true);
@@ -211,6 +211,24 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
   };
 
   function handleSubmitSchedulePost() {
+    let df = new Date(scheduledTime);
+    let dfIsoString = new Date(
+      df.getTime() + df.getTimezoneOffset() * 60000
+    ).toISOString();
+
+    console.log(dfIsoString);
+
+    if (content === "") {
+      if (!toast.isActive("post-empty")) {
+        toast({
+          id: "post-empty",
+          status: "error",
+          title: "Post content is empty!",
+        });
+      }
+      return;
+    }
+
     setIsSubmittingScheduled(true);
 
     fetch(CONSTANTS.api_server_url + "/app/linkedin/schedule/post", {
@@ -232,12 +250,21 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
           lifecycleState: "PUBLISHED",
           isReshareDisabledByAuthor: false,
         },
-        scheduled_at: scheduledTime,
+        scheduled_at: dfIsoString,
       }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw new Error("Error scheduling post!");
+      })
       .then((data) => {
         console.log(data);
+
+        toast({
+          status: "success",
+          title: "Submitted post for scheduling",
+          duration: 5000,
+        });
       })
       .catch(() => {})
       .finally(() => {
@@ -264,9 +291,6 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
             m="10px auto"
             as="form"
           >
-            <Heading w="100%" textAlign={"center"} py={4} fontWeight="normal">
-              Schedule Post
-            </Heading>
             <SimpleGrid columns={1} spacing={6}>
               <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
                 <FormLabel
@@ -395,63 +419,76 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                       setIsLinkedinPost(e.currentTarget.checked);
                     }}
                   />
-
                   <FormLabel htmlFor="isFocusable">Instagram</FormLabel>
                   <Switch id="isFocusable" marginRight={"auto"} isDisabled />
-
                   <FormLabel htmlFor="isInvalid">Facebook</FormLabel>
                   <Switch id="isInvalid" marginRight={"auto"} isDisabled />
                 </FormControl>
                 <Stack spacing={10}>
                   <Spacer />
-                  <Button
-                    // bg={"blue.400"}
-                    color={"white"}
-                    _hover={{
-                      bg: "blue.600",
+                  <IconButton
+                    icon={<FaClock />}
+                    aria-label="schedule post"
+                    onClick={() => {
+                      setShowScheduleSection(!showScheduleSection);
                     }}
-                    colorScheme={"linkedin"}
-                    w={"full"}
-                    maxW={"md"}
-                    leftIcon={<SiPeertube />}
-                    isLoading={isSubmitting}
-                    onClick={handleSubmitPost}
-                  >
-                    <Center>
-                      <Text>Post on Socials</Text>
-                    </Center>
-                  </Button>
-                  {/* <Input
-                    type={"datetime-local"}
-                    value={scheduledTime}
-                    onChange={(e) => {
-                      console.log(e.currentTarget.value);
-                      setScheduledTime(e.currentTarget.value);
-                    }}
-                  ></Input>
-                  <Select value={"15min"}>
-                    <option value={"15min"}>15 min</option>
-                    <option value={"30min"}>30 min</option>
-                    <option value={"1hr"}>1 hour</option>
-                    <option value={"Tomorrow"}>Tomorrow</option>
-                  </Select>
-                  <Button
-                    _hover={{
-                      bg: "blue.600",
-                      color: "white",
-                    }}
-                    colorScheme={"linkedin"}
-                    variant={"outline"}
-                    // w={"full"}
-                    // maxW={"md"}
-                    leftIcon={<FaClock />}
-                    isLoading={isSubmittingScheduled}
-                    onClick={handleSubmitSchedulePost}
-                  >
-                    <Center>
-                      <Text>Schedule for Later</Text>
-                    </Center>
-                  </Button> */}
+                  />
+                  {showScheduleSection ? (
+                    <Button
+                      // bg={"blue.400"}
+                      color={"white"}
+                      _hover={{
+                        bg: "blue.600",
+                      }}
+                      colorScheme={"linkedin"}
+                      w={"full"}
+                      maxW={"md"}
+                      leftIcon={<SiPeertube />}
+                      isLoading={isSubmitting}
+                      onClick={handleSubmitPost}
+                    >
+                      <Center>
+                        <Text>Post on Socials</Text>
+                      </Center>
+                    </Button>
+                  ) : (
+                    // <Select value={"15min"}>
+                    //   <option value={"15min"}>15 min</option>
+                    //   <option value={"30min"}>30 min</option>
+                    //   <option value={"1hr"}>1 hour</option>
+                    //   <option value={"Tomorrow"}>Tomorrow</option>
+                    // </Select>
+                    <>
+                      <Input
+                        type={"datetime-local"}
+                        value={scheduledTime.substring(0, 16)}
+                        onChange={(e) => {
+                          console.log(new Date(e.currentTarget.value));
+                          const d = new Date(e.currentTarget.value);
+                          const dateTimeLocalValueDisplay =
+                            convertToLocalTimeString(d);
+                          setScheduledTime(dateTimeLocalValueDisplay);
+                        }}
+                      ></Input>
+                      <Button
+                        _hover={{
+                          bg: "blue.600",
+                          color: "white",
+                        }}
+                        colorScheme={"linkedin"}
+                        variant={"outline"}
+                        // w={"full"}
+                        // maxW={"md"}
+                        leftIcon={<FaClock />}
+                        isLoading={isSubmittingScheduled}
+                        onClick={handleSubmitSchedulePost}
+                      >
+                        <Center>
+                          <Text>Schedule for Later</Text>
+                        </Center>
+                      </Button>
+                    </>
+                  )}
                 </Stack>
               </FormControl>
             </SimpleGrid>
@@ -461,6 +498,12 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     </Box>
   );
 };
+
+function convertToLocalTimeString(date: Date) {
+  return new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  ).toISOString();
+}
 
 const Arr: React.FunctionComponent<any> = (props) => {
   return <div></div>;

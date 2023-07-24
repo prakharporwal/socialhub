@@ -63,7 +63,7 @@ func TwitterConnectedAccountInfo(ctx *gin.Context) {
 	}
 
 	if row.TwitterID != "" {
-		plogger.Debug("fetched account info -", row.TwitterID, row.TwitterUsername)
+		plogger.Debug("fetched account info- ", row.TwitterID, row.TwitterUsername)
 		ctx.JSON(http.StatusOK, gin.H{"account": TwitterAccountInfo{Id: row.TwitterID, Username: row.TwitterUsername}})
 		return
 	}

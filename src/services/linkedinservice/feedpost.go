@@ -135,7 +135,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		PostIDOnLinkedin: "lol",
 		PostJsonString:   string(body),
 		Status:           "SUBMITTED",
-		CreatedBy:        auth.GetCurrentUser(),
+		CreatedBy:        auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
 		ScheduledTime:    time.Now().UTC().Add(10 * time.Minute),
 	}
 

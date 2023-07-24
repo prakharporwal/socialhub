@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"socialhub-server/api/auth"
+	"socialhub-server/model/models"
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -14,9 +15,9 @@ import (
 )
 
 type schedulePostRequest struct {
-	PostType    string      `json:"post_type" binding:"required"`
-	PostJson    interface{} `json:"post_json" binding:"required"`
-	ScheduledAt time.Time   `json:"scheduled_at" binding:"required"`
+	PostType    string                         `json:"post_type" binding:"required"`
+	PostJson    models.LinkedInFeedPostContent `json:"post_json" binding:"required"`
+	ScheduledAt string                         `json:"scheduled_at" binding:"required"`
 }
 
 func SchedulePost(ctx *gin.Context) {
@@ -27,7 +28,7 @@ func SchedulePost(ctx *gin.Context) {
 	//and data filling
 	// todo: encrypt JSON data of post json string
 	arg := db.FetchLinkedinURNbyAccountIdParams{
-		OrganisationGroupID: "org_yogveda",
+		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
@@ -38,6 +39,7 @@ func SchedulePost(ctx *gin.Context) {
 		//return
 	}
 
+	reqBody.PostJson.Author = linkedinUrn
 	postJsonByteArr, err := json.Marshal(reqBody.PostJson)
 	if err != nil {
 		plogger.Info("failed to marshal json")
@@ -48,17 +50,18 @@ func SchedulePost(ctx *gin.Context) {
 	//if err != nil {
 	//	plogger.Error("Failed to encrypt post JSON file! ", err)
 	//}
+	scheduleTime, err := time.Parse(time.RFC3339, reqBody.ScheduledAt)
 
 	args := db.ScheduleAUserPostOnLinkedinParams{
 		ScheduledPostID:  uuid.NewString(),
-		AccountID:        1234,
+		AccountID:        0,
 		AuthorUrn:        linkedinUrn,
 		PostType:         reqBody.PostType,
 		PostIDOnLinkedin: "lol",
 		PostJsonString:   string(postJsonByteArr),
 		Status:           "SUBMITTED",
-		CreatedBy:        auth.GetCurrentUser(),
-		ScheduledTime:    time.Now().UTC().Add(10 * time.Minute),
+		CreatedBy:        auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
+		ScheduledTime:    scheduleTime,
 	}
 
 	out, err := store.GetInstance().ScheduleAUserPostOnLinkedin(ctx, args)
