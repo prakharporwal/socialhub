@@ -76,10 +76,11 @@ func WriteTweet(ctx *gin.Context) {
 		UserEmail:           auth.GetCurrentUser(),
 	}
 
+	plogger.Debug("useremail: ", args.UserEmail, "  organisationGroupId: ", args.OrganisationGroupID)
+
 	row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
-		plogger.Debug("useremail: ", args.UserEmail, "organisationGroupId: ", args.OrganisationGroupID)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
@@ -91,7 +92,11 @@ func WriteTweet(ctx *gin.Context) {
 	req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
 	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
 
-	http.DefaultClient.Do(req)
+	resp, err := http.DefaultClient.Do(req)
+
+	if resp.StatusCode != http.StatusOK {
+		plogger.Error("Failed with error! Status code :", resp.StatusCode)
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "posted successfully"})
 }
