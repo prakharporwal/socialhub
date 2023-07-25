@@ -60,6 +60,8 @@ type tweetRequest struct {
 const twitterPostTweetUrl = "https://api.twitter.com/2/tweets"
 
 func WriteTweet(ctx *gin.Context) {
+	plogger.Debug("-------------- WriteTweet -----------------")
+
 	var reqBody tweetRequest
 
 	err := ctx.ShouldBindJSON(&reqBody)
