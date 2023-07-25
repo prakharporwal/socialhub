@@ -46,7 +46,6 @@ func FetchTweets(ctx *gin.Context) {
 	defer resp.Body.Close()
 
 	var respBody interface{}
-
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 
 	plogger.Info("Fetched Tweets From Twitter")

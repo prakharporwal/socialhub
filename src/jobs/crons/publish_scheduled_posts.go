@@ -106,6 +106,15 @@ func pickScheduledPosts() {
 
 		req, _ := http.NewRequest("POST", twitterPostTweetUrl, strings.NewReader(utils.Stringify(tweetObj)))
 		req.Header.Add("Authorization", "Bearer "+row.AccessToken)
-		http.DefaultClient.Do(req)
+		req.Header.Add("Content-Type", "application/json")
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			plogger.Debug("Error sending HTTP request!")
+		}
+		var respBody interface{}
+		_ = json.NewDecoder(resp.Body).Decode(&respBody)
+		plogger.Debug("response body ", respBody)
+
+		resp.Body.Close()
 	}
 }
