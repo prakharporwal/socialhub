@@ -65,7 +65,7 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, refreshTo
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		plogger.Info("error getting tweets from twitter ", err)
+		plogger.Info("error getting new refresh token from twitter ", err)
 		return
 	}
 
@@ -76,6 +76,7 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, refreshTo
 		plogger.Debug(resp.StatusCode)
 		plogger.Debug(resp.Status)
 		plogger.Debug(resp.Header)
+		return
 	}
 
 	var respBody struct {
@@ -103,10 +104,10 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, refreshTo
 	}
 
 	row, err := store.GetInstance().TwitterAccountAccessTokens_saveAccessToken(context.Background(), args)
-
 	if err != nil {
 		plogger.Error("Error saving the token to database ", err)
 		return
 	}
+
 	plogger.Info("Success refreshing twitter token for ", organisationGroupId, row.UserEmail)
 }

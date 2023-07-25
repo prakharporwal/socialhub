@@ -106,7 +106,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := sqlcmodels.SaveLinkedinURNParams{
-		OrganisationGroupID: "org_yogveda",
+		OrganisationGroupID: auth.GetCurrentOrganisationId(),
 		UserEmail:           auth.GetCurrentUser(),
 		LinkedinUrn:         createURN("person", urnId),
 	}

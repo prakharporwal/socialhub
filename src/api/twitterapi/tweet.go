@@ -77,6 +77,7 @@ func WriteTweet(ctx *gin.Context) {
 	row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error getting bearer token from db! ", err)
+		plogger.Debug("useremail: ", args.UserEmail, "organisationGroupId: ", args.OrganisationGroupID)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}

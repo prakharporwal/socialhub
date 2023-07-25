@@ -71,12 +71,6 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       })
       .then((data) => {
         console.log(data.access_token);
-        window.localStorage.setItem("access_token", data.access_token);
-        window.localStorage.setItem("current_username", data.username);
-        window.localStorage.setItem("current_user_email", data.user_email);
-        window.localStorage.setItem("authenticated", "true");
-        document.cookie = "access_token=" + data.access_token;
-
         toast({
           // todo add the user name here
           title: "Account Creation successful",
@@ -86,6 +80,15 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           isClosable: true,
         });
 
+        if (data?.access_token !== undefined && data?.access_token !== "") {
+          window.localStorage.setItem("access_token", data.access_token);
+          window.localStorage.setItem("current_username", data.username);
+          window.localStorage.setItem("current_user_email", data.user_email);
+          window.localStorage.setItem("authenticated", "true");
+          document.cookie = "access_token=" + data.access_token;
+        } else {
+          console.error("access token is empty or undefined");
+        }
         navigate("/home");
       })
       .catch((err) => {
