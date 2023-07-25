@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
-  Heading,
   Flex,
   FormControl,
   GridItem,
@@ -20,7 +19,6 @@ import {
   Center,
   RadioGroup,
   Radio,
-  ButtonGroup,
   Switch,
   IconButton,
 } from "@chakra-ui/react";
@@ -426,31 +424,33 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                 </FormControl>
                 <Stack spacing={10}>
                   <Spacer />
-                  <IconButton
-                    icon={<FaClock />}
-                    aria-label="schedule post"
-                    onClick={() => {
-                      setShowScheduleSection(!showScheduleSection);
-                    }}
-                  />
                   {showScheduleSection ? (
-                    <Button
-                      // bg={"blue.400"}
-                      color={"white"}
-                      _hover={{
-                        bg: "blue.600",
-                      }}
-                      colorScheme={"linkedin"}
-                      w={"full"}
-                      maxW={"md"}
-                      leftIcon={<SiPeertube />}
-                      isLoading={isSubmitting}
-                      onClick={handleSubmitPost}
-                    >
-                      <Center>
-                        <Text>Post on Socials</Text>
-                      </Center>
-                    </Button>
+                    <Flex dir="row" gap={4}>
+                      <Button
+                        // bg={"blue.400"}
+                        color={"white"}
+                        _hover={{
+                          bg: "blue.600",
+                        }}
+                        colorScheme={"linkedin"}
+                        w={"full"}
+                        maxW={"md"}
+                        leftIcon={<SiPeertube />}
+                        isLoading={isSubmitting}
+                        onClick={handleSubmitPost}
+                      >
+                        <Center>
+                          <Text>Post on Socials</Text>
+                        </Center>
+                      </Button>
+                      <IconButton
+                        icon={<FaClock />}
+                        aria-label="schedule post"
+                        onClick={() => {
+                          setShowScheduleSection(!showScheduleSection);
+                        }}
+                      />
+                    </Flex>
                   ) : (
                     // <Select value={"15min"}>
                     //   <option value={"15min"}>15 min</option>
@@ -458,36 +458,47 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                     //   <option value={"1hr"}>1 hour</option>
                     //   <option value={"Tomorrow"}>Tomorrow</option>
                     // </Select>
-                    <>
-                      <Input
-                        type={"datetime-local"}
-                        value={scheduledTime.substring(0, 16)}
-                        onChange={(e) => {
-                          console.log(new Date(e.currentTarget.value));
-                          const d = new Date(e.currentTarget.value);
-                          const dateTimeLocalValueDisplay =
-                            convertToLocalTimeString(d);
-                          setScheduledTime(dateTimeLocalValueDisplay);
-                        }}
-                      ></Input>
-                      <Button
-                        _hover={{
-                          bg: "blue.600",
-                          color: "white",
-                        }}
-                        colorScheme={"linkedin"}
-                        variant={"outline"}
-                        // w={"full"}
-                        // maxW={"md"}
-                        leftIcon={<FaClock />}
-                        isLoading={isSubmittingScheduled}
-                        onClick={handleSubmitSchedulePost}
-                      >
-                        <Center>
-                          <Text>Schedule for Later</Text>
-                        </Center>
-                      </Button>
-                    </>
+                    <FormControl>
+                      <Stack spacing={8}>
+                        <Flex dir="row" gap={4}>
+                          <Button
+                            _hover={{
+                              bg: "blue.600",
+                              color: "white",
+                            }}
+                            colorScheme={"linkedin"}
+                            variant={"outline"}
+                            w={"full"}
+                            maxW={"md"}
+                            leftIcon={<FaClock />}
+                            isLoading={isSubmittingScheduled}
+                            onClick={handleSubmitSchedulePost}
+                          >
+                            <Center>
+                              <Text>Schedule for Later</Text>
+                            </Center>
+                          </Button>
+                          <IconButton
+                            icon={<FaClock />}
+                            aria-label="schedule post"
+                            onClick={() => {
+                              setShowScheduleSection(!showScheduleSection);
+                            }}
+                          />
+                        </Flex>
+                        <Input
+                          type={"datetime-local"}
+                          value={scheduledTime.substring(0, 16)}
+                          onChange={(e) => {
+                            console.log(new Date(e.currentTarget.value));
+                            const d = new Date(e.currentTarget.value);
+                            const dateTimeLocalValueDisplay =
+                              convertToLocalTimeString(d);
+                            setScheduledTime(dateTimeLocalValueDisplay);
+                          }}
+                        ></Input>
+                      </Stack>
+                    </FormControl>
                   )}
                 </Stack>
               </FormControl>
