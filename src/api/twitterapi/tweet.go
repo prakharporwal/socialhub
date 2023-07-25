@@ -93,10 +93,21 @@ func WriteTweet(ctx *gin.Context) {
 	req.Header.Add("Authorization", "Bearer "+row.AccessToken)
 
 	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		plogger.Error("failed making api call to twitter! ", err)
+		return
+	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		plogger.Error("Failed with error! Status code :", resp.StatusCode)
+
 	}
+
+	var respBody interface{}
+	_ = json.NewDecoder(resp.Body).Decode(&respBody)
+
+	plogger.Debug("response body ", respBody)
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "posted successfully"})
 }
