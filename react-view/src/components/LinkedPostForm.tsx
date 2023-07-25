@@ -41,7 +41,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     convertToLocalTimeString(new Date())
   );
 
-  const [showScheduleSection, setShowScheduleSection] = useState(false);
+  const [showScheduleSection, setShowScheduleSection] = useState(true);
 
   const [pollOptions, setPollOptions] = useState([
     { value: "monday", id: 1 },
@@ -290,84 +290,91 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
             as="form"
           >
             <SimpleGrid columns={1} spacing={6}>
-              <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50",
-                  }}
-                >
-                  Post Type
-                </FormLabel>
-                <Select
-                  placeholder="Select post type"
-                  value={type}
-                  variant="outline"
-                  w={"auto"}
-                  onChange={(e) => {
-                    setType(e.currentTarget.value);
-                  }}
-                >
-                  <option value="image" disabled aria-disabled>
-                    Image
-                  </option>
-                  <option value="poll" disabled aria-disabled>
-                    Create a Poll
-                  </option>
-                  <option value="text">Text</option>
-                </Select>
-              </FormControl>
-              {type === "poll" ? (
-                <>
-                  <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
-                    <FormLabel
-                      fontSize="sm"
-                      fontWeight="md"
-                      color="gray.700"
-                      _dark={{
-                        color: "white",
-                      }}
+              <form>
+                <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
+                  <FormLabel
+                    fontSize="sm"
+                    fontWeight="md"
+                    color="gray.700"
+                    _dark={{
+                      color: "gray.50",
+                    }}
+                  >
+                    Post Type
+                  </FormLabel>
+                  <Select
+                    placeholder="Select post type"
+                    value={type}
+                    variant="outline"
+                    w={"auto"}
+                    onChange={(e) => {
+                      setType(e.currentTarget.value);
+                    }}
+                  >
+                    <option value="image" disabled aria-disabled>
+                      Image
+                    </option>
+                    <option value="poll" disabled aria-disabled>
+                      Create a Poll
+                    </option>
+                    <option value="text">Text</option>
+                  </Select>
+                </FormControl>
+                {type === "poll" ? (
+                  <>
+                    <FormControl
+                      mt={2}
+                      as={GridItem}
+                      colSpan={[3, 2]}
+                      isRequired
                     >
-                      Question
-                    </FormLabel>
-                    <Input
-                      p={2}
-                      placeholder="Hey guys I just started using Socialhub"
-                      shadow="sm"
-                      focusBorderColor="brand.400"
-                      fontSize={{
-                        sm: "sm",
-                      }}
-                      value={content}
-                      onChange={(e) => {
-                        setContent(e.currentTarget.value);
-                      }}
-                    ></Input>
-                  </FormControl>
-                  <FormControl mt={2} as={GridItem} colSpan={[3, 2]}>
-                    <RadioGroup value={"1"} onChange={() => {}}>
-                      <Stack direction="column">
-                        {pollOptions.map((item) => (
-                          <Radio
-                            key={item.id}
-                            value={item.value}
-                            textTransform="capitalize"
-                          >
-                            {item.value}
-                          </Radio>
-                        ))}
-                      </Stack>
-                    </RadioGroup>
-                    <FormHelperText>
-                      Brief description for your profile. URLs are hyperlinked.
-                    </FormHelperText>
-                  </FormControl>
-                </>
-              ) : (
-                <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
-                  {/* <FormLabel
+                      <FormLabel
+                        fontSize="sm"
+                        fontWeight="md"
+                        color="gray.700"
+                        _dark={{
+                          color: "white",
+                        }}
+                      >
+                        Question
+                      </FormLabel>
+                      <Input
+                        p={2}
+                        placeholder="Hey guys I just started using Socialhub"
+                        shadow="sm"
+                        focusBorderColor="brand.400"
+                        fontSize={{
+                          sm: "sm",
+                        }}
+                        value={content}
+                        onChange={(e) => {
+                          setContent(e.currentTarget.value);
+                        }}
+                      ></Input>
+                    </FormControl>
+                    <FormControl mt={2} as={GridItem} colSpan={[3, 2]}>
+                      <RadioGroup value={"1"} onChange={() => {}}>
+                        <Stack direction="column">
+                          {pollOptions.map((item) => (
+                            <Radio
+                              key={item.id}
+                              value={item.value}
+                              textTransform="capitalize"
+                            >
+                              {item.value}
+                            </Radio>
+                          ))}
+                        </Stack>
+                      </RadioGroup>
+                      <FormHelperText>
+                        Brief description for your profile. URLs are
+                        hyperlinked.
+                      </FormHelperText>
+                    </FormControl>
+                  </>
+                ) : (
+                  <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
+                    {/* <FormLabel
                     fontSize="sm"
                     fontWeight="md"
                     color="gray.700"
@@ -377,26 +384,24 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                   >
                     Content
                   </FormLabel> */}
-                  <Textarea
-                    p={2}
-                    placeholder="Hey guys I just started using Socialhub"
-                    rows={10}
-                    shadow="sm"
-                    focusBorderColor="brand.400"
-                    fontSize={{
-                      sm: "sm",
-                    }}
-                    value={content}
-                    onChange={(e) => {
-                      setContent(e.currentTarget.value);
-                    }}
-                  ></Textarea>
+                    <Textarea
+                      p={2}
+                      placeholder="Hey guys I just started using Socialhub"
+                      rows={10}
+                      shadow="sm"
+                      focusBorderColor="brand.400"
+                      fontSize={{
+                        sm: "sm",
+                      }}
+                      value={content}
+                      onChange={(e) => {
+                        setContent(e.currentTarget.value);
+                      }}
+                    ></Textarea>
 
-                  <FormHelperText> </FormHelperText>
-                </FormControl>
-              )}
-
-              <FormControl>
+                    <FormHelperText> </FormHelperText>
+                  </FormControl>
+                )}
                 <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
                   <FormLabel htmlFor="isChecked">Twitter</FormLabel>
                   <Switch
@@ -422,43 +427,43 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                   <FormLabel htmlFor="isInvalid">Facebook</FormLabel>
                   <Switch id="isInvalid" marginRight={"auto"} isDisabled />
                 </FormControl>
-                <Stack spacing={10}>
-                  <Spacer />
-                  {showScheduleSection ? (
-                    <Flex dir="row" gap={4}>
-                      <Button
-                        // bg={"blue.400"}
-                        color={"white"}
-                        _hover={{
-                          bg: "blue.600",
-                        }}
-                        colorScheme={"linkedin"}
-                        w={"full"}
-                        maxW={"md"}
-                        leftIcon={<SiPeertube />}
-                        isLoading={isSubmitting}
-                        onClick={handleSubmitPost}
-                      >
-                        <Center>
-                          <Text>Post on Socials</Text>
-                        </Center>
-                      </Button>
-                      <IconButton
-                        icon={<FaClock />}
-                        aria-label="schedule post"
-                        onClick={() => {
-                          setShowScheduleSection(!showScheduleSection);
-                        }}
-                      />
-                    </Flex>
-                  ) : (
-                    // <Select value={"15min"}>
-                    //   <option value={"15min"}>15 min</option>
-                    //   <option value={"30min"}>30 min</option>
-                    //   <option value={"1hr"}>1 hour</option>
-                    //   <option value={"Tomorrow"}>Tomorrow</option>
-                    // </Select>
-                    <FormControl>
+                <FormControl>
+                  <Stack spacing={8}>
+                    <Spacer />
+                    {showScheduleSection ? (
+                      <Flex dir="row" gap={4}>
+                        <Button
+                          // bg={"blue.400"}
+                          color={"white"}
+                          _hover={{
+                            bg: "blue.600",
+                          }}
+                          colorScheme={"linkedin"}
+                          w={"full"}
+                          maxW={"md"}
+                          leftIcon={<SiPeertube />}
+                          isLoading={isSubmitting}
+                          onClick={handleSubmitPost}
+                        >
+                          <Center>
+                            <Text w="64">{"Post  Socials"}</Text>
+                          </Center>
+                        </Button>
+                        <IconButton
+                          icon={<FaClock />}
+                          aria-label="schedule post"
+                          onClick={() => {
+                            setShowScheduleSection(!showScheduleSection);
+                          }}
+                        />
+                      </Flex>
+                    ) : (
+                      // <Select value={"15min"}>
+                      //   <option value={"15min"}>15 min</option>
+                      //   <option value={"30min"}>30 min</option>
+                      //   <option value={"1hr"}>1 hour</option>
+                      //   <option value={"Tomorrow"}>Tomorrow</option>
+                      // </Select>
                       <Stack spacing={8}>
                         <Flex dir="row" gap={4}>
                           <Button
@@ -475,7 +480,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                             onClick={handleSubmitSchedulePost}
                           >
                             <Center>
-                              <Text>Schedule for Later</Text>
+                              <Text>Schedule Post</Text>
                             </Center>
                           </Button>
                           <IconButton
@@ -498,10 +503,10 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                           }}
                         ></Input>
                       </Stack>
-                    </FormControl>
-                  )}
-                </Stack>
-              </FormControl>
+                    )}
+                  </Stack>
+                </FormControl>
+              </form>
             </SimpleGrid>
           </Box>
         </Stack>
