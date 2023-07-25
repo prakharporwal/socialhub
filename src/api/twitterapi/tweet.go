@@ -100,7 +100,7 @@ func WriteTweet(ctx *gin.Context) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		plogger.Error("Failed with error! Status code :", resp.StatusCode)
 
 	}
