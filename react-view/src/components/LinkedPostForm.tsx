@@ -446,7 +446,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
                           onClick={handleSubmitPost}
                         >
                           <Center>
-                            <Text w="64">{"Post  Socials"}</Text>
+                            <Text>{"Post on Socials"}</Text>
                           </Center>
                         </Button>
                         <IconButton
