@@ -12,8 +12,11 @@ import { Link as ReactLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../CONSTANTS";
 import FormContainer from "../../components/FormContainer";
-
+import ReactGA from "react-ga";
 import "./signup.css";
+
+ReactGA.initialize("G-DWQ4JNSKQE");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const SignUpPage: React.FunctionComponent<any> = (props) => {
   const [username, setUsername] = useState<string>("");

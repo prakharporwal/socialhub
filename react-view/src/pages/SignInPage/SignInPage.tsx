@@ -14,11 +14,14 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../CONSTANTS";
-
+import ReactGA from "react-ga";
 import FormContainer from "../../components/FormContainer";
 
 import "./signin.css";
 import { useAuth } from "../../hooks/useAuth";
+
+ReactGA.initialize("G-DWQ4JNSKQE");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const SignInPage: React.FunctionComponent<any> = (props) => {
   const [organisationId, setOrganisationId] = useState<string>("");
@@ -182,8 +185,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             >
               Sign in
             </Button>
-            <div className="g-signin2" data-onsuccess="onSignIn">
-            </div>
+            <div className="g-signin2" data-onsuccess="onSignIn"></div>
           </Stack>
         </FormControl>
       </form>
