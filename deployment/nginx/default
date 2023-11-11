@@ -3,17 +3,29 @@ server {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-
     if ($host = www.prakhar.works) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
+    if ($host = prakhar.works) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
 
     listen 80;
-    server_name www.prakhar.works api.prakhar.works;
-    return 301 https://$host$request_uri;
+    server_name www.prakhar.works api.prakhar.works prakhar.works;
+    return 404; # managed by Certbot
 }
 
+server{
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/prakhar.works/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/prakhar.works/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    server_name prakhar.works;
+    rewrite ^(.*) $scheme://www.prakhar.works$request_uri permanent;
+}
 
 server {
     listen [::]:443 ssl; # managed by Certbot
@@ -37,7 +49,6 @@ server {
     }
 }
 
-
 server {
     listen [::]:443 ssl; # managed by Certbot
     listen 443 ssl; # managed by Certbot
@@ -50,8 +61,8 @@ server {
 
     location / {
         # Your API server configuration goes here
-		proxy_pass http://localhost:8080/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://localhost:8080;
     }
 }

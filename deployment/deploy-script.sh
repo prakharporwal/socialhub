@@ -15,5 +15,4 @@ sudo cp ../socialhub.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl restart socialhub.service
 
-sudo service nginx restart
-
+sudo systemctl restart nginx
