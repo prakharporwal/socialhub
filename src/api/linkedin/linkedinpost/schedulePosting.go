@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/model/models"
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
@@ -28,8 +28,8 @@ func SchedulePost(ctx *gin.Context) {
 	//and data filling
 	// todo: encrypt JSON data of post json string
 	arg := db.FetchLinkedinURNbyAccountIdParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	linkedinUrn, err := store.GetInstance().FetchLinkedinURNbyAccountId(ctx, arg)
@@ -60,7 +60,7 @@ func SchedulePost(ctx *gin.Context) {
 		PostIDOnLinkedin: "lol",
 		PostJsonString:   string(postJsonByteArr),
 		Status:           "SUBMITTED",
-		CreatedBy:        auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
+		CreatedBy:        authZ.GetCurrentOrganisationId() + " | " + authZ.GetCurrentUser(),
 		ScheduledTime:    scheduleTime,
 	}
 

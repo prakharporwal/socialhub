@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/env"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
@@ -33,7 +33,7 @@ func OAuth2Callback(ctx *gin.Context) {
 		return
 	}
 
-	tokenMaker, _ := auth.NewPasetoMaker()
+	tokenMaker, _ := authZ.NewPasetoMaker()
 	_, err := tokenMaker.VerifyToken(state)
 	if err != nil {
 		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err)

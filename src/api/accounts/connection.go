@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -19,8 +19,8 @@ type LinkedinAccountInfo struct {
 
 func LinkedinConnectedAccountInfo(ctx *gin.Context) {
 	args := sqlcmodels.FetchLinkedinURNbyAccountIdParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	urn, err := store.GetInstance().FetchLinkedinURNbyAccountId(context.Background(), args)
@@ -46,8 +46,8 @@ type TwitterAccountInfo struct {
 
 func TwitterConnectedAccountInfo(ctx *gin.Context) {
 	args := sqlcmodels.TwitterAccountAccessTokens_fetchAccountInfoByUserEmailParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	row, err := store.GetInstance().TwitterAccountAccessTokens_fetchAccountInfoByUserEmail(context.Background(), args)
@@ -99,8 +99,8 @@ func TwitterConnectedAccountInfo(ctx *gin.Context) {
 	upsertArgs := sqlcmodels.TwitterAccountAccessTokens_updateUsernameAndIdParams{
 		TwitterID:           respObj.Data.Id,
 		TwitterUsername:     respObj.Data.Username,
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	accInfo, err := store.GetInstance().TwitterAccountAccessTokens_updateUsernameAndId(context.Background(), upsertArgs)

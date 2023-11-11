@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/env"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
@@ -31,9 +31,9 @@ func OAuth2Initiate(ctx *gin.Context) {
 
 	//	generate a JWT For callback and user identification
 	// 	and pass as a state then it should be valid for a minute.
-	tm, _ := auth.NewPasetoMaker()
+	tm, _ := authZ.NewPasetoMaker()
 
-	oauthJwtToken, err := tm.CreateToken(auth.GetCurrentUser(), auth.GetCurrentOrganisationId(), 1*time.Minute)
+	oauthJwtToken, err := tm.CreateToken(authZ.GetCurrentUser(), authZ.GetCurrentOrganisationId(), 1*time.Minute)
 	if err != nil {
 		plogger.Error("Error creating state for oauth callback! ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)

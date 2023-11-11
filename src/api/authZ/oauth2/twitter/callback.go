@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/env"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
@@ -74,8 +74,8 @@ func OAuthCallbackController(ctx *gin.Context) {
 	args := sqlcmodels.TwitterAccountAccessTokens_saveAccessTokenParams{
 		AccessToken:         respBody.AccessToken,
 		RefreshToken:        respBody.RefreshToken,
-		UserEmail:           auth.GetCurrentUser(),
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 		TokenScope:          respBody.Scope,
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}

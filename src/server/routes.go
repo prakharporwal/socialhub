@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"socialhub-server/api"
 	"socialhub-server/api/accounts"
-	"socialhub-server/api/auth"
-	"socialhub-server/api/auth/oauth2/google"
-	"socialhub-server/api/auth/oauth2/linkedin"
-	"socialhub-server/api/auth/oauth2/twitter"
-	"socialhub-server/api/auth/password"
+	"socialhub-server/api/authN/sso/google/googleoauth2"
+	"socialhub-server/api/authZ"
+
+	"socialhub-server/api/authZ/oauth2/linkedin"
+	"socialhub-server/api/authZ/oauth2/twitter"
+	"socialhub-server/api/authZ/password"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/api/twitterapi"
 	"socialhub-server/server/middleware"
@@ -44,12 +45,14 @@ func InitRouter() *gin.Engine {
 	public.Use(cors.Default()) // as this is public we don't need access_token header
 	public.GET("/health", api.HealthCheck)
 
-	public.POST("/v1/login", auth.Login)
-	public.POST("/v1/signup", auth.SignUp)
+	public.POST("/v1/login", authZ.Login)
+	public.POST("/v1/signup", authZ.SignUp)
 	public.POST("/v1/password/change", password.ChangePassword)
 	public.POST("/v1/password/forgot/request", password.ForgotPasswordRequest)
 	public.POST("/v1/password/forgot/reset", password.ForgotPasswordReset)
-	public.GET("/google/oauth2/login", google.SignIn)
+	public.GET("/v1/google/oauth2/signup/callback/:hashParam", googleoauth2.SignUpCallback)
+	public.GET("/v1/google/oauth2/signup", googleoauth2.InitiateSignup)
+	public.POST("/v1/google/oauth2/signup", googleoauth2.FetchUserEmailFromGoogle)
 
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))

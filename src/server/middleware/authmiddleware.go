@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 )
@@ -18,7 +18,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		tokenMaker, err := auth.NewPasetoMaker()
+		tokenMaker, err := authZ.NewPasetoMaker()
 		if err != nil {
 			plogger.Error("Token Creation Failed ! ", err)
 			ctx.AbortWithStatusJSON(http.StatusInternalServerError, apierror.UnexpectedError)
@@ -32,8 +32,8 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		auth.SetCurrentUser(payload.Username)
-		auth.SetCurrentOrganisationId(payload.OrganisationGroupID)
+		authZ.SetCurrentUser(payload.Username)
+		authZ.SetCurrentOrganisationId(payload.OrganisationGroupID)
 		ctx.Set("current_user", payload.Username)
 
 		ctx.Next()

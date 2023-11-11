@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/robfig/cron/v3"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/model/models"
 	sqlcmodels "socialhub-server/model/sqlc"
@@ -90,8 +90,8 @@ func pickScheduledPosts() {
 		//post on twitter
 		// get access token to make api call
 		twitterTokenArgs := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
-			OrganisationGroupID: auth.GetCurrentOrganisationId(),
-			UserEmail:           auth.GetCurrentUser(),
+			OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+			UserEmail:           authZ.GetCurrentUser(),
 		}
 
 		row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(context.Background(), twitterTokenArgs)

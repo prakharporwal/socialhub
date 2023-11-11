@@ -1,4 +1,4 @@
-package auth
+package authZ
 
 import (
 	"github.com/stretchr/testify/require"

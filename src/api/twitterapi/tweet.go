@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -18,8 +18,8 @@ const twitterFetchTweetsUrl = "https://api.twitter.com/2/tweets"
 func FetchTweets(ctx *gin.Context) {
 
 	args := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(ctx, args)
@@ -71,8 +71,8 @@ func WriteTweet(ctx *gin.Context) {
 
 	// get access token to make api call
 	args := sqlcmodels.TwitterAccountAccessTokens_findAccessTokenParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	plogger.Debug("useremail: ", args.UserEmail, "  organisationGroupId: ", args.OrganisationGroupID)

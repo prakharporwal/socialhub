@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/model/models"
 	"socialhub-server/model/models/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
@@ -106,8 +106,8 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := sqlcmodels.SaveLinkedinURNParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 		LinkedinUrn:         createURN("person", urnId),
 	}
 	out, err := store.GetInstance().SaveLinkedinURN(context.Background(), args)
@@ -135,7 +135,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		PostIDOnLinkedin: "lol",
 		PostJsonString:   string(body),
 		Status:           "SUBMITTED",
-		CreatedBy:        auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
+		CreatedBy:        authZ.GetCurrentOrganisationId() + " | " + authZ.GetCurrentUser(),
 		ScheduledTime:    time.Now().UTC().Add(10 * time.Minute),
 	}
 

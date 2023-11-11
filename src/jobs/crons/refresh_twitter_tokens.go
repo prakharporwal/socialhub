@@ -75,7 +75,6 @@ func refreshTokenAPICall(organisationGroupId string, userEmail string, refreshTo
 		plogger.Error(" Getting Access Token API call failed ! ")
 		plogger.Debug(resp.StatusCode)
 		plogger.Debug(resp.Status)
-		plogger.Debug(resp.Header)
 		return
 	}
 

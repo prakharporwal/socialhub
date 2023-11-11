@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
@@ -24,8 +24,8 @@ func ChangePassword(ctx *gin.Context) {
 	}
 
 	args := sqlcmodels.Users_updatePasswordParams{
-		UserEmail:           auth.GetCurrentUser(),
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 		PasswordHash:        string(passwordHash),
 	}
 

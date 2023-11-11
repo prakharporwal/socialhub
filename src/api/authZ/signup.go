@@ -1,4 +1,4 @@
-package auth
+package authZ
 
 import (
 	"github.com/gin-gonic/gin"

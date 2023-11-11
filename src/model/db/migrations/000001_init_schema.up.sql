@@ -206,3 +206,16 @@ CREATE TRIGGER set_timestamp
     ON socialhub.user_password_reset_tokens
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+CREATE TABLE IF NOT EXISTS socialhub.google_signup_access_token(
+    organisation_group_id varchar NOT NULL,
+    user_id                varchar     NOT NULL,
+    token                  varchar     NOT NULL UNIQUE,
+    expires_at             timestamptz NOT NULL,
+    is_expired             bool        NOT NULL default false,
+    requested_by_client_ip varchar     NOT NULL,
+    created_at             timestamptz NOT NULL DEFAULT NOW(),
+    updated_at             timestamptz not null default now(),
+    PRIMARY KEY (organisation_group_id,user_id, token)
+);

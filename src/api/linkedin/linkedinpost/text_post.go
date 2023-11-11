@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
-	"socialhub-server/api/auth"
+	"socialhub-server/api/authZ"
 	"socialhub-server/model/models"
 	"socialhub-server/model/models/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
@@ -57,7 +57,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 		PostType:        reqBody.ContentType.String(),
 		ScheduledTime:   time.Now(),
 		Status:          "PUBLISHED",
-		CreatedBy:       auth.GetCurrentOrganisationId() + " | " + auth.GetCurrentUser(),
+		CreatedBy:       authZ.GetCurrentOrganisationId() + " | " + authZ.GetCurrentUser(),
 	}
 
 	_, err = store.GetInstance().ScheduleAUserPostOnLinkedin(ctx, args)
@@ -98,8 +98,8 @@ var ErrNotFound = errors.New("token not found!")
 
 func FetchLinkedinAccountAccessToken() (string, error) {
 	args := sqlcmodels.FindLinkedInAccountAccessTokenParams{
-		OrganisationGroupID: auth.GetCurrentOrganisationId(),
-		UserEmail:           auth.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
+		UserEmail:           authZ.GetCurrentUser(),
 	}
 
 	row, err := store.GetInstance().FindLinkedInAccountAccessToken(context.Background(), args)

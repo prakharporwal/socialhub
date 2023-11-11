@@ -1,4 +1,4 @@
-import { FormEvent, ReactText } from "react";
+import { FormEvent } from "react";
 import {
   FormControl,
   FormLabel,
@@ -8,12 +8,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link as ReactLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../CONSTANTS";
 import FormContainer from "../../components/FormContainer";
 import ReactGA from "react-ga";
 import "./signup.css";
+import { SiGoogle } from "react-icons/si";
 
 ReactGA.initialize("G-DWQ4JNSKQE");
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -26,7 +26,6 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
 
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
   const toast = useToast();
-
   const navigate = useNavigate();
 
   function submitSignUpForm(e: FormEvent<HTMLFormElement>) {
@@ -117,6 +116,49 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
     return true;
   }
 
+  // function handleGoogleAuth() {
+  // fetch(CONSTANTS.api_server_url + "/v1/google/oauth2/signup")
+  //   .then((res) => res.json())
+  //   .then()
+  //   .catch()
+  //   .finally();
+  // }
+
+  function oauthSignIn() {
+    // Google's OAuth 2.0 endpoint for requesting an access token
+    var oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+
+    // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+    var form = document.createElement("form");
+    form.setAttribute("method", "GET"); // Send as a GET request.
+    form.setAttribute("action", oauth2Endpoint);
+
+    // Parameters to pass to OAuth 2.0 endpoint.
+    var params: any = {
+      client_id:
+        "400956389014-h8i654igfoqm53ud0694bhk649kigaur.apps.googleusercontent.com",
+      redirect_uri: "http://localhost:3000/v1/google/oauth2/signup/callback",
+      response_type: "token",
+      scope: "openid email profile",
+      include_granted_scopes: "true",
+      state: "pass-through value",
+      prompt: "select_account",
+    };
+
+    // Add form parameters as hidden input values.
+    for (var p in params) {
+      var input = document.createElement("input");
+      input.setAttribute("type", "hidden");
+      input.setAttribute("name", p);
+      input.setAttribute("value", params[p]);
+      form.appendChild(input);
+    }
+
+    // Add form to page and submit it to open the OAuth 2.0 endpoint.
+    document.body.appendChild(form);
+    form.submit();
+  }
+
   return (
     <FormContainer headingText="Signup into Organisation">
       <form onSubmit={submitSignUpForm}>
@@ -175,6 +217,9 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           Sign up
         </Button>
       </form>
+      <Button leftIcon={<SiGoogle />} onClick={oauthSignIn}>
+        Continue With Google
+      </Button>
     </FormContainer>
   );
 };
