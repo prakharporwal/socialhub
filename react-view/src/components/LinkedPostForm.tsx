@@ -165,16 +165,12 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         body: JSON.stringify({ text: content }),
       })
         .then(async (res) => {
+          const body = res.json();
           if (res.ok || res.status === 201) {
-            return res.json();
+            return body;
           }
 
-          let resp = {};
-          await res.json().then((body) => {
-            resp = body;
-          });
-
-          throw new Error(JSON.stringify(resp));
+          throw new Error(JSON.stringify({ body }));
         })
         .then((data) => {
           if (!toast.isActive("post-submit-api-success")) {
