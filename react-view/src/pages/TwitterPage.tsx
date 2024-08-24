@@ -116,7 +116,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   }, []);
 
   return (
-    <Box h="80vh">
+    <Box h="20vh">
       <Flex
         direction={"column"}
         align="center"
