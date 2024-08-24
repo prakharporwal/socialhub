@@ -3,13 +3,13 @@ const Env = {
     api_server_url: "http://localhost:8080",
   },
   lan: {
-    api_server_url: "http://192.168.0.184:8080",
+    api_server_url: "http://192.168.0.164:8080",
   },
   prod: {
     api_server_url: "https://api.prakhar.works",
   },
 };
 
-const CONSTANTS = Env.prod;
+const CONSTANTS = Env.lan;
 
 export default CONSTANTS;
