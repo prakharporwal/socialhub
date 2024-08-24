@@ -10,6 +10,6 @@ const Env = {
   },
 };
 
-const CONSTANTS = Env.dev;
+const CONSTANTS = Env.lan;
 
 export default CONSTANTS;
