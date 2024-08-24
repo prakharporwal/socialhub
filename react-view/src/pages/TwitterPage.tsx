@@ -128,6 +128,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           isLoading={isSubmitting}
           colorScheme={isConnected ? "green" : "twitter"}
           leftIcon={<SiTwitter />}
+          loadingText="Connecting"
           onClick={handleConnectToTwitter}
         >
           {isConnected ? `Connected to ${twitterUsername}` : "Connect Twitter"}
@@ -138,7 +139,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
       </Flex>
       <Container>
         {tweets.map((tweet) => {
-          return <TweetCard tweet={tweet}></TweetCard>;
+          return <TweetCard key={tweet.id} tweet={tweet}></TweetCard>;
         })}
       </Container>
     </Box>

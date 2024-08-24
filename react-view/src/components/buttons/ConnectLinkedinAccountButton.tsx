@@ -75,6 +75,7 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
       maxW={"md"}
       leftIcon={<SiLinkedin />}
       isLoading={isSubmitting}
+      loadingText="Connecting"
       onClick={handleConnectLinkedinAccount}
     >
       <Center>
