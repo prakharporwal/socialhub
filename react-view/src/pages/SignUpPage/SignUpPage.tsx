@@ -21,7 +21,6 @@ ReactGA.pageview(window.location.pathname + window.location.search);
 const SignUpPage: React.FunctionComponent<any> = (props) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [organisationId, setOrganisationId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
@@ -29,11 +28,10 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
   const navigate = useNavigate();
 
   function submitSignUpForm(e: FormEvent<HTMLFormElement>) {
-    console.log(e.preventDefault());
+    e.preventDefault();
     setIsRegistering(true);
 
     if (
-      organisationId === "" ||
       username === "" ||
       email === "" ||
       password === "" ||
@@ -54,22 +52,21 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       return;
     }
 
-    console.log(email, password, organisationId, username);
-
     fetch(CONSTANTS.api_server_url + "/v1/signup", {
       method: "POST",
       body: JSON.stringify({
-        organisation_group_id: organisationId,
         username: username,
         email: email,
         password: password,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
+        const data = await res.json();
         if (res.ok) {
-          return res.json();
+          return data;
         }
-        throw new Error("failed to login");
+
+        throw new Error(data.message);
       })
       .then((data) => {
         console.log(data.access_token);
@@ -82,7 +79,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           isClosable: true,
         });
 
-        if (data?.access_token !== undefined && data?.access_token !== "") {
+        if (data?.access_token) {
           window.localStorage.setItem("access_token", data.access_token);
           window.localStorage.setItem("current_username", data.username);
           window.localStorage.setItem("current_user_email", data.user_email);
@@ -107,8 +104,6 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       .finally(() => {
         setIsRegistering(false);
       });
-
-    console.log(e.preventDefault());
   }
 
   function validateEmail(email: any) {
@@ -160,10 +155,11 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
   }
 
   return (
-    <FormContainer headingText="Signup into Organisation">
+    <FormContainer headingText="Signup into SocialHub">
       <form onSubmit={submitSignUpForm}>
         <Stack spacing={0}>
-          <FormControl id="orgname">
+          {/* Will use org Id concept later when we have a org */}
+          {/* <FormControl id="orgname">
             <FormLabel>Organisation Id</FormLabel>
             <Input
               type="text"
@@ -172,24 +168,26 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
                 setOrganisationId(e.currentTarget.value);
               }}
             />
+          </FormControl> */}
+          <FormControl id="name">
+            <FormLabel>Username</FormLabel>
+            <Input
+              type="text"
+              value={username}
+              onChange={(e) => {
+                const inputText = e.currentTarget.value;
+                setUsername(inputText.toLowerCase());
+              }}
+            />
           </FormControl>
-          <FormControl id="email">
+          {/* // keeping it as username because chrome picks the email to save from this field id */}
+          <FormControl id="username">
             <FormLabel>Email address</FormLabel>
             <Input
               type="email"
               value={email}
               onChange={(e) => {
                 setEmail(e.currentTarget.value);
-              }}
-            />
-          </FormControl>
-          <FormControl id="username">
-            <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.currentTarget.value);
               }}
             />
           </FormControl>

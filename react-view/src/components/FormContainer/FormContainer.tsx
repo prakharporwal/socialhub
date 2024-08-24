@@ -15,7 +15,14 @@ const FormContainer: React.FunctionComponent<IProps> = (props) => {
       justify={"center"}
       backgroundColor={"whitesmoke"}
     >
-      <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack
+        spacing={4}
+        mx={"auto"}
+        minW={{ md: "md" }}
+        maxW={"lg"}
+        py={12}
+        px={6}
+      >
         <Stack align={"center"}>
           <Heading fontSize={"3xl"}>{props.headingText}</Heading>
           {/* <Text fontSize={"lg"} color={"gray.600"}>

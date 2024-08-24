@@ -39,7 +39,7 @@ import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaPlusCircle } from "react-icons/fa";
-import { SiFacebook, SiInstagram, SiLinkedin, SiTwitter } from "react-icons/si";
+import { SiLinkedin, SiTwitter } from "react-icons/si";
 import { logOut } from "../utils/logoutUtils";
 
 interface LinkItemProps {

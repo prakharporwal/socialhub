@@ -24,7 +24,6 @@ ReactGA.initialize("G-DWQ4JNSKQE");
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 const SignInPage: React.FunctionComponent<any> = (props) => {
-  const [organisationId, setOrganisationId] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
@@ -40,7 +39,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
 
     setIsLoggingIn(true);
 
-    if (organisationId === "" || email === "" || password === "") {
+    if (email === "" || password === "") {
       if (!toast.isActive("login-error")) {
         toast({
           // todo add the username here
@@ -60,7 +59,6 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
     fetch(CONSTANTS.api_server_url + "/v1/login", {
       method: "POST",
       body: JSON.stringify({
-        organisation_group_id: organisationId,
         user_id: email,
         password,
       }),
@@ -86,7 +84,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
         toast({
           // todo add the user name here
           title: "Login successful",
-          description: "Logged in as {username}",
+          description: `Logged in as ${data.username}`,
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -122,7 +120,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
   return (
     <FormContainer headingText={"Signin into Organisation"}>
       <form onSubmit={submitSignInForm}>
-        <FormControl id="organisation-id">
+        {/* <FormControl id="organisation-id">
           <FormLabel>Organisation Id</FormLabel>
           <Input
             type="text"
@@ -131,8 +129,9 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
               setOrganisationId(e.currentTarget.value);
             }}
           />
-        </FormControl>
-        <FormControl id="email">
+        </FormControl> */}
+        {/* // keeping it as username because chrome picks the email to save from this field id */}
+        <FormControl id="username">
           <FormLabel>Email address</FormLabel>
           <Input
             type="email"
