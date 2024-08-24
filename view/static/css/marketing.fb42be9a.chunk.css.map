@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/marketing.fb42be9a.chunk.css","mappings":"AAAA,WACE,wBAAyB,CACzB,sDACF","sources":["pages/MarketingPage/marketing.css"],"sourcesContent":[".marketing {\n  background-color: #d9afd9;\n  background-image: linear-gradient(0deg, #97d9e1 0%, #d9c7af 100%);\n}\n"],"names":[],"sourceRoot":""}
