@@ -17,7 +17,7 @@ const FormContainer: React.FunctionComponent<IProps> = (props) => {
     >
       <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>{props.headingText}</Heading>
+          <Heading fontSize={"3xl"}>{props.headingText}</Heading>
           {/* <Text fontSize={"lg"} color={"gray.600"}>
             to enjoy all of our cool <Link color={"blue.400"}>features</Link>{" "}
           </Text> */}

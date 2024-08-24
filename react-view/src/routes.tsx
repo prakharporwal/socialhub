@@ -1,13 +1,29 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import SidebarWithHeader from "./components/SimpleSidebarWithHeader";
 
 /** LAZY IMPORT PAGES COMPONENTS */
+
+const WebHeader = lazy(
+  () => import(/* webpackChunkName: "webHeader" */ "./components/WebHeader")
+);
+const SidebarWithHeader = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "SidebarWithHeader" */ "./components/SimpleSidebarWithHeader"
+    )
+);
+
 const ForgotPasswordResetPage = lazy(
-  () => import("./pages/ForgotPasswordResetPage")
+  () =>
+    import(
+      /* webpackChunkName: "forgotPasswordResetPage" */ "./pages/ForgotPasswordResetPage"
+    )
 );
 const ForgotPasswordRequestPage = lazy(
-  () => import("./pages/ForgotPasswordPage")
+  () =>
+    import(
+      /* webpackChunkName: "forgotPasswordRequest" */ "./pages/ForgotPasswordPage"
+    )
 );
 const MarketingPage = lazy(
   () => import(/* webpackChunkName: "marketing" */ "./pages/MarketingPage")
@@ -53,20 +69,30 @@ export const appRouter = createBrowserRouter([
   },
 
   {
-    path: "/forgot-password",
-    element: <ForgotPasswordRequestPage />,
-  },
-  {
-    path: "/forgot-password-reset",
-    element: <ForgotPasswordResetPage />,
-  },
-  {
-    path: "/signin",
-    element: <SignInPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUpPage />,
+    path: "/",
+    element: <WebHeader />,
+    children: [
+      {
+        path: "/forgot-password",
+        element: <ForgotPasswordRequestPage />,
+      },
+      {
+        path: "/forgot-password-reset",
+        element: <ForgotPasswordResetPage />,
+      },
+      {
+        path: "/signin",
+        element: <SignInPage />,
+      },
+      {
+        path: "/signup",
+        element: <SignUpPage />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
+      },
+    ],
   },
   {
     path: routeNames.rootPath,
@@ -97,9 +123,5 @@ export const appRouter = createBrowserRouter([
         element: <LinkedinPage />,
       },
     ],
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
   },
 ]);
