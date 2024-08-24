@@ -162,7 +162,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
   return (
     <FormContainer headingText="Signup into Organisation">
       <form onSubmit={submitSignUpForm}>
-        <Stack spacing={4}>
+        <Stack spacing={0}>
           <FormControl id="orgname">
             <FormLabel>Organisation Id</FormLabel>
             <Input
