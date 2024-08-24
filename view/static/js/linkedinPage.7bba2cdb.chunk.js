@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_view=self.webpackChunkreact_view||[]).push([[209],{3822:function(e,n,c){c.r(n);var r=c(7973),t=c(7254),i=(c(9867),c(83)),u=c(6005),s=c(2834);n.default=(0,i.Z)((function(e){return(0,s.jsx)(r.xu,{h:"80vh",children:(0,s.jsx)(t.k,{direction:"column",align:"center",justify:"center",h:"100%",gap:"8",children:(0,s.jsx)(u.Z,{})})})}))}}]);
-//# sourceMappingURL=linkedinPage.7bba2cdb.chunk.js.map
