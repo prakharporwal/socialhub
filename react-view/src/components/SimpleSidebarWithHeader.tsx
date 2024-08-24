@@ -28,6 +28,8 @@ import {
 } from "@chakra-ui/react";
 
 import {
+  NavLink,
+  Outlet,
   Link as ReactLink,
   NavLink as RouterNavLink,
   useNavigate,
@@ -38,6 +40,7 @@ import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaPlusCircle } from "react-icons/fa";
 import { SiFacebook, SiInstagram, SiLinkedin, SiTwitter } from "react-icons/si";
+import { logOut } from "../utils/logoutUtils";
 
 interface LinkItemProps {
   name: string;
@@ -45,10 +48,10 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, linkTo: "/home" },
-  { name: "Create Post", icon: FaPlusCircle, linkTo: "/post/new" },
-  { name: "Linkedin", icon: SiLinkedin, linkTo: "/linkedin" },
-  { name: "Twitter", icon: SiTwitter, linkTo: "/twitter" },
+  { name: "Home", icon: FiHome, linkTo: "/app/home" },
+  { name: "Create Post", icon: FaPlusCircle, linkTo: "/app/post/new" },
+  { name: "Linkedin", icon: SiLinkedin, linkTo: "/app/linkedin" },
+  { name: "Twitter", icon: SiTwitter, linkTo: "/app/twitter" },
   // { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
   // { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
@@ -93,7 +96,9 @@ export default function SidebarWithHeader({
             "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
         }}
       />
-      <Box ml={{ base: 0, md: 60 }}>{children}</Box>
+      <Box ml={{ base: 0, md: 60 }}>
+        <Outlet />
+      </Box>
     </Box>
   );
 }
@@ -184,12 +189,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
   let navigate = useNavigate();
 
   function handleLogout() {
-    window.localStorage.removeItem("authenticated");
-    window.localStorage.removeItem("access_token");
-    window.localStorage.removeItem("username");
-    window.localStorage.removeItem("organisation_group_id");
-
-    document.cookie = `access_token=; Path=/;`;
+    logOut();
     navigate("/signin");
   }
 

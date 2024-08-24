@@ -278,12 +278,12 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
         justify={"center"}
         direction={"column"}
       >
-        <Stack spacing={4} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack spacing={4} mx={"auto"} width={"full"} py={4} px={4}>
           <Box
             borderWidth="2px"
             rounded="lg"
             shadow="2px 2px 3px rgba(0,0,0,0.3)"
-            minWidth={{ sm: 80, md: 96 }}
+            minWidth={{ base: "full", sm: "96" }}
             bg={useColorModeValue("white", "gray.700")}
             p={8}
             m="10px auto"

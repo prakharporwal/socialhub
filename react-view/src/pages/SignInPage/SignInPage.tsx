@@ -92,7 +92,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
           isClosable: true,
         });
 
-        navigate("/home");
+        navigate("/app/home");
       })
       .catch((err) => {
         console.log(err);
@@ -115,7 +115,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      navigate("/home");
+      navigate("/app/home");
     }
   }, [auth]);
 
@@ -153,7 +153,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
           />
         </FormControl>
         <FormControl id="submit-button">
-          <Stack spacing={10}>
+          <Stack spacing={6}>
             <Stack
               direction={{ base: "column", sm: "row" }}
               align={"start"}
@@ -187,6 +187,9 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             </Button>
             <div className="g-signin2" data-onsuccess="onSignIn"></div>
           </Stack>
+          <Link as={RouterLink} to="/signup" color={"blue.400"}>
+            Create Account
+          </Link>
         </FormControl>
       </form>
     </FormContainer>

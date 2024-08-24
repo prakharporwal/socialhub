@@ -75,7 +75,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
           duration: 6000,
         });
       }
-      navigate("/home");
+      navigate("/app/home");
     }
   }, [auth]);
 

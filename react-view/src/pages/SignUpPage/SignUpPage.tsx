@@ -91,7 +91,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
         } else {
           console.error("access token is empty or undefined");
         }
-        navigate("/home");
+        navigate("/app/home");
       })
       .catch((err) => {
         console.log(err);
@@ -137,7 +137,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
     var params: any = {
       client_id:
         "400956389014-h8i654igfoqm53ud0694bhk649kigaur.apps.googleusercontent.com",
-      redirect_uri: "http://localhost:3000/v1/google/oauth2/signup/callback",
+      redirect_uri: "http://localhost:8080/v1/google/oauth2/signup/callback",
       response_type: "token",
       scope: "openid email profile",
       include_granted_scopes: "true",
