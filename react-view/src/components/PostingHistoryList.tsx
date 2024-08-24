@@ -19,6 +19,7 @@ import CONSTANTS from "../CONSTANTS";
 import { useColorModeValue } from "@chakra-ui/react";
 import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
 import mockData from "./mockPosts.json";
+import LoadingShell from "./ui/LoadingShell";
 
 type LinkedinPost = {
   author?: string;
@@ -46,10 +47,11 @@ interface IProps {
 
 const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   const auth = useAuth();
-
+  const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>(mockData);
 
   useEffect(() => {
+    setIsLoadingPosts(true);
     fetch(CONSTANTS.api_server_url + "/app/linkedin/posts/fetchall", {
       method: "GET",
       headers: {
@@ -69,22 +71,28 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => {
+        setIsLoadingPosts(false);
+      });
   }, []);
 
   return (
-    <Box w="100%" p={4} as={"div"}>
+    <Box w="100%" px={4} as={"div"}>
       <Heading color={"black"}>Your Posts</Heading>
       <ConnectLinkedinAccountButton />
-      <List>
-        {posts.length > 0 ? (
-          posts.map((item, idx) => {
-            return <PostHistory key={item.scheduled_post_id} post={item} />;
-          })
-        ) : (
-          <Text textAlign={"center"}>No Posts</Text>
-        )}
-      </List>
+      {isLoadingPosts ? (
+        <LoadingShell />
+      ) : (
+        <List mt={8}>
+          {posts.length > 0 ? (
+            posts.map((item, idx) => {
+              return <PostHistory key={item.scheduled_post_id} post={item} />;
+            })
+          ) : (
+            <Text textAlign={"center"}>No Posts</Text>
+          )}
+        </List>
+      )}
     </Box>
   );
 };

@@ -4,8 +4,10 @@ const LoadingShell = () => {
       style={{
         display: "grid",
         placeItems: "center",
-        height: "100vh",
-        width: "100vw",
+        height: "100%",
+        width: "100%",
+        margin: "4px",
+        padding: "8px",
       }}
     >
       Loading...
