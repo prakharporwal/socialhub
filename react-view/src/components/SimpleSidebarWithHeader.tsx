@@ -23,12 +23,9 @@ import {
   MenuList,
   Image,
   DrawerOverlay,
-  DrawerBody,
-  DrawerCloseButton,
 } from "@chakra-ui/react";
 
 import {
-  NavLink,
   Outlet,
   Link as ReactLink,
   NavLink as RouterNavLink,
