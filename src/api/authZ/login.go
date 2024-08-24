@@ -16,15 +16,17 @@ import (
 
 const fiveHours = 5 * 60 * 60
 const TokenAgeInSeconds = fiveHours
+const PUBLIC = "PUBLIC"
 
 type loginRequest struct {
 	UserId              string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
-	OrganisationGroupId string `json:"organisation_group_id" binding:"required"`
+	OrganisationGroupId string `json:"organisation_group_id"`
 	Password            string `json:"password" binding:"required"`
 }
 
 type loginResponse struct {
 	Username            string `json:"username"`
+	UserEmail           string `json:"email"`
 	OrganisationGroupId string `json:"organisation_group_id"`
 	AccessToken         string `json:"access_token"` // userId can be username or userEmail
 	RefreshToken        string `json:"refresh_token"`
@@ -42,7 +44,7 @@ func Login(ctx *gin.Context) {
 	plogger.Debug(request.UserId, " is attempting login!")
 	args := sqlcmodels.GetUserDetailsParams{
 		UserEmail:           request.UserId,
-		OrganisationGroupID: request.OrganisationGroupId,
+		OrganisationGroupID: PUBLIC, // hard code OrganisationGroupID to PUBLIC for everyone
 	}
 	// convert provided password and username to hash with salt
 	// check for the hash string match or not
@@ -68,6 +70,7 @@ func Login(ctx *gin.Context) {
 	response := generateLoginSession(user.UserEmail, user.OrganisationGroupID, ctx.Request.UserAgent(), ctx.ClientIP())
 
 	response.Username = user.Username
+	response.UserEmail = user.UserEmail
 	response.OrganisationGroupId = user.OrganisationGroupID
 
 	plogger.Debug(request.UserId, " is logged in successfully!")

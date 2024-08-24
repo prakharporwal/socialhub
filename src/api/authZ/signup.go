@@ -19,7 +19,7 @@ import (
 type signUpRequest struct {
 	Username            string `json:"username" binding:"required"`
 	UserEmail           string `json:"email" binding:"required,email"`
-	OrganisationGroupId string `json:"organisation_group_id" binding:"required"`
+	OrganisationGroupId string `json:"organisation_group_id"`
 	Password            string `json:"password" binding:"required,min=6"`
 }
 
@@ -53,7 +53,7 @@ func SignUp(ctx *gin.Context) {
 	args := db.CreateUserParams{
 		UserEmail:           request.UserEmail,
 		Username:            request.Username,
-		OrganisationGroupID: request.OrganisationGroupId,
+		OrganisationGroupID: PUBLIC, // hard code OrganisationGroupID to PUBLIC for everyone
 		PasswordHash:        string(passwordHash),
 		IsVerified:          false,
 	}
@@ -64,6 +64,8 @@ func SignUp(ctx *gin.Context) {
 		if pqErr, ok := err.(*pq.Error); ok {
 			if pqErr.Code.Name() == "unique_violation" {
 				plogger.Error("unique_key_violation ", "User with this email or username already exists!")
+				ctx.JSON(http.StatusInternalServerError, gin.H{"message": "User with this email or username already exists!"})
+				return
 			}
 			plogger.Error(err)
 			ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
