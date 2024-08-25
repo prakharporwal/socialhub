@@ -94,7 +94,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
     //   .catch()
     //   .finally();
     if (isLinkedinPost) {
-      await fetch(CONSTANTS.api_server_url + "/app/linkedin/post", {
+      await fetch(CONSTANTS.api_server_url + "/api/p/linkedin/post", {
         headers: {
           "access-token": auth.accessToken || "",
         },
@@ -157,7 +157,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
 
     // POST ON TWITTER API ALSO
     if (isTwitterPost) {
-      await fetch(CONSTANTS.api_server_url + "/app/twitter/tweets/create", {
+      await fetch(CONSTANTS.api_server_url + "/api/p/twitter/tweets/create", {
         headers: {
           "access-token": auth.accessToken || "",
         },
@@ -225,7 +225,7 @@ const LinkedinPostForm: React.FunctionComponent<any> = () => {
 
     setIsSubmittingScheduled(true);
 
-    fetch(CONSTANTS.api_server_url + "/app/linkedin/schedule/post", {
+    fetch(CONSTANTS.api_server_url + "/api/p/linkedin/schedule/post", {
       method: "POST",
       headers: {
         "access-token": auth.accessToken || "",

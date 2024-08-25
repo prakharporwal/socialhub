@@ -52,7 +52,7 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
 
   useEffect(() => {
     setIsLoadingPosts(true);
-    fetch(CONSTANTS.api_server_url + "/app/linkedin/posts/fetchall", {
+    fetch(CONSTANTS.api_server_url + "/api/p/linkedin/posts/fetchall", {
       method: "GET",
       headers: {
         "access-token": auth.accessToken || "",

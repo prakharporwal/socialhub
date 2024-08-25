@@ -13,7 +13,7 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
   const [isAccountConnected, setIsAccountConnected] = useState(false);
 
   useEffect(() => {
-    fetch(CONSTANTS.api_server_url + "/app/linkedin/account/info", {
+    fetch(CONSTANTS.api_server_url + "/api/p/linkedin/account/info", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -37,7 +37,7 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
   async function handleConnectLinkedinAccount() {
     setIsSubmitting(true);
     await fetch(
-      CONSTANTS.api_server_url + "/app/linkedin/oauth/access/initiate",
+      CONSTANTS.api_server_url + "/api/p/linkedin/oauth/access/initiate",
       {
         method: "get",
         headers: {

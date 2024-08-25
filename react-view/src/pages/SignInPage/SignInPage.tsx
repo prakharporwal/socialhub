@@ -54,7 +54,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
     }
 
     console.log(email, password, rememberMe);
-    fetch(CONSTANTS.api_server_url + "/v1/login", {
+    fetch(CONSTANTS.api_server_url + "/api/v1/login", {
       method: "POST",
       body: JSON.stringify({
         user_id: email,

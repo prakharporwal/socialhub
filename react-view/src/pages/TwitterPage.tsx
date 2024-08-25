@@ -35,7 +35,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   function handleConnectToTwitter(e: React.MouseEvent) {
     setIsSubmitting(true);
 
-    fetch(CONSTANTS.api_server_url + "/app/twitter/oauth2/access/initiate", {
+    fetch(CONSTANTS.api_server_url + "/api/p/twitter/oauth2/access/initiate", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -70,7 +70,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   }
 
   function handleFetchTweets() {
-    fetch(CONSTANTS.api_server_url + "/app/twitter/tweets/all", {
+    fetch(CONSTANTS.api_server_url + "/api/p/twitter/tweets/all", {
       headers: {
         "access-token": auth.accessToken || "",
       },
@@ -91,7 +91,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
   }
 
   useEffect(() => {
-    fetch(CONSTANTS.api_server_url + "/app/twitter/account/info", {
+    fetch(CONSTANTS.api_server_url + "/api/p/twitter/account/info", {
       method: "get",
       headers: {
         "access-token": auth.accessToken || "",

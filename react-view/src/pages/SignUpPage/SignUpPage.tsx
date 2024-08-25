@@ -52,7 +52,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       return;
     }
 
-    fetch(CONSTANTS.api_server_url + "/v1/signup", {
+    fetch(CONSTANTS.api_server_url + "/api/v1/signup", {
       method: "POST",
       body: JSON.stringify({
         username: username,
