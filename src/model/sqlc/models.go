@@ -20,6 +20,17 @@ type SocialhubAccount struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type SocialhubGoogleSignupAccessToken struct {
+	OrganisationGroupID string    `json:"organisation_group_id"`
+	UserID              string    `json:"user_id"`
+	Token               string    `json:"token"`
+	ExpiresAt           time.Time `json:"expires_at"`
+	IsExpired           bool      `json:"is_expired"`
+	RequestedByClientIp string    `json:"requested_by_client_ip"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
+}
+
 type SocialhubLinkedinAccountAccessToken struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	UserEmail           string    `json:"user_email"`

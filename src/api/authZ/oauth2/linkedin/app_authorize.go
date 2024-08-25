@@ -18,23 +18,16 @@ const MESSAGE = "message"
 const CODE = "code"
 
 // fixme: use in env secret
-const clientId = "77270lc9p0hmuz"
+const clientId = "777tjn7kotod8h"
 
 // fixme: use in env secret
-const clientSecret = "2SOSGddMxfUL8vlZ"
+const clientSecret = "I3ZZqOReGsbfOQ2F"
 
 // FetchAuthCode get Auth Code from LinkedIn OAuth 2
 func FetchAuthCode(ctx *gin.Context) {
 	plogger.Debug("Fetching linkedin Auth Code!")
-	///GET https://www.linkedin.com/oauth/v2/authorization
-	//?response_type=code
-	//&client_id={your_client_id}
-	//&redirect_uri={your_callback_url}
-	//&state=foobar
-	//&scope=w_member_social
-
 	//	generate a JWT For callback and user identification
-	// 	and pass as a state then it should be valid for a minute.
+	// 	and pass as a state then it should be valid for a minute. to avoid CSRF
 	tm, _ := authZ.NewPasetoMaker()
 
 	oauthJwtToken, err := tm.CreateToken(authZ.GetCurrentUser(), authZ.GetCurrentOrganisationId(), 1*time.Minute)
@@ -47,9 +40,11 @@ func FetchAuthCode(ctx *gin.Context) {
 	responseType := "code"
 	redirectURI := env.LINKEDIN_OAUTH_REDIRECT_URL
 
+	scopeForId := "openid"
 	scopeForPosting := "w_member_social"
-	scopeForProfileInfo := "r_liteprofile"
-	scope := scopeForPosting + " " + scopeForProfileInfo
+	scopeForProfileInfo := "profile"
+	scopeForEmail := "email"
+	scope := scopeForId + " " + scopeForPosting + " " + scopeForEmail + " " + scopeForProfileInfo
 
 	getDataParams := url.Values{}
 	getDataParams.Set("response_type", responseType)
@@ -59,26 +54,7 @@ func FetchAuthCode(ctx *gin.Context) {
 	getDataParams.Set("scope", scope)
 
 	url := env.LINKEDIN_GET_AUTHORISATION_CODE_URL + "?" + getDataParams.Encode()
-
-	//resp, err := http.Get(url)
-	//if err != nil {
-	//	ctx.JSON(http.StatusInternalServerError, gin.H{MESSAGE: "Error getting the oauth token!"})
-	//	return
-	//}
-	//defer resp.Body.Close()
-	//
-	//// Parse the JSON response to get the access token
-	//var code interface{}
-	//
-	//plogger.Debug(resp.Body)
-	//err = json.NewDecoder(resp.Body).Decode(&code)
-	//if err != nil {
-	//	plogger.Info(code)
-	//	plogger.Error(err)
-	//	ctx.JSON(http.StatusInternalServerError, gin.H{MESSAGE: "Error parsing the oauth token!"})
-	//	return
-	//}
-
+	plogger.Debug(url)
 	ctx.JSON(http.StatusOK, gin.H{"redirect_uri": url})
 }
 
@@ -89,6 +65,7 @@ const LINKEDIN_ACCESS_TOKEN_REQUEST_URL = "https://www.linkedin.com/oauth/v2/acc
 // GetAccessToken
 // use the authorization code to get the access code
 func GetAccessToken(ctx *gin.Context) {
+	plogger.Debug("GetAccessToken")
 	//code, clientID, clientSecret, redirectURI string, grant_type,
 	//set up the HTTP POST request to exchange the authorization code for an access token
 	errParam, ok := ctx.GetQuery(ERROR)
@@ -106,7 +83,6 @@ func GetAccessToken(ctx *gin.Context) {
 	}
 
 	tokenMaker, _ := authZ.NewPasetoMaker()
-
 	jwtInfo, err := tokenMaker.VerifyToken(state)
 	if err != nil {
 		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err)
@@ -198,6 +174,5 @@ func GetAccessToken(ctx *gin.Context) {
 		return
 	}
 	plogger.Debug(row.UserEmail, " ", row.TokenScope)
-	ctx.Redirect(http.StatusTemporaryRedirect, env.WebsiteURL+"?linkedin=success")
-	//ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
+	ctx.Redirect(http.StatusFound, "/")
 }

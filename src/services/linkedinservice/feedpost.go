@@ -58,16 +58,16 @@ func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.L
 	return "success", nil
 }
 
-const accountLinkedinURNEndpoint = "https://api.linkedin.com/v2/me"
+const accountLinkedinURNEndpoint = "https://api.linkedin.com/v2/userinfo"
 
 // fetchLinkedinAccountURN looks for user info from linkedin using token
 // from uri: accountLinkedinURNEndpoint -> https://api.linkedin.com/v2/me
 func fetchLinkedinAccountURN(accessToken string) string {
 	// get user id from the endpoint and
 	req, err := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
+	req.Header.Set("X-RestLi-Protocol-Version", "2.0.0")
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
-	plogger.Info(req.Header)
 	// Send the HTTP request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -75,10 +75,15 @@ func fetchLinkedinAccountURN(accessToken string) string {
 		return ""
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		plogger.Error("Request to fetch URN failed! ", resp.StatusCode)
-		return ""
-	}
+	var responseBody map[string]interface{}
+	//struct {
+	//	LocalizedLastName  string      `json:"localizedLastName"`
+	//	ProfilePicture     interface{} `json:"profilePicture"`
+	//	FirstName          interface{} `json:"firstName"`
+	//	LastName           interface{} `json:"lastName"`
+	//	Id                 string      `json:"id"`
+	//	LocalisedFirstName string      `json:"localizedFirstName"`
+	//}
 
 	defer resp.Body.Close()
 
@@ -88,18 +93,16 @@ func fetchLinkedinAccountURN(accessToken string) string {
 		return ""
 	}
 
-	plogger.Debug("Error decoding response body!", responseBody.Id, responseBody.FirstName, responseBody.ProfilePicture)
+	if resp.StatusCode != http.StatusOK {
+		plogger.Error("Request to fetch URN failed! ", resp.StatusCode)
+		return ""
+	}
 
-	return responseBody.Id
-}
+	//plogger.Debug("Error decoding response body!", responseBody.Id, responseBody.FirstName, responseBody.ProfilePicture)
+	var out = responseBody["sub"].(string)
+	plogger.Debug(out)
 
-var responseBody struct {
-	LocalizedLastName  string      `json:"localizedLastName"`
-	ProfilePicture     interface{} `json:"profilePicture"`
-	FirstName          interface{} `json:"firstName"`
-	LastName           interface{} `json:"lastName"`
-	Id                 string      `json:"id"`
-	LocalisedFirstName string      `json:"localizedFirstName"`
+	return out
 }
 
 func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
@@ -121,7 +124,11 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 	body, _ := json.Marshal(requestBody)
 	plogger.Debug("post request body ", string(body))
 
-	err = SendPostToLinkedin(string(body), accessToken)
+	postId, err := SendPostToLinkedin(string(body), accessToken)
+
+	// todo: write query to update the postId in the database for delete and other actions across linkedin
+	plogger.Debug(postId)
+
 	if err != nil {
 		plogger.Error("Failed while sending post to linkedin ", err)
 		return "", err
@@ -161,18 +168,18 @@ func createURN(resourceType string, urnId string) string {
 	}
 }
 
-func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) error {
+func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (string, error) {
 	req, err := http.NewRequest(http.MethodPost, postOnFeedURN, strings.NewReader(bodyJsonString))
 
 	if err != nil {
 		plogger.Error("Creating Request Object for Linkedin post API failed! ", err)
-		return err
+		return "", err
 	}
 
 	plogger.Debug("access Token ", linkedinAccessToken)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+linkedinAccessToken)
-	req.Header.Set("LinkedIn-Version", "202304")
+	req.Header.Set("LinkedIn-Version", "202404")
 	req.Header.Set("X-Restli-Protocol-Version", "2.0.0")
 
 	plogger.Debug(req.Header.Get("Authorization"))
@@ -180,13 +187,15 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) error
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		plogger.Error("Error getting the account URN! ", err)
-		return errors.New("post creation Failed")
+		return "", errors.New("post creation Failed")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 
 	defer resp.Body.Close()
 
+	plogger.Debug("Header:", resp.Header.Clone())
+	plogger.Debug("Post Id": )
 	plogger.Debug("Status code is ", resp.StatusCode)
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
@@ -194,8 +203,9 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) error
 		plogger.Debug("resp status code ", resp.StatusCode)
 		plogger.Debug("resp Header ", resp.Header)
 		plogger.Debug("resp body ", string(body))
-		return errors.New("post creation Failed")
+		return "", errors.New("post creation Failed")
 	}
 
-	return nil
+	var postId = resp.Header.Get("X-Restli-Id")
+	return postId, nil
 }

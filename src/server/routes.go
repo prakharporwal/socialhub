@@ -8,6 +8,7 @@ import (
 	"socialhub-server/api/accounts"
 	"socialhub-server/api/authN/sso/google/googleoauth2"
 	"socialhub-server/api/authZ"
+	"socialhub-server/pkg/plogger"
 
 	"socialhub-server/api/authZ/oauth2/linkedin"
 	"socialhub-server/api/authZ/oauth2/twitter"
@@ -35,13 +36,14 @@ func InitRouter() *gin.Engine {
 			ctx.AbortWithStatus(http.StatusOK)
 			return
 		}
-
+		plogger.Debug(ctx.Request.Header.Values)
+		plogger.Debug("Trying to access", ctx.Request.Method, ctx.Request.URL)
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "no such route found"})
 	})
 
 	//r.GET("/persist", linkedin.Persist)
 
-	public := router.Group("")
+	public := router.Group("/api")
 	public.Use(cors.Default()) // as this is public we don't need access_token header
 	public.GET("/health", api.HealthCheck)
 
@@ -57,7 +59,7 @@ func InitRouter() *gin.Engine {
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))
 
-	protected := router.Group("/app")
+	protected := public.Group("/p")
 	protected.Use(middleware.CORSMiddleware())
 	protected.Use(middleware.AuthMiddleware())
 

@@ -40,7 +40,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 	token, err := FetchLinkedinAccountAccessToken()
 	if err != nil {
 		plogger.Error(err)
-		ctx.Redirect(http.StatusTemporaryRedirect, "/app/linkedin/oauth/access/initiate")
+		ctx.Redirect(http.StatusTemporaryRedirect, "/api/p/linkedin/oauth/access/initiate")
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Linkedin Account not connected or access revoked"})
 		return
 	}
