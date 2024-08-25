@@ -96,7 +96,7 @@ func pickScheduledPosts() {
 			OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 			UserEmail:           authZ.GetCurrentUser(),
 		}
-
+		plogger.Info("Attempting to post on twitter....")
 		row, err := store.GetInstance().TwitterAccountAccessTokens_findAccessToken(context.Background(), twitterTokenArgs)
 		if err != nil {
 			plogger.Error("Error getting bearer token from db! ", err)

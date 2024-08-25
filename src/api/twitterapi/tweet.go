@@ -56,6 +56,7 @@ type tweetRequest struct {
 	Text string `json:"text" binding:"required"`
 }
 
+// REFER: https://developer.x.com/en/docs/authentication/oauth-2-0/user-access-token
 const twitterPostTweetUrl = "https://api.twitter.com/2/tweets"
 
 func WriteTweet(ctx *gin.Context) {
@@ -101,11 +102,15 @@ func WriteTweet(ctx *gin.Context) {
 
 	if resp.StatusCode != http.StatusCreated {
 		plogger.Error("Failed with error! Status code :", resp.StatusCode)
-
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
 	}
 
 	var respBody interface{}
 	_ = json.NewDecoder(resp.Body).Decode(&respBody)
+
+	//todo: update the tweet id in our db also
+	// created required table etc.
 
 	plogger.Debug("response body ", respBody)
 

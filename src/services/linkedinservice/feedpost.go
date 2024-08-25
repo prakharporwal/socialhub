@@ -206,7 +206,7 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (stri
 	}
 
 	var postId = resp.Header.Get("X-Restli-Id")
-	plogger.Debug("Post Id", postId)
+	plogger.Debug("Post Id: ", postId)
 
 	return postId, nil
 }

@@ -23,6 +23,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 	plogger.Debug(twitterOAuthToken)
 	plogger.Debug(oauthVerifier)
 
+	// todo: add a validation to check if same as
 	// 1. verify the state variable
 	// 2. store token in db
 
@@ -77,6 +78,7 @@ func OAuthCallbackController(ctx *gin.Context) {
 		UserEmail:           authZ.GetCurrentUser(),
 		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 		TokenScope:          respBody.Scope,
+		TokenType:           respBody.TokenType,
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}
 

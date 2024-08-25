@@ -15,8 +15,8 @@ const (
 )
 
 const (
-	TwitterAppClientId     = "T0d6MDNldDZNR19yU29xbFBTb3k6MTpjaQ"
-	TwitterAppClientSecret = "2Qf7eGgae5W0J95J6eVoAm2lOfM58pXh1-Kzqy5yESc_f83dGO"
+	TwitterAppClientId     = "T2NEcHVta29jNVJid0V2Mk5CUTU6MTpjaQ"
+	TwitterAppClientSecret = "7dLedJHkine7HllsQkTnMxbbKoy-t_WTdaH5udYy3tGia4lhQ-"
 	TwitterAccessTokenUrl  = "https://api.twitter.com/2/oauth2/token"
 	TwitterOAuth2Callback  = "http://localhost:4000/api/twitter/oauth2/access/callback"
 )

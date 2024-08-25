@@ -5,6 +5,12 @@ Posting and managing multiple social media accounts is easy
 
 
 # RoadMap
+-[x] Basic login functionality with password
+-[x] User registration functionality
+-[x] user forgot password flow
+-[x] Support posting on Linkedin
+-[x] Support posting on Twitter
+-[] adding support for poll in the post for linkedin and twitter
 -[] User permissions engine
 -[] Account and Teams setup
 
