@@ -195,7 +195,6 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (stri
 	defer resp.Body.Close()
 
 	plogger.Debug("Header:", resp.Header.Clone())
-	plogger.Debug("Post Id": )
 	plogger.Debug("Status code is ", resp.StatusCode)
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
@@ -207,5 +206,7 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (stri
 	}
 
 	var postId = resp.Header.Get("X-Restli-Id")
+	plogger.Debug("Post Id", postId)
+
 	return postId, nil
 }

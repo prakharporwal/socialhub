@@ -72,10 +72,13 @@ func pickScheduledPosts() {
 			return
 		}
 
-		err = linkedinservice.SendPostToLinkedin(row.PostJsonString, linkedinAccessToken)
+		postId, err := linkedinservice.SendPostToLinkedin(row.PostJsonString, linkedinAccessToken)
 		if err != nil {
 			plogger.Error("failed while sending posting to linkedin -", err)
 		}
+
+		// todo: update your db with postId after posting to twitter and linkedin
+		plogger.Debug("postId: ", postId)
 
 		args := sqlcmodels.UpdatePostStatusParams{
 			ScheduledPostID: row.ScheduledPostID,
