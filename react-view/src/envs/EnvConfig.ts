@@ -1,4 +1,4 @@
-const Env = {
+export const Env = {
   dev: {
     api_server_url: "http://localhost:8080",
   },
@@ -9,7 +9,3 @@ const Env = {
     api_server_url: "http://3.111.57.148",
   },
 };
-
-const CONSTANTS = Env.prod;
-
-export default CONSTANTS;
