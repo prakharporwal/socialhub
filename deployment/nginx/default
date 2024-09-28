@@ -1,18 +1,18 @@
 server {
-    if ($host = api.prakhar.works) {
+    if ($host = api.sociohub.live) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-    if ($host = www.prakhar.works) {
+    if ($host = www.sociohub.live) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-    if ($host = prakhar.works) {
+    if ($host = sociohub.live) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
     listen 80;
-    server_name www.prakhar.works api.prakhar.works prakhar.works;
+    server_name www.sociohub.live api.sociohub.live sociohub.live;
     return 404; # managed by Certbot
 }
 
@@ -23,8 +23,8 @@ server{
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    server_name prakhar.works;
-    rewrite ^(.*) $scheme://www.prakhar.works$request_uri permanent;
+    server_name sociohub.live;
+    rewrite ^(.*) $scheme://www.sociohub.live$request_uri permanent;
 }
 
 server {
@@ -35,7 +35,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    server_name www.prakhar.works;
+    server_name www.sociohub.live;
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
@@ -57,7 +57,7 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    server_name api.prakhar.works;
+    server_name api.sociohub.live;
 
     location / {
         # Your API server configuration goes here
