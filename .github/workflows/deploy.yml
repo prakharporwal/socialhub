@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - schb/v2
       - test
 jobs:
   deploy:
@@ -23,8 +24,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           rm: true
-          source: "."  # Path to the code to be copied
-          target: "~/github/socialhub"  # Destination path on the EC2 instance
+          source: "." # Path to the code to be copied
+          target: "~/github/socialhub" # Destination path on the EC2 instance
 
       - name: SSH into EC2
         uses: appleboy/ssh-action@master
