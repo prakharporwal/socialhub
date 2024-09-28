@@ -1,8 +1,7 @@
 create schema IF NOT EXISTS socialhub;
 
 
-CREATE
-EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
 CREATE TABLE IF NOT EXISTS socialhub.accounts

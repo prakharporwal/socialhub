@@ -12,14 +12,10 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../CONSTANTS";
-import ReactGA from "react-ga";
 import FormContainer from "../../components/FormContainer";
-
 import "./signin.css";
 import { useAuth } from "../../hooks/useAuth";
 
-ReactGA.initialize("G-DWQ4JNSKQE");
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 const SignInPage: React.FunctionComponent<any> = (props) => {
   const [email, setEmail] = useState<string>("");
