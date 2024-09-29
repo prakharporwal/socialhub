@@ -1,41 +1,5 @@
 server {
-    if ($host = api.sociohub.live) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-    if ($host = www.sociohub.live) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-    if ($host = sociohub.live) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-    listen 80;
-    server_name www.sociohub.live api.sociohub.live sociohub.live;
-    return 404; # managed by Certbot
-}
-
-server{
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/prakhar.works/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/prakhar.works/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
-    server_name sociohub.live;
-    rewrite ^(.*) $scheme://www.sociohub.live$request_uri permanent;
-}
-
-server {
-    listen [::]:443 ssl; # managed by Certbot
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/www.prakhar.works/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/www.prakhar.works/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
-    server_name www.sociohub.live;
+    server_name www.sociohub.live sociohub.live;
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
@@ -47,16 +11,16 @@ server {
 
         # try_files $uri /index.html;
     }
+
+    listen 443 ssl; # managed by Certbot
+
+    ssl_certificate /etc/letsencrypt/live/api.sociohub.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api.sociohub.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
-    listen [::]:443 ssl; # managed by Certbot
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/api.prakhar.works/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/api.prakhar.works/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
     server_name api.sociohub.live;
 
     location / {
@@ -65,4 +29,40 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_pass http://localhost:8080;
     }
+
+    listen 443 ssl; # managed by Certbot
+
+    ssl_certificate /etc/letsencrypt/live/api.sociohub.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api.sociohub.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = www.sociohub.live) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = sociohub.live) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+
+    server_name www.sociohub.live sociohub.live;
+    return 404; # managed by Certbot
+
+}
+
+server {
+    if ($host = api.sociohub.live) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name api.sociohub.live;
+    return 404; # managed by Certbot
 }
