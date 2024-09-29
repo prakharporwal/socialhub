@@ -1,15 +1,8 @@
-const Env = {
-  dev: {
-    api_server_url: "http://localhost:8080",
-  },
-  lan: {
-    api_server_url: "http://192.168.0.184:8080",
-  },
-  prod: {
-    api_server_url: "http://3.111.57.148",
-  },
-};
+import { Env } from "./envs/EnvConfig";
 
-const CONSTANTS = Env.prod;
+const isDev = process.env.NODE_ENV === "development";
+const isProd = process.env.NODE_ENV === "production";
+
+const CONSTANTS = isProd ? Env.prod : isDev ? Env.dev : Env.lan;
 
 export default CONSTANTS;

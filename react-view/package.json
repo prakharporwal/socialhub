@@ -21,10 +21,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cp ./src/envs/local/CONSTANTS.ts ./src/CONSTANTS.ts && react-scripts start",
-    "start:lan": "cp ./src/envs/lan/CONSTANTS.ts ./src/CONSTANTS.ts && react-scripts start",
-    "deploy": "cp ./src/envs/prod/CONSTANTS.ts ./src/CONSTANTS.ts && npm run build && npm run copy",
-    "deploy:lan": "cp ./src/envs/lan/CONSTANTS.ts ./src/CONSTANTS.ts && npm run build && npm run copy",
+    "start": "NODE_ENV=development react-scripts start",
+    "start:lan": "react-scripts start",
+    "deploy": "NODE_ENV=production npm run build && npm run copy",
+    "deploy:lan": "npm run build && npm run copy",
     "develop": "webpack-dev-server --mode development --hot",
     "build": "react-scripts build",
     "copy": "rm -rf ../view/* && cp -r build/ ../view",
