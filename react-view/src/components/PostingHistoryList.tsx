@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  List,
-  ListItem,
-  Text,
-} from "@chakra-ui/layout";
+import { Box, Divider, Flex, Heading, ListItem, Text } from "@chakra-ui/layout";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
 import { Card, CardBody, CardFooter, CardHeader } from "@chakra-ui/card";
 import { Button, ButtonGroup } from "@chakra-ui/button";
@@ -16,10 +8,20 @@ import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
 import CONSTANTS from "../CONSTANTS";
-import { useColorModeValue } from "@chakra-ui/react";
-import ConnectLinkedinAccountButton from "./buttons/ConnectLinkedinAccountButton";
+import {
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import mockData from "./mockPosts.json";
 import LoadingShell from "./ui/LoadingShell";
+import { useNavigate } from "react-router";
 
 type LinkedinPost = {
   author?: string;
@@ -47,6 +49,7 @@ interface IProps {
 
 const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>(mockData);
 
@@ -79,19 +82,54 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
   return (
     <Box w="100%" px={4} as={"div"}>
       <Heading color={"black"}>Your Posts</Heading>
-      <ConnectLinkedinAccountButton />
       {isLoadingPosts ? (
         <LoadingShell />
       ) : (
-        <List mt={8}>
-          {posts.length > 0 ? (
-            posts.map((item, idx) => {
-              return <PostHistory key={item.scheduled_post_id} post={item} />;
-            })
-          ) : (
-            <Text textAlign={"center"}>No Posts</Text>
-          )}
-        </List>
+        <TableContainer w={"100%"} px={4}>
+          <Table variant="striped" colorScheme={"gray"}>
+            <Thead>
+              <Th>Post Type</Th>
+              <Th>Post</Th>
+              <Th>Status</Th>
+              <Th>Platform</Th>
+              <Th>Created By</Th>
+              <Th>Created At</Th>
+            </Thead>
+            <Tbody fontSize={"sm"}>
+              {posts.map((item, idx) => (
+                <Tr
+                  key={item.scheduled_post_id}
+                  onClick={() => {
+                    navigate("/app/post/" + item.scheduled_post_id);
+                  }}
+                >
+                  <Td>{item.post_type}</Td>
+                  <Td
+                    maxWidth={"64"}
+                    wordBreak={"break-word"}
+                    whiteSpace={"pre-wrap"}
+                    overflowX={"hidden"}
+                  >
+                    {JSON.parse(item.post_json_string).commentary}
+                  </Td>
+                  <Td>{item.status}</Td>
+                  <Td>{""}</Td>
+                  <Td>{item.created_by}</Td>
+                  <Td>{item.created_at}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <Tfoot
+              fontSize={"xs"}
+              fontWeight={"bold"}
+              backgroundColor={"InfoBackground"}
+            >
+              <Tr>
+                <Td colSpan={6}>1 2 3 4</Td>
+              </Tr>
+            </Tfoot>
+          </Table>
+        </TableContainer>
       )}
     </Box>
   );

@@ -23,12 +23,12 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { SiPeertube } from "react-icons/si";
-import { useAuth } from "../hooks/useAuth";
-import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import CONSTANTS from "../CONSTANTS";
+import { useAuth } from "../../hooks/useAuth";
+import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
+import CONSTANTS from "../../CONSTANTS";
 import { FaClock } from "react-icons/fa";
 
-const LinkedinPostForm: React.FunctionComponent<any> = () => {
+const PostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
   const auth = useAuth();
   const [type, setType] = useState<string>("text");
@@ -521,4 +521,4 @@ const Arr: React.FunctionComponent<any> = (props) => {
   return <div></div>;
 };
 
-export default withAuthenticationRequired(LinkedinPostForm);
+export default withAuthenticationRequired(PostForm);
