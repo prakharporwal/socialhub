@@ -2,7 +2,6 @@ package twitter
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
 	"socialhub-server/api/authZ"
@@ -12,6 +11,8 @@ import (
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func OAuthCallbackController(ctx *gin.Context) {
@@ -91,5 +92,5 @@ func OAuthCallbackController(ctx *gin.Context) {
 	plogger.Info(row.UserEmail)
 	plogger.Info("scope from db response ", row.TokenScope)
 
-	ctx.Redirect(http.StatusFound, env.WebsiteURL+"?twitter=success")
+	ctx.Redirect(http.StatusFound, env.WebsiteURL+"/app/twitter")
 }
