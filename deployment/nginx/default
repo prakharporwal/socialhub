@@ -1,19 +1,20 @@
 server {
-    server_name www.sociohub.live sociohub.live;
 
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
+        root /var/www/sociohub.live/html;
+        index index.html index.htm index.nginx-debian.html;
 
-    location / {
-        try_files $uri $uri/ /index.html;
+        server_name sociohub.live www.sociohub.live;
+
+        location / {
+		try_files $uri $uri/ /index.html;
         # below line is active to solve react-router-dom 404 error on reload
         # https://github.com/react-boilerplate/react-boilerplate/issues/1480
 
         # try_files $uri /index.html;
-    }
+	}
 
+    listen [::]:443 ssl; # managed by Certbot
     listen 443 ssl; # managed by Certbot
-
     ssl_certificate /etc/letsencrypt/live/api.sociohub.live/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/api.sociohub.live/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
@@ -30,8 +31,9 @@ server {
         proxy_pass http://localhost:8080;
     }
 
+    listen [::]:443 ssl; # managed by Certbot
     listen 443 ssl; # managed by Certbot
-
+    
     ssl_certificate /etc/letsencrypt/live/api.sociohub.live/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/api.sociohub.live/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
@@ -39,30 +41,22 @@ server {
 }
 
 server {
-    if ($host = www.sociohub.live) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
     if ($host = sociohub.live) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
 
-    listen 80;
+    if ($host = www.sociohub.live) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
 
-    server_name www.sociohub.live sociohub.live;
-    return 404; # managed by Certbot
-
-}
-
-server {
     if ($host = api.sociohub.live) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-
     listen 80;
-    server_name api.sociohub.live;
+    listen [::]:80;
+
+    server_name sociohub.live www.sociohub.live api.sociohub.live;
     return 404; # managed by Certbot
 }
