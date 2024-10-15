@@ -11,11 +11,10 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import FormContainer from "../../components/FormContainer";
 import "./signin.css";
 import { useAuth } from "../../hooks/useAuth";
-
 
 const SignInPage: React.FunctionComponent<any> = (props) => {
   const [email, setEmail] = useState<string>("");

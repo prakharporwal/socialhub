@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import CONSTANTS from "../CONSTANTS";
+import CONSTANTS from "../EnvConstant";
 import { SiTwitter } from "react-icons/si";
 
 type TweetType = {

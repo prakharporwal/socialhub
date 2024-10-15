@@ -1,7 +1,7 @@
 import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { SiYoutube } from "react-icons/si";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import VideoUploadForm from "./VideoUploadForm/VideoUploadForm";

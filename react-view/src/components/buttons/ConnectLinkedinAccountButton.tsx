@@ -2,7 +2,7 @@ import { Button, Center, Text, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { SiGrafana, SiLinkedin } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 
 const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

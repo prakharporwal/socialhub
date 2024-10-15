@@ -3,7 +3,7 @@ import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import { SiInstagram } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 
 const InstagramPageContainer = () => {
   const toast = useToast();
