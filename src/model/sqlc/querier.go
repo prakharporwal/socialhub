@@ -11,6 +11,7 @@ import (
 )
 
 type Querier interface {
+	AppAccountOauth2AccessTokens_SaveToken(ctx context.Context, arg AppAccountOauth2AccessTokens_SaveTokenParams) (AppAccountOauth2AccessTokens_SaveTokenRow, error)
 	BlockSessionById(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error)
 	BlockSessionFamily(ctx context.Context, email string) (SocialhubSession, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (SocialhubSession, error)

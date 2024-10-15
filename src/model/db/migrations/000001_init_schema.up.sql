@@ -219,3 +219,26 @@ CREATE TABLE IF NOT EXISTS socialhub.google_signup_access_token(
     updated_at             timestamptz not null default now(),
     PRIMARY KEY (organisation_group_id,user_id, token)
 );
+
+
+-- not in prod yet
+CREATE TABLE IF NOT EXISTS socialhub.app_account_oauth2_access_tokens(
+    organisation_group_id      varchar     NOT NULL,
+    user_email                 varchar     NOT NULL,
+    app_name                   varchar     NOT NULL,
+    app_user_identification_id varchar     NOT NULL DEFAULT '',
+    access_token               varchar     NOT NULL,
+    refresh_token              varchar     NOT NULL,
+    token_scope                varchar     NOT NULL,
+    expires_at                 timestamptz NOT NULL,
+    created_at                 timestamptz NOT NULL DEFAULT now(),
+    updated_at                 timestamptz not null default now(),
+    PRIMARY KEY (organisation_group_id, user_email)
+);
+
+-- setting trigger to update timestamp accounts table
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.app_account_oauth2_access_tokens
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();

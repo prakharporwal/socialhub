@@ -2,7 +2,6 @@ package linkedin
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/url"
 	"socialhub-server/api/authZ"
@@ -12,6 +11,8 @@ import (
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 const MESSAGE = "message"
@@ -85,7 +86,7 @@ func GetAccessToken(ctx *gin.Context) {
 	tokenMaker, _ := authZ.NewPasetoMaker()
 	jwtInfo, err := tokenMaker.VerifyToken(state)
 	if err != nil {
-		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err)
+		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err.Error())
 		ctx.AbortWithStatusJSON(http.StatusForbidden, apierror.Forbidden)
 		return
 	}
@@ -174,5 +175,5 @@ func GetAccessToken(ctx *gin.Context) {
 		return
 	}
 	plogger.Debug(row.UserEmail, " ", row.TokenScope)
-	ctx.Redirect(http.StatusFound, "/")
+	ctx.Redirect(http.StatusFound, env.WebsiteURL+"/app/linkedin")
 }

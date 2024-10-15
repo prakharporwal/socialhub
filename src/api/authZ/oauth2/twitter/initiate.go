@@ -8,8 +8,6 @@ import (
 	"socialhub-server/pkg/utils"
 )
 
-const twitterOAuth2Url = "https://twitter.com/i/oauth2/authorize"
-
 func OAuth2Initiate(ctx *gin.Context) {
 	responseType := "code"
 	clientId := env.TwitterAppClientId
@@ -30,7 +28,7 @@ func OAuth2Initiate(ctx *gin.Context) {
 	dataParams.Add("code_challenge", codeChallenge)
 	dataParams.Add("code_challenge_method", codeChallengeMethod)
 
-	redirectURL := twitterOAuth2Url + "?" + dataParams.Encode()
+	redirectURL := env.TwitterOAuth2AuthorizeUrl + "?" + dataParams.Encode()
 
 	// ctx.Redirect(http.StatusFound, redirectURL)
 

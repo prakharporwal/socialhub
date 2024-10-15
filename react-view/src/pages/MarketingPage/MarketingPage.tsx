@@ -21,10 +21,6 @@ import MarketingFooter from "./MarketingFooter";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "../../hooks/useQuery";
-import ReactGA from "react-ga";
-
-ReactGA.initialize("G-DWQ4JNSKQE");
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 interface FeatureProps {
   text: string;

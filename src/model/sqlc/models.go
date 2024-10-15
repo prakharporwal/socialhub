@@ -20,6 +20,19 @@ type SocialhubAccount struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type SocialhubAppAccountOauth2AccessToken struct {
+	OrganisationGroupID     string    `json:"organisation_group_id"`
+	UserEmail               string    `json:"user_email"`
+	AppName                 string    `json:"app_name"`
+	AppUserIdentificationID string    `json:"app_user_identification_id"`
+	AccessToken             string    `json:"access_token"`
+	RefreshToken            string    `json:"refresh_token"`
+	TokenScope              string    `json:"token_scope"`
+	ExpiresAt               time.Time `json:"expires_at"`
+	CreatedAt               time.Time `json:"created_at"`
+	UpdatedAt               time.Time `json:"updated_at"`
+}
+
 type SocialhubGoogleSignupAccessToken struct {
 	OrganisationGroupID string    `json:"organisation_group_id"`
 	UserID              string    `json:"user_id"`

@@ -8,6 +8,7 @@ import (
 	"socialhub-server/env"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"strings"
 	"time"
 )
 
@@ -15,10 +16,10 @@ const MESSAGE = "message"
 const CODE = "code"
 
 // fixme: use in env secret
-const clientId = "77270lc9p0hmuz"
+const clientId = env.InstagramAppClientId
 
 // fixme: use in env secret
-const clientSecret = "2SOSGddMxfUL8vlZ"
+const clientSecret = env.InstagramAppClientSecret
 
 // FetchAuthCode get Auth Code from LinkedIn OAuth 2
 func OAuth2Initiate(ctx *gin.Context) {
@@ -41,12 +42,15 @@ func OAuth2Initiate(ctx *gin.Context) {
 	}
 
 	responseType := "code"
-	redirectURI := "https://api.yogveda.live/linkedin/oauth/access/callback"
+	redirectURI := env.ApiURL + "/api/instagram/oauth/access/callback"
 
-	scopeForPosting := "w_member_social"
-	scopeForProfileInfo := "r_liteprofile"
-	scope := scopeForPosting + " " + scopeForProfileInfo
-
+	scopeForPublicProfile := "public_profile"
+	//https://developers.facebook.com/docs/permissions#instagram_basic
+	scopeForBasicUserDetails := "instagram_basic"
+	//https://developers.facebook.com/docs/permissions#instagram_content_publish
+	scopeForContentPublishing := "instagram_content_publish"
+	scopeList := []string{scopeForPublicProfile, scopeForBasicUserDetails, scopeForContentPublishing}
+	scope := strings.Join(scopeList, " ")
 	getDataParams := url.Values{}
 	getDataParams.Set("response_type", responseType)
 	getDataParams.Set("client_id", clientId)
@@ -54,7 +58,7 @@ func OAuth2Initiate(ctx *gin.Context) {
 	getDataParams.Set("state", oauthJwtToken)
 	getDataParams.Set("scope", scope)
 
-	url := env.LINKEDIN_GET_AUTHORISATION_CODE_URL + "?" + getDataParams.Encode()
+	url := env.InstagramOAuthAuthorisationUrl + "?" + getDataParams.Encode()
 
 	//resp, err := http.Get(url)
 	//if err != nil {
@@ -74,6 +78,8 @@ func OAuth2Initiate(ctx *gin.Context) {
 	//	ctx.JSON(http.StatusInternalServerError, gin.H{MESSAGE: "Error parsing the oauth token!"})
 	//	return
 	//}
+
+	plogger.Debug("redirecturl: ", url)
 
 	ctx.JSON(http.StatusOK, gin.H{"redirect_uri": url})
 }

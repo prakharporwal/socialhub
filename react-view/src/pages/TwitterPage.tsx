@@ -137,11 +137,12 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           Get Tweets Twitter
         </Button> */}
       </Flex>
-      <Container>
+      {/* TODO once we can read all the users tweets we enable this component */}
+      {/* <Container>
         {tweets.map((tweet) => {
           return <TweetCard key={tweet.id} tweet={tweet}></TweetCard>;
         })}
-      </Container>
+      </Container> */}
     </Box>
   );
 };

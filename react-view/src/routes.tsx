@@ -31,14 +31,11 @@ const MarketingPage = lazy(
 const NotFoundPage = lazy(
   () => import(/* webpackChunkName: "notFoundPage" */ "./pages/NotFoundPage")
 );
-const InstagramPage = lazy(
-  () => import(/* webpackChunkName: "instagramPage" */ "./pages/InstagramPage")
-);
 const FacebookPage = lazy(
   () => import(/* webpackChunkName: "facebookPage" */ "./pages/FacebookPage")
 );
 const LinkedPostForm = lazy(
-  () => import(/* webpackChunkName: "postForm" */ "./components/LinkedPostForm")
+  () => import(/* webpackChunkName: "postForm" */ "./components/PostForm")
 );
 const PostingHistoryList = lazy(
   /* webpackChunkName: "postingHistory" */
@@ -46,6 +43,12 @@ const PostingHistoryList = lazy(
 );
 const TwitterPage = lazy(
   () => import(/* webpackChunkName: "twitterPage" */ "./pages/TwitterPage")
+);
+const InstagramPage = lazy(
+  () => import(/* webpackChunkName: "twitterPage" */ "./pages/InstagramPage")
+);
+const YoutubePage = lazy(
+  () => import(/* webpackChunkName: "twitterPage" */ "./pages/YoutubePage")
 );
 const LinkedinPage = lazy(
   () => import(/* webpackChunkName: "linkedinPage" */ "./pages/LinkedinPage")
@@ -113,6 +116,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "instagram",
         element: <InstagramPage />,
+      },
+      {
+        path: "youtube",
+        element: <YoutubePage />,
       },
       {
         path: "facebook",

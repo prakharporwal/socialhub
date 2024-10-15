@@ -51,8 +51,13 @@ func OAuth2Callback(ctx *gin.Context) {
 
 	//TODO : Make secret storage more secure using hashing, HMAC, or some other algo
 
-	// redirectURI := "https://www.yogveda.live"
-	redirectURI := "https://api.yogveda.live/linkedin/oauth/access/callback"
+	redirectURI := env.ApiURL + "/api/linkedin/oauth/access/callback"
+
+// 	GET https://api.instagram.com/oauth/authorize
+//   ?client_id={app-id},
+//   &redirect_uri={redirect-uri},
+//   &response_type=code,
+//   &scope={scope}
 
 	postData := url.Values{}
 	postData.Set("grant_type", "authorization_code")
@@ -125,6 +130,6 @@ func OAuth2Callback(ctx *gin.Context) {
 	//	return
 	//}
 	//plogger.Debug(row.UserEmail, " ", row.TokenScope)
-	ctx.Redirect(http.StatusTemporaryRedirect, env.WebsiteURL)
+	ctx.Redirect(http.StatusTemporaryRedirect, env.WebsiteURL + "/app/instagram")
 	//ctx.JSON(http.StatusOK, gin.H{"email": row.UserEmail, "scope": row.Scope})
 }
