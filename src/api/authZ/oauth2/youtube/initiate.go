@@ -1,4 +1,4 @@
-package instagram
+package youtube
 
 import (
 	"github.com/gin-gonic/gin"
@@ -15,20 +15,16 @@ import (
 const MESSAGE = "message"
 const CODE = "code"
 
-// fixme: use in env secret
-const clientId = env.InstagramAppClientId
-
-// fixme: use in env secret
-const clientSecret = env.InstagramAppClientSecret
-
 // FetchAuthCode get Auth Code from LinkedIn OAuth 2
 func OAuth2Initiate(ctx *gin.Context) {
 	plogger.Debug("Fetching linkedin Auth Code!")
-	/// GET https://api.instagram.com/oauth/authorize
-	//	?client_id={app-id},
-	//	&redirect_uri={redirect-uri},
-	//	&response_type=code,
-	//	&scope={scope}
+	//	https://accounts.google.com/o/oauth2/v2/auth?
+	//	scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&
+	//	include_granted_scopes=true&
+	//		response_type=token&
+	//		state=state_parameter_passthrough_value&
+	//		redirect_uri=https%3A//oauth2.example.com/code&
+	//		client_id=client_id
 
 	//	generate a JWT For callback and user identification
 	// 	and pass as a state then it should be valid for a minute.
@@ -42,23 +38,26 @@ func OAuth2Initiate(ctx *gin.Context) {
 	}
 
 	responseType := "code"
-	redirectURI := env.ApiURL + "/api/instagram/oauth/access/callback"
+	redirectURI := env.YoutubeRedirectUriEndpoint
 
-	scopeForPublicProfile := "public_profile"
-	//https://developers.facebook.com/docs/permissions#instagram_basic
-	scopeForBasicUserDetails := "instagram_basic"
-	//https://developers.facebook.com/docs/permissions#instagram_content_publish
-	scopeForContentPublishing := "instagram_content_publish"
-	scopeList := []string{scopeForPublicProfile, scopeForBasicUserDetails, scopeForContentPublishing}
+	// see all scopes here: https://developers.google.com/youtube/v3/guides/auth/installed-apps
+	scopeForYoutubeProfile := "https://www.googleapis.com/auth/youtube"
+	scopeForYoutubeUpload := "https://www.googleapis.com/auth/youtube.upload"
+	scopeForViewProfile := "https://www.googleapis.com/auth/youtube.readonly"
+
+	scopeList := []string{scopeForYoutubeProfile, scopeForYoutubeUpload, scopeForViewProfile}
 	scope := strings.Join(scopeList, " ")
 	getDataParams := url.Values{}
 	getDataParams.Set("response_type", responseType)
-	getDataParams.Set("client_id", clientId)
+	// for long lived token with refresh token present
+	getDataParams.Set("access_type", "offline")
+	getDataParams.Set("client_id", env.YoutubeAppClientId)
 	getDataParams.Set("redirect_uri", redirectURI)
 	getDataParams.Set("state", oauthJwtToken)
 	getDataParams.Set("scope", scope)
+	getDataParams.Set("prompt", "consent")
 
-	url := env.InstagramOAuthAuthorisationUrl + "?" + getDataParams.Encode()
+	url := env.YoutubeOAuth2AuthorisationUrl + "?" + getDataParams.Encode()
 
 	//resp, err := http.Get(url)
 	//if err != nil {

@@ -36,7 +36,7 @@ import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaPlusCircle } from "react-icons/fa";
-import { SiLinkedin, SiTwitter } from "react-icons/si";
+import { SiInstagram, SiLinkedin, SiTwitter, SiYoutube } from "react-icons/si";
 import { logOut } from "../utils/logoutUtils";
 
 interface LinkItemProps {
@@ -49,7 +49,8 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Create Post", icon: FaPlusCircle, linkTo: "/app/post/new" },
   { name: "Linkedin", icon: SiLinkedin, linkTo: "/app/linkedin" },
   { name: "Twitter", icon: SiTwitter, linkTo: "/app/twitter" },
-  // { name: "Instagram", icon: SiInstagram, linkTo: "/instagram" },
+  { name: "Instagram", icon: SiInstagram, linkTo: "/app/instagram" },
+  { name: "Youtube", icon: SiYoutube, linkTo: "/app/youtube" },
   // { name: "Facebook", icon: SiFacebook, linkTo: "/facebook" },
 ];
 

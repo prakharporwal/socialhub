@@ -86,7 +86,7 @@ func GetAccessToken(ctx *gin.Context) {
 	tokenMaker, _ := authZ.NewPasetoMaker()
 	jwtInfo, err := tokenMaker.VerifyToken(state)
 	if err != nil {
-		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err)
+		plogger.Error("Token Verification Failed! Cannot validate oauth callback state ! Cannot check for CSRF attack!", err.Error())
 		ctx.AbortWithStatusJSON(http.StatusForbidden, apierror.Forbidden)
 		return
 	}

@@ -8,10 +8,13 @@ import (
 	"socialhub-server/api/accounts"
 	"socialhub-server/api/authN/sso/google/googleoauth2"
 	"socialhub-server/api/authZ"
+	"socialhub-server/api/authZ/oauth2/instagram"
+	"socialhub-server/api/storage"
 	"socialhub-server/pkg/plogger"
 
 	"socialhub-server/api/authZ/oauth2/linkedin"
 	"socialhub-server/api/authZ/oauth2/twitter"
+	"socialhub-server/api/authZ/oauth2/youtube"
 	"socialhub-server/api/authZ/password"
 	"socialhub-server/api/linkedin/linkedinpost"
 	"socialhub-server/api/twitterapi"
@@ -55,6 +58,7 @@ func InitRouter() *gin.Engine {
 	public.GET("/v1/google/oauth2/signup/callback/:hashParam", googleoauth2.SignUpCallback)
 	public.GET("/v1/google/oauth2/signup", googleoauth2.InitiateSignup)
 	public.POST("/v1/google/oauth2/signup", googleoauth2.FetchUserEmailFromGoogle)
+	public.POST("/upload", storage.UploadToBucket)
 
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))
@@ -62,6 +66,12 @@ func InitRouter() *gin.Engine {
 	protected := public.Group("/p")
 	protected.Use(middleware.CORSMiddleware())
 	protected.Use(middleware.AuthMiddleware())
+
+	protected.GET("/instagram/oauth2/access/initiate", instagram.OAuth2Initiate)
+	public.GET("/instagram/oauth2/access/callback", instagram.OAuth2Callback)
+
+	protected.GET("/youtube/oauth2/access/initiate", youtube.OAuth2Initiate)
+	public.GET("/youtube/oauth2/access/callback", youtube.OAuth2Callback)
 
 	protected.GET("/linkedin/oauth/access/initiate", linkedin.FetchAuthCode)
 

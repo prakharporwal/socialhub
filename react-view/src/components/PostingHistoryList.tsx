@@ -88,12 +88,14 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
         <TableContainer w={"100%"} px={4}>
           <Table variant="striped" colorScheme={"gray"}>
             <Thead>
-              <Th>Post Type</Th>
-              <Th>Post</Th>
-              <Th>Status</Th>
-              <Th>Platform</Th>
-              <Th>Created By</Th>
-              <Th>Created At</Th>
+              <Tr>
+                <Th>Post Type</Th>
+                <Th>Post</Th>
+                <Th>Status</Th>
+                <Th>Platform</Th>
+                <Th>Created By</Th>
+                <Th>Created At</Th>
+              </Tr>
             </Thead>
             <Tbody fontSize={"sm"}>
               {posts.map((item, idx) => (
