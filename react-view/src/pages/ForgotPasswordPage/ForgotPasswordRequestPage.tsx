@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import FormContainer from "../../components/FormContainer";
 
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import { useAuth } from "../../hooks/useAuth";
 
 const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {

@@ -25,7 +25,7 @@ import {
 import { SiPeertube } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
 
 const PostForm: React.FunctionComponent<any> = () => {

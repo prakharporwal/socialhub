@@ -12,7 +12,7 @@ import {
   Spacer,
   useToast,
 } from "@chakra-ui/react";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useQuery } from "../../hooks/useQuery";
 

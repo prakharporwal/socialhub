@@ -7,7 +7,7 @@ import { Switch } from "@chakra-ui/switch";
 import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
 import { useAuth } from "../hooks/useAuth";
-import CONSTANTS from "../CONSTANTS";
+import CONSTANTS from "../EnvConstant";
 import {
   Table,
   TableContainer,

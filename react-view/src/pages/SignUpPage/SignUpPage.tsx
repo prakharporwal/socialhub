@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import CONSTANTS from "../../CONSTANTS";
+import CONSTANTS from "../../EnvConstant";
 import FormContainer from "../../components/FormContainer";
 import "./signup.css";
 import { SiGoogle } from "react-icons/si";
