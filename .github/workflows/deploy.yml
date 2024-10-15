@@ -1,10 +1,11 @@
 name: Deploy to AWS EC2
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
-      - schb/v2
       - test
 jobs:
   deploy:
