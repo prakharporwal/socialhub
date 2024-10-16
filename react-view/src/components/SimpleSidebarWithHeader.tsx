@@ -36,7 +36,13 @@ import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
 import { FaPlusCircle } from "react-icons/fa";
-import { SiInstagram, SiLinkedin, SiTwitter, SiYoutube } from "react-icons/si";
+import {
+  SiDash,
+  SiInstagram,
+  SiLinkedin,
+  SiTwitter,
+  SiYoutube,
+} from "react-icons/si";
 import { logOut } from "../utils/logoutUtils";
 
 interface LinkItemProps {
@@ -46,6 +52,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, linkTo: "/app/home" },
+  { name: "Dashboard", icon: SiDash, linkTo: "/app/dashboard" },
   { name: "Create Post", icon: FaPlusCircle, linkTo: "/app/post/new" },
   { name: "Linkedin", icon: SiLinkedin, linkTo: "/app/linkedin" },
   { name: "Twitter", icon: SiTwitter, linkTo: "/app/twitter" },
@@ -146,7 +153,7 @@ const NavItem = ({ icon, linkTo, children, ...rest }: NavItemProps) => {
   return (
     <Link
       _activeLink={{
-        color: "cyan.500",
+        color: "blue.500",
         fontWeight: 700,
       }}
       as={RouterNavLink}
@@ -162,7 +169,7 @@ const NavItem = ({ icon, linkTo, children, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "blue.400",
           color: "white",
         }}
         {...rest}

@@ -4,14 +4,12 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Container,
   Flex,
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
-import CONSTANTS from "../EnvConstant";
+import { useAuth } from "../../hooks/useAuth";
+import CONSTANTS from "../../EnvConstant";
 import { SiTwitter } from "react-icons/si";
 
 type TweetType = {
@@ -131,7 +129,7 @@ const TwitterPage: React.FunctionComponent<any> = (props) => {
           loadingText="Connecting"
           onClick={handleConnectToTwitter}
         >
-          {isConnected ? `Connected to ${twitterUsername}` : "Connect Twitter"}
+          {isConnected ? `${twitterUsername}` : "Connect Twitter"}
         </Button>
         {/* <Button colorScheme={"twitter"} onClick={handleFetchTweets}>
           Get Tweets Twitter
@@ -156,4 +154,4 @@ const TweetCard: React.FunctionComponent<any> = ({ tweet }) => {
   );
 };
 
-export default withAuthenticationRequired(TwitterPage);
+export { TwitterPage };
