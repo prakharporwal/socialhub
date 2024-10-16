@@ -1,13 +1,12 @@
-import { Button, Center, Text, useToast } from "@chakra-ui/react";
+import { Button, Center, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { SiGrafana, SiLinkedin } from "react-icons/si";
+import { SiLinkedin } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
 import CONSTANTS from "../../EnvConstant";
 
 const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [urn, setUrn] = useState("");
-
   const auth = useAuth();
 
   const [isAccountConnected, setIsAccountConnected] = useState(false);
@@ -35,7 +34,9 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
   }, []);
 
   async function handleConnectLinkedinAccount() {
+    if (isAccountConnected) return;
     setIsSubmitting(true);
+
     await fetch(
       CONSTANTS.api_server_url + "/api/p/linkedin/oauth/access/initiate",
       {
@@ -65,11 +66,7 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
 
   return (
     <Button
-      bg={isAccountConnected ? "green.500" : "blue.400"}
-      color={"white"}
-      _hover={{
-        bg: isAccountConnected ? "green.500" : "blue.500",
-      }}
+      variant={isAccountConnected ? "outline" : "solid"}
       colorScheme={"linkedin"}
       w={"full"}
       maxW={"md"}
@@ -80,17 +77,11 @@ const ConnectLinkedinAccountButton: React.FunctionComponent<any> = (props) => {
     >
       <Center>
         <Text>
-          {isAccountConnected
-            ? "Connected to " + urn
-            : "Connect Linkedin Account"}
+          {isAccountConnected ? urn.split(":")[3] : "Connect Linkedin Account"}
         </Text>
       </Center>
     </Button>
   );
-};
-
-const ConnectedAccountButton: React.FunctionComponent<any> = (props) => {
-  return <Button></Button>;
 };
 
 export default ConnectLinkedinAccountButton;

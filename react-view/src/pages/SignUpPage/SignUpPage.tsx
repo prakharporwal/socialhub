@@ -165,17 +165,6 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
               }}
             />
           </FormControl> */}
-          <FormControl id="name">
-            <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              value={username}
-              onChange={(e) => {
-                const inputText = e.currentTarget.value;
-                setUsername(inputText.toLowerCase());
-              }}
-            />
-          </FormControl>
           {/* // keeping it as username because chrome picks the email to save from this field id */}
           <FormControl id="username">
             <FormLabel>Email address</FormLabel>
@@ -186,6 +175,17 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
                 setEmail(e.currentTarget.value);
               }}
             />
+            <FormControl id="name">
+              <FormLabel>Username</FormLabel>
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => {
+                  const inputText = e.currentTarget.value;
+                  setUsername(inputText.toLowerCase());
+                }}
+              />
+            </FormControl>
           </FormControl>
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
