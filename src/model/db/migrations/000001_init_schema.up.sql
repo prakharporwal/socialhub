@@ -242,3 +242,18 @@ CREATE TRIGGER set_timestamp
     ON socialhub.app_account_oauth2_access_tokens
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+-- BIBOCOMIC
+create schema IF NOT EXISTS p_bibocomic;
+
+-- table for Users Early Access Signups
+CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
+(
+    email varchar NOT NULL DEFAULT '',
+    created_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY(email)
+);

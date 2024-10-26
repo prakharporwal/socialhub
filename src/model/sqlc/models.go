@@ -10,6 +10,11 @@ import (
 	"github.com/google/uuid"
 )
 
+type PBibocomicPUsersEarlyAccessSignup struct {
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 type SocialhubAccount struct {
 	ID         int64     `json:"id"`
 	OwnerEmail string    `json:"owner_email"`
