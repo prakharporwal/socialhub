@@ -9,7 +9,7 @@ import (
 	"socialhub-server/api/authN/sso/google/googleoauth2"
 	"socialhub-server/api/authZ"
 	"socialhub-server/api/authZ/oauth2/instagram"
-	"socialhub-server/api/storage"
+	"socialhub-server/api/landingpage"
 	"socialhub-server/pkg/plogger"
 
 	"socialhub-server/api/authZ/oauth2/linkedin"
@@ -49,6 +49,7 @@ func InitRouter() *gin.Engine {
 	public := router.Group("/api")
 	public.Use(cors.Default()) // as this is public we don't need access_token header
 	public.GET("/health", api.HealthCheck)
+	public.POST("/early-access/signup", landingpage.SubmitForEarlyAccess)
 
 	public.POST("/v1/login", authZ.Login)
 	public.POST("/v1/signup", authZ.SignUp)
@@ -58,7 +59,6 @@ func InitRouter() *gin.Engine {
 	public.GET("/v1/google/oauth2/signup/callback/:hashParam", googleoauth2.SignUpCallback)
 	public.GET("/v1/google/oauth2/signup", googleoauth2.InitiateSignup)
 	public.POST("/v1/google/oauth2/signup", googleoauth2.FetchUserEmailFromGoogle)
-	public.POST("/upload", storage.UploadToBucket)
 
 	// directory path relative to project root not this file location
 	public.StaticFS("/static", http.Dir("templates/static"))
