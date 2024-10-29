@@ -47,7 +47,7 @@ const list: ShortVideoListProps = {
     },
     {
       id: "video-9",
-      nextId: "video-1",
+      nextId: "video-2",
       src: "/videos/video-9.mp4",
     },
   ],
@@ -56,18 +56,19 @@ const list: ShortVideoListProps = {
 export const ShortsFeedPage: React.FunctionComponent = (props: any) => {
   const [videoList, setVideoList] = useState(list.list);
 
-  useEffect(() => {
-    fetch("http://localhost:1337/api/articles")
-      .then((res) => {
-        if (!res.ok) throw new Error();
-        return res.json();
-      })
-      .then((data) => {
-        console.log("body", data.data);
-        setVideoList(data.data);
-      })
-      .catch((e) => console.error(e));
-  }, []);
+  // uncomment on api server is ready
+  //   useEffect(() => {
+  //     fetch("http://localhost:1337/api/articles")
+  //       .then((res) => {
+  //         if (!res.ok) throw new Error();
+  //         return res.json();
+  //       })
+  //       .then((data) => {
+  //         console.log("body", data.data);
+  //         setVideoList(data.data);
+  //       })
+  //       .catch((e) => console.error(e));
+  //   }, []);
 
   return (
     <div>

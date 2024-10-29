@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.a240c550.css",
-    "main.js": "/static/js/main.d34e1837.js",
+    "main.css": "/static/css/main.a969067e.css",
+    "main.js": "/static/js/main.aa0816dd.js",
     "webHeader.js": "/static/js/webHeader.634c1af8.chunk.js",
     "SidebarWithHeader.js": "/static/js/SidebarWithHeader.86974f6c.chunk.js",
     "forgotPasswordResetPage.js": "/static/js/forgotPasswordResetPage.13bfa9b7.chunk.js",
     "forgotPasswordRequest.js": "/static/js/forgotPasswordRequest.a85b38d7.chunk.js",
     "marketing.css": "/static/css/marketing.fb42be9a.chunk.css",
-    "marketing.js": "/static/js/marketing.09027cef.chunk.js",
+    "marketing.js": "/static/js/marketing.5e3a8711.chunk.js",
     "notFoundPage.js": "/static/js/notFoundPage.8d01d4b2.chunk.js",
     "facebookPage.js": "/static/js/facebookPage.3f54b192.chunk.js",
     "dashboardPage.js": "/static/js/dashboardPage.0b90fe84.chunk.js",
@@ -17,8 +17,8 @@
     "linkedinPage.js": "/static/js/linkedinPage.b97e8f79.chunk.js",
     "signinPage.css": "/static/css/signinPage.a994b68c.chunk.css",
     "signinPage.js": "/static/js/signinPage.a3aae52e.chunk.js",
-    "signUpPage.css": "/static/css/signUpPage.31d6cfe0.chunk.css",
-    "signUpPage.js": "/static/js/signUpPage.14e88652.chunk.js",
+    "signUpPage.css": "/static/css/signUpPage.619266da.chunk.css",
+    "signUpPage.js": "/static/js/signUpPage.6c6cd47b.chunk.js",
     "static/js/988.7d574d8a.chunk.js": "/static/js/988.7d574d8a.chunk.js",
     "static/js/302.4ce911e4.chunk.js": "/static/js/302.4ce911e4.chunk.js",
     "static/js/821.7947a548.chunk.js": "/static/js/821.7947a548.chunk.js",
@@ -27,14 +27,14 @@
     "static/js/13.7134a2db.chunk.js": "/static/js/13.7134a2db.chunk.js",
     "static/js/141.30beb9a6.chunk.js": "/static/js/141.30beb9a6.chunk.js",
     "index.html": "/index.html",
-    "main.a240c550.css.map": "/static/css/main.a240c550.css.map",
-    "main.d34e1837.js.map": "/static/js/main.d34e1837.js.map",
+    "main.a969067e.css.map": "/static/css/main.a969067e.css.map",
+    "main.aa0816dd.js.map": "/static/js/main.aa0816dd.js.map",
     "webHeader.634c1af8.chunk.js.map": "/static/js/webHeader.634c1af8.chunk.js.map",
     "SidebarWithHeader.86974f6c.chunk.js.map": "/static/js/SidebarWithHeader.86974f6c.chunk.js.map",
     "forgotPasswordResetPage.13bfa9b7.chunk.js.map": "/static/js/forgotPasswordResetPage.13bfa9b7.chunk.js.map",
     "forgotPasswordRequest.a85b38d7.chunk.js.map": "/static/js/forgotPasswordRequest.a85b38d7.chunk.js.map",
     "marketing.fb42be9a.chunk.css.map": "/static/css/marketing.fb42be9a.chunk.css.map",
-    "marketing.09027cef.chunk.js.map": "/static/js/marketing.09027cef.chunk.js.map",
+    "marketing.5e3a8711.chunk.js.map": "/static/js/marketing.5e3a8711.chunk.js.map",
     "notFoundPage.8d01d4b2.chunk.js.map": "/static/js/notFoundPage.8d01d4b2.chunk.js.map",
     "facebookPage.3f54b192.chunk.js.map": "/static/js/facebookPage.3f54b192.chunk.js.map",
     "dashboardPage.0b90fe84.chunk.js.map": "/static/js/dashboardPage.0b90fe84.chunk.js.map",
@@ -44,7 +44,8 @@
     "linkedinPage.b97e8f79.chunk.js.map": "/static/js/linkedinPage.b97e8f79.chunk.js.map",
     "signinPage.a994b68c.chunk.css.map": "/static/css/signinPage.a994b68c.chunk.css.map",
     "signinPage.a3aae52e.chunk.js.map": "/static/js/signinPage.a3aae52e.chunk.js.map",
-    "signUpPage.14e88652.chunk.js.map": "/static/js/signUpPage.14e88652.chunk.js.map",
+    "signUpPage.619266da.chunk.css.map": "/static/css/signUpPage.619266da.chunk.css.map",
+    "signUpPage.6c6cd47b.chunk.js.map": "/static/js/signUpPage.6c6cd47b.chunk.js.map",
     "988.7d574d8a.chunk.js.map": "/static/js/988.7d574d8a.chunk.js.map",
     "302.4ce911e4.chunk.js.map": "/static/js/302.4ce911e4.chunk.js.map",
     "821.7947a548.chunk.js.map": "/static/js/821.7947a548.chunk.js.map",
@@ -54,7 +55,7 @@
     "141.30beb9a6.chunk.js.map": "/static/js/141.30beb9a6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a240c550.css",
-    "static/js/main.d34e1837.js"
+    "static/css/main.a969067e.css",
+    "static/js/main.aa0816dd.js"
   ]
 }
