@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.a969067e.css","mappings":"AAAA,EAEE,QAAS,CADT,SAEF,CAEA,KACE,sBACF","sources":["index.css"],"sourcesContent":["* {\n  padding: 0;\n  margin: 0;\n}\n\nhtml {\n  scroll-behavior: smooth;\n}\n"],"names":[],"sourceRoot":""}
