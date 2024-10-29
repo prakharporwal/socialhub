@@ -162,6 +162,20 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
               Sign In
             </Button>
             <Button
+              colorScheme={"red"}
+              variant={"solid"}
+              px={6}
+              _hover={{
+                bg: "green.500",
+                color: "white",
+              }}
+              onClick={() => {
+                navigate("/shorts");
+              }}
+            >
+              Shorts
+            </Button>
+            <Button
               variant={"link"}
               colorScheme={"blue"}
               size={"sm"}

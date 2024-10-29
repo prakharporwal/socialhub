@@ -64,6 +64,10 @@ const SignUpPage = lazy(
   () => import(/* webpackChunkName: "signUpPage" */ "./pages/SignUpPage")
 );
 
+const ShortsFeedPage = lazy(
+  () => import(/* webpackChunkName: "signUpPage" */ "./pages/ShortsFeedPage")
+);
+
 export const routeNames = {
   rootPath: "/app",
   protectedPath: "/admin",
@@ -74,7 +78,10 @@ export const appRouter = createBrowserRouter([
     path: "/",
     element: <MarketingPage />,
   },
-
+  {
+    path: "/shorts",
+    element: <ShortsFeedPage />,
+  },
   {
     path: "/",
     element: <WebHeader />,
