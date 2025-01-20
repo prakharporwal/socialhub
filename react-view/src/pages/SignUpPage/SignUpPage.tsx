@@ -211,9 +211,9 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           Sign up
         </Button>
       </form>
-      <Button leftIcon={<SiGoogle />} onClick={oauthSignIn}>
+      {/* <Button leftIcon={<SiGoogle />} onClick={oauthSignIn}>
         Continue With Google
-      </Button>
+      </Button> */}
     </FormContainer>
   );
 };
