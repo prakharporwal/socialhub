@@ -161,7 +161,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
             >
               Sign In
             </Button>
-            <Button
+            {/* <Button
               colorScheme={"red"}
               variant={"solid"}
               px={6}
@@ -174,7 +174,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
               }}
             >
               Shorts
-            </Button>
+            </Button> */}
             <Button
               variant={"link"}
               colorScheme={"blue"}

@@ -78,10 +78,10 @@ export const appRouter = createBrowserRouter([
     path: "/",
     element: <MarketingPage />,
   },
-  {
-    path: "/shorts",
-    element: <ShortsFeedPage />,
-  },
+  // {
+  //   path: "/shorts",
+  //   element: <ShortsFeedPage />,
+  // },
   {
     path: "/",
     element: <WebHeader />,
