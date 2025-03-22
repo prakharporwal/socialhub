@@ -246,10 +246,10 @@ CREATE TRIGGER set_timestamp
 
 ----------------------------------------------------------------
 -- BIBOCOMIC
-create schema IF NOT EXISTS p_bibocomic;
+create schema IF NOT EXISTS bibocomic;
 
 -- table for Users Early Access Signups
-CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
+CREATE TABLE IF NOT EXISTS bibocomic.p_users_early_access_signups
 (
     email varchar NOT NULL DEFAULT '',
     created_at timestamptz NOT NULL DEFAULT now(),
@@ -260,22 +260,8 @@ CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
 ---------------- SDUI page service
 create schema IF NOT EXISTS page_service;
 
-CREATE TABLE IF NOT EXISTS product_service.p_listings (
-    listing_id varchar NOT NULL PRIMARY KEY,
-    product_id varchar NOT NULL DEFAULT '',
-    seller_id varchar NOT NULL DEFAULT '',
-    created_at
-    updated_at
-    updated_by
+CREATE TABLE IF NOT EXISTS page_service.p_page_layout_config (
+    page_id BIGSERIAL NOT NULL PRIMARY KEY,
+    config varchar NOT NULL DEFAULT '',
+    datasource_service varchar
 );
-
-CREATE TABLE IF NOT EXISTS product_service.p_product_details (
-    product_id varchar NOT NULL PRIMARY KEY,
-    brand varchar NOT NULL DEFAULT '',
-    variants varchar NOT NULL DEFAULT '',
-    img_urls varchar NOT NULL DEFAULT '',
-    created_at
-    updated_at
-    updated_by
-);
-
