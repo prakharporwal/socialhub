@@ -1,8 +1,7 @@
 create schema IF NOT EXISTS socialhub;
 
 
-CREATE
-EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
 CREATE TABLE IF NOT EXISTS socialhub.accounts
@@ -134,12 +133,12 @@ CREATE TABLE IF NOT EXISTS socialhub.linkedin_account_access_tokens
     user_email            varchar     NOT NULL,
     linkedin_urn          varchar     NOT NULL DEFAULT '',
     access_token          varchar     NOT NULL,
-    token_scope                 varchar     NOT NULL,
+    token_scope           varchar     NOT NULL,
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),
     PRIMARY KEY (organisation_group_id, user_email)
-    );
+);
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -163,7 +162,7 @@ CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),
     PRIMARY KEY (organisation_group_id, user_email)
-    );
+);
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -220,9 +219,9 @@ CREATE TABLE IF NOT EXISTS socialhub.google_signup_access_token(
     PRIMARY KEY (organisation_group_id,user_id, token)
 );
 
-
 -- not in prod yet
-CREATE TABLE IF NOT EXISTS socialhub.app_account_oauth2_access_tokens(
+CREATE TABLE IF NOT EXISTS socialhub.app_account_oauth2_access_tokens
+(
     organisation_group_id      varchar     NOT NULL,
     user_email                 varchar     NOT NULL,
     app_name                   varchar     NOT NULL,
@@ -243,7 +242,6 @@ CREATE TRIGGER set_timestamp
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
 
-
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
@@ -257,3 +255,27 @@ CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
     created_at timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY(email)
 );
+
+
+---------------- SDUI page service
+create schema IF NOT EXISTS page_service;
+
+CREATE TABLE IF NOT EXISTS product_service.p_listings (
+    listing_id varchar NOT NULL PRIMARY KEY,
+    product_id varchar NOT NULL DEFAULT '',
+    seller_id varchar NOT NULL DEFAULT '',
+    created_at
+    updated_at
+    updated_by
+);
+
+CREATE TABLE IF NOT EXISTS product_service.p_product_details (
+    product_id varchar NOT NULL PRIMARY KEY,
+    brand varchar NOT NULL DEFAULT '',
+    variants varchar NOT NULL DEFAULT '',
+    img_urls varchar NOT NULL DEFAULT '',
+    created_at
+    updated_at
+    updated_by
+);
+

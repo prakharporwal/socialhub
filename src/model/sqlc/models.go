@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,12 @@ import (
 type PBibocomicPUsersEarlyAccessSignup struct {
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type PageServicePPageLayoutConfig struct {
+	PageID            int64          `json:"page_id"`
+	Config            string         `json:"config"`
+	DatasourceService sql.NullString `json:"datasource_service"`
 }
 
 type SocialhubAccount struct {

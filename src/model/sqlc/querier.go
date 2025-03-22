@@ -23,6 +23,8 @@ type Querier interface {
 	GetSession(ctx context.Context, sessionID uuid.UUID) (SocialhubSession, error)
 	GetUserDetails(ctx context.Context, arg GetUserDetailsParams) (GetUserDetailsRow, error)
 	LinkedinScheduledUserPosts_fetchAllPosts(ctx context.Context, arg LinkedinScheduledUserPosts_fetchAllPostsParams) ([]SocialhubLinkedinScheduledUserPost, error)
+	PageService_createPageLayoutConfig(ctx context.Context, config string) (PageService_createPageLayoutConfigRow, error)
+	PageService_getPageLayoutConfig(ctx context.Context, pageID int64) (PageService_getPageLayoutConfigRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
 	ScheduleAUserPostOnLinkedin(ctx context.Context, arg ScheduleAUserPostOnLinkedinParams) (ScheduleAUserPostOnLinkedinRow, error)
