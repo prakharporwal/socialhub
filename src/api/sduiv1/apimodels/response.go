@@ -1,5 +1,7 @@
 package apimodels
 
+import "socialhub-server/api/sduiv1/apimodels/sduimodelsv1"
+
 type FetchResponse struct {
 	RequestId string       `json:"requestId"`
 	Request   interface{}  `json:"request"`
@@ -8,7 +10,7 @@ type FetchResponse struct {
 }
 
 type PageResponse struct {
-	PageData interface{}              `json:"pageData"`
-	PageMeta string                   `json:"pageMeta"`
-	Slots    []map[string]interface{} `json:"slots"`
+	PageData interface{}           `json:"pageData"`
+	PageMeta interface{}           `json:"pageMeta"`
+	Slots    []sduimodelsv1.Widget `json:"slots"`
 }

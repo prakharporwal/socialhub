@@ -246,10 +246,10 @@ CREATE TRIGGER set_timestamp
 
 ----------------------------------------------------------------
 -- BIBOCOMIC
-create schema IF NOT EXISTS bibocomic;
+create schema IF NOT EXISTS p_bibocomic;
 
 -- table for Users Early Access Signups
-CREATE TABLE IF NOT EXISTS bibocomic.p_users_early_access_signups
+CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
 (
     email varchar NOT NULL DEFAULT '',
     created_at timestamptz NOT NULL DEFAULT now(),
@@ -263,5 +263,79 @@ create schema IF NOT EXISTS page_service;
 CREATE TABLE IF NOT EXISTS page_service.p_page_layout_config (
     page_id BIGSERIAL NOT NULL PRIMARY KEY,
     config varchar NOT NULL DEFAULT '',
-    datasource_service varchar
+    datasource_service varchar,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
 );
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON page_service.p_page_layout_config
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+---------------- SDUI product service
+create schema IF NOT EXISTS product_service;
+
+CREATE TABLE IF NOT EXISTS product_service.p_listings (
+    listing_id varchar NOT NULL PRIMARY KEY,
+    product_id varchar NOT NULL DEFAULT '',
+    seller_id bigint NOT NULL,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS product_service.p_product_details (
+    product_id varchar NOT NULL PRIMARY KEY,
+    product_name varchar NOT NULL DEFAULT '',
+    product_description varchar NOT NULL DEFAULT '',
+    highlights varchar NOT NULL DEFAULT '',
+    brand varchar NOT NULL DEFAULT '',
+    variants varchar NOT NULL DEFAULT '',
+    img_url varchar NOT NULL DEFAULT '',
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
+);
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON product_service.p_listings
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON product_service.p_product_details
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+---------------- Seller Details : Account seller systems
+
+CREATE SCHEMA IF NOT EXISTS seller_systems;
+
+CREATE TABLE seller_systems.p_seller_account
+(
+    seller_id BIGSERIAL PRIMARY KEY,
+    seller_name varchar NOT NULL DEFAULT '',
+    seller_img_url varchar NOT NULL DEFAULT '',
+    seller_email_id varchar NOT NULL UNIQUE DEFAULT '',
+    seller_contact_number varchar NOT NULL DEFAULT '',
+    is_verified boolean NOT NULL DEFAULT false,
+    gst_number varchar,
+    created_by varchar NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE seller_systems.p_seller_account
+    IS 'seller user id and other account details';
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON seller_systems.p_seller_account
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();

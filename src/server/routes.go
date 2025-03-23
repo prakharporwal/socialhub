@@ -1,9 +1,6 @@
 package server
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/requestid"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api"
 	"socialhub-server/api/accounts"
@@ -13,6 +10,10 @@ import (
 	"socialhub-server/api/landingpage"
 	"socialhub-server/api/sduiv1"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/requestid"
+	"github.com/gin-gonic/gin"
 
 	"socialhub-server/api/authZ/oauth2/linkedin"
 	"socialhub-server/api/authZ/oauth2/twitter"
