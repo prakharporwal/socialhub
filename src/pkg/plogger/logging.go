@@ -31,8 +31,6 @@ func New() *PLogger {
 	return &kl
 }
 
-var stdLog = New()
-
 func (kl *PLogger) Info(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.InfoLevel)("Info: "))
 	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.InfoLevel)(fmt.Sprint(args...)))

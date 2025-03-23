@@ -11,6 +11,7 @@ import (
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"sort"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -96,7 +97,7 @@ func PageFetchV4(ctx *gin.Context) {
 			plogger.Debug("Data fetched for widget type: ", widgetType)
 			plogger.Debug("Data: ", data)
 
-			slot := &sduimodelsv1.Widget{WidgetID: key}
+			slot := &sduimodelsv1.Widget{Id: key}
 			slot.Data = data
 			slot.Type = widgetType
 			if viewType != "" {
@@ -112,6 +113,12 @@ func PageFetchV4(ctx *gin.Context) {
 		"pagename": "product_page",
 		"pagetype": "pp",
 	}
+
+	// Sort slots by widget id
+	// for consistent response order
+	sort.Slice(slots, func(i, j int) bool {
+		return slots[i].Id < slots[j].Id
+	})
 
 	// Session Data:
 	val, ok := ctx.Get("current_user")
