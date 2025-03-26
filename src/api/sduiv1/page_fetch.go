@@ -56,31 +56,29 @@ func PageFetchV4(ctx *gin.Context) {
 	productId := pageUrl.Query().Get("pid")
 	listingId := pageUrl.Query().Get("lid")
 
+	plogger.Info("Fetching data for page: "+reqBody.PageUri, len(configMap))
+
 	var slots []sduimodelsv1.Widget
 	var wg sync.WaitGroup
 
-	plogger.Info("Fetching data for page: "+reqBody.PageUri, len(configMap))
-
 	for key, value := range configMap {
-		ch := make(chan interface{}, 4)
-		plogger.Info("---------For Loop-------------")
+		ch := make(chan interface{}, 10)
+		defer close(ch)
 		wg.Add(1)
 
 		go func() {
-			plogger.Debug("---------Running Go Routine-------------")
-
-			// fetch datasource se data
 			defer wg.Done()
 
 			widgetType := fmt.Sprintf("%v", value["type"])
 			datasource := fmt.Sprintf("%v", value["datasource"])
 
-			// optinal field
+			// optional field
 			var viewType string
 			if value["view_type"] != nil {
 				viewType = fmt.Sprintf("%v", value["view_type"])
 			}
 
+			// fetch datasource se data
 			dataStrategy := datasourceservice.New(datasource)
 			var data interface{}
 
@@ -93,9 +91,6 @@ func PageFetchV4(ctx *gin.Context) {
 			} else {
 				data = nil
 			}
-
-			plogger.Debug("Data fetched for widget type: ", widgetType)
-			plogger.Debug("Data: ", data)
 
 			slot := &sduimodelsv1.Widget{Id: key}
 			slot.Data = data
