@@ -6,6 +6,11 @@ import { createBrowserRouter } from "react-router-dom";
 const WebHeader = lazy(
   () => import(/* webpackChunkName: "webHeader" */ "./components/WebHeader")
 );
+
+const MultiWidgetPage = lazy(
+  () => import(/* webpackChunkName: "multiWidgetPage" */ "./pages/MultiWidgetPage")
+);
+
 const SidebarWithHeader = lazy(
   () =>
     import(
@@ -78,6 +83,10 @@ export const appRouter = createBrowserRouter([
     path: "/",
     element: <MarketingPage />,
   },
+  {
+    path: "/:slug/p/:itemId",
+    element:<MultiWidgetPage/>
+  },
   // {
   //   path: "/shorts",
   //   element: <ShortsFeedPage />,
@@ -103,7 +112,7 @@ export const appRouter = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        path: "*",
+        path: "/*",
         element: <NotFoundPage />,
       },
     ],
