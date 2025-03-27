@@ -6,6 +6,7 @@ import {
   BaseWidgetDataModel,
   MultiWidgetAPIResponse,
 } from "../../apimodels/MultiWidgetAPIResponse";
+import "./style.css";
 
 export default function MultiWidgetPage(): JSX.Element {
   const [data, setData] = useState<MultiWidgetAPIResponse<any> | null>(null);
@@ -46,17 +47,21 @@ function MakeSlotList({ data }: IMakeSlotList) {
   let Component: React.FunctionComponent<any>;
   return (
     <div>
-      {data.response.slots.map((datum) => {
+      {data.response.slots.map((datum, i) => {
         let widgetData;
         switch (datum.type) {
           case "PRODUCT_INFO":
             widgetData = datum.data as ProductInfoWidgetDataModel;
             Component = ProductInfo;
             break; 
+          case "PRODUCT_INFO":
+              widgetData = datum.data as ProductInfoWidgetDataModel;
+              Component = ProductInfo;
+              break; 
           default:
             Component = FallbackComponent
         }
-        return <Component widgetData={widgetData} />;
+        return <Component key={i} widgetData={widgetData} />;
       })}
     </div>
   );
@@ -76,7 +81,7 @@ const ProductInfo: React.FunctionComponent<IProductInfo> = (props) => {
   const { widgetData } = props;
   const { product_name, product_id, listing_id } = widgetData;
 
-  return <div>{product_name}</div>;
+  return <div className="widget-wrapper">{product_name}</div>;
 };
 
 const FallbackComponent: React.FunctionComponent<any> = (props) => {

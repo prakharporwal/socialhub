@@ -6,7 +6,6 @@ import (
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
-	"time"
 )
 
 type ProductDetailsDataStrategy struct {
@@ -27,8 +26,6 @@ func (p *ProductDetailsDataStrategy) GetService(ctx context.Context, req map[str
 		chResponse <- nil
 		return
 	}
-
-	time.Sleep(2 * time.Second)
 	chResponse <- product
 }
 
