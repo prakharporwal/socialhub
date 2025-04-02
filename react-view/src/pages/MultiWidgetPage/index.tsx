@@ -47,7 +47,7 @@ function MakeSlotList({ data }: IMakeSlotList) {
   let Component: React.FunctionComponent<any>;
   return (
     <div>
-      {data.response.slots.map((datum, i) => {
+      {data.response.slots.map((datum, index) => {
         let widgetData;
         switch (datum.type) {
           case "PRODUCT_INFO":
@@ -61,7 +61,7 @@ function MakeSlotList({ data }: IMakeSlotList) {
           default:
             Component = FallbackComponent
         }
-        return <Component key={i} widgetData={widgetData} />;
+        return <Component key={index} widgetData={widgetData} />;
       })}
     </div>
   );

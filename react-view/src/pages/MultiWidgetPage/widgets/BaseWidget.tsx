@@ -1,7 +1,7 @@
 import { Card } from "@chakra-ui/react";
 import React from "react";
 
-type BaseState = {
+export type BaseState = {
     widgetType: string;
     viewType: string;
     layoutParams: string;

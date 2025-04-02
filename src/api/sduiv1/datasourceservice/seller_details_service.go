@@ -7,13 +7,21 @@ import (
 	"socialhub-server/api/sduiv1/apimodels/sduimodelsv1/actiontype"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
+	"strconv"
 )
 
 type SellerDetailsDataStrategy struct {
 }
 
-func (p *SellerDetailsDataStrategy) GetService(ctx context.Context, req map[string]interface{}, chResponse chan interface{}) {
-	listingId := fmt.Sprintf("%v", req["listing_id"])
+func (p *SellerDetailsDataStrategy) FetchData(ctx context.Context, req map[string]interface{}, chResponse chan interface{}) {
+	listingIdVal, listingOk := req["listing_id"]
+	if !listingOk {
+		plogger.Error("Error in SellerDetailsDataStrategy: ", "missing required parameters: listing_id")
+		chResponse <- nil
+		return
+	}
+
+	listingId := fmt.Sprintf("%v", listingIdVal)
 	seller, err := store.GetInstance().SellerService_fetchSellerDetailsForListing(ctx, listingId)
 
 	plogger.Debug(seller)
@@ -23,10 +31,8 @@ func (p *SellerDetailsDataStrategy) GetService(ctx context.Context, req map[stri
 		return
 	}
 
-	resp := sduimodelsv1.RenderableComponent{Action: sduimodelsv1.Action{Type: actiontype.NAVIGATION, Url: "https://www.google.com"}, Value: seller}
+	// TODO: replace with actual data
+	resp := sduimodelsv1.RenderableComponent{Action: sduimodelsv1.Action{Type: actiontype.NAVIGATION, Url: "/seller/" + strconv.FormatInt(seller.SellerID, 10)}, Value: seller}
 
 	chResponse <- resp
-}
-
-func (p *SellerDetailsDataStrategy) FetchData() {
 }

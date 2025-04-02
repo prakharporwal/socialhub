@@ -17,5 +17,6 @@ func DataSourceMapper(datasourceName datasourcetype.DataSourceType) IWidgetDataS
 	case datasourcetype.SELLER_DETAILS_SERVICE:
 		return &SellerDetailsDataStrategy{}
 	}
+	plogger.Warn("No matching data source found for: ", datasourceName)
 	return nil
 }

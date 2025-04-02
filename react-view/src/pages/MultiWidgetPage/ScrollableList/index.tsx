@@ -10,7 +10,7 @@ import useCellMeasurer from "../hooks/useCellMeasurer";
 
 interface WidgetData {
   widgetType: string;
-  viewType: any;
+  viewType: string;
   widgetList: any[];
   widgetId: number;
 }

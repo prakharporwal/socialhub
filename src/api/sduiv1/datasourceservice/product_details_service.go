@@ -11,11 +11,21 @@ import (
 type ProductDetailsDataStrategy struct {
 }
 
-func (p *ProductDetailsDataStrategy) GetService(ctx context.Context, req map[string]interface{}, chResponse chan interface{}) {
+func (p *ProductDetailsDataStrategy) FetchData(ctx context.Context, req map[string]interface{}, chResponse chan interface{}) {
 
 	plogger.Info("GetService: ProductDetailsDataStrategy")
-	listingId := fmt.Sprintf("%v", req["listing_id"])
-	productId := fmt.Sprintf("%v", req["product_id"])
+	// Type assert and extract values with proper error handling
+	listingIdVal, listingOk := req["listing_id"]
+	productIdVal, productOk := req["product_id"]
+
+	if !listingOk || !productOk {
+		plogger.Error("Error in ProductDetailsDataStrategy: ", "missing required parameters: listing_id or product_id")
+		chResponse <- nil
+		return
+	}
+
+	listingId := fmt.Sprintf("%v", listingIdVal)
+	productId := fmt.Sprintf("%v", productIdVal)
 
 	plogger.Info("GetService: ProductDetailsDataStrategy ", listingId, productId)
 
@@ -27,8 +37,4 @@ func (p *ProductDetailsDataStrategy) GetService(ctx context.Context, req map[str
 		return
 	}
 	chResponse <- product
-}
-
-func (p *ProductDetailsDataStrategy) FetchData() {
-
 }

@@ -6,7 +6,7 @@ type FetchResponse struct {
 	RequestId string       `json:"requestId"`
 	Request   interface{}  `json:"request"`
 	Response  PageResponse `json:"response"`
-	Session   interface{}  `json:"Session"`
+	Session   interface{}  `json:"session"`
 }
 
 type PageResponse struct {

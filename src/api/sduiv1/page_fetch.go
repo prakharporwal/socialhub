@@ -48,9 +48,13 @@ func PageFetchV4(ctx *gin.Context) {
 		return
 	}
 
+	// we add a dummy domain to the page uri as pageUri is just the path
+	// not absolute url
 	pageUrl, err := url.Parse("https://dummy.djsfnfdl.co.xyz" + reqBody.PageUri)
 	if err != nil {
 		plogger.Error("Cannot parse request uri", err.Error())
+		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
+		return
 	}
 
 	productId := pageUrl.Query().Get("pid")
@@ -63,6 +67,9 @@ func PageFetchV4(ctx *gin.Context) {
 
 	for key, value := range configMap {
 		ch := make(chan interface{}, 10)
+
+		// FIXME: this is a hack to make sure that the channel is closed
+		// after the goroutine is done and not before
 		defer close(ch)
 		wg.Add(1)
 
@@ -86,7 +93,7 @@ func PageFetchV4(ctx *gin.Context) {
 
 			if dataStrategy != nil {
 				// prepare data to query details from service
-				dataStrategy.GetService(ctx, map[string]interface{}{"listing_id": listingId, "product_id": productId}, ch)
+				dataStrategy.FetchData(ctx, map[string]interface{}{"listing_id": listingId, "product_id": productId}, ch)
 				data = <-ch
 			} else {
 				data = nil
