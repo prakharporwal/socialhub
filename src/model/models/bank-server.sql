@@ -63,7 +63,6 @@ ALTER TABLE "account_transactions_entries" ADD FOREIGN KEY ("account_id") REFERE
 
 ALTER TABLE "users" ADD FOREIGN KEY ("user_email") REFERENCES "accounts" ("owner_email");
 
-
 -- sessions table
 CREATE TABLE sessions(
     session_id uuid NOT NULL PRIMARY KEY ,

@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,51 @@ import (
 type PBibocomicPUsersEarlyAccessSignup struct {
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type PageServicePPageLayoutConfig struct {
+	PageID            int64          `json:"page_id"`
+	Config            string         `json:"config"`
+	DatasourceService sql.NullString `json:"datasource_service"`
+	CreatedAt         sql.NullTime   `json:"created_at"`
+	UpdatedAt         sql.NullTime   `json:"updated_at"`
+	CreatedBy         string         `json:"created_by"`
+}
+
+type ProductServicePListing struct {
+	ListingID string       `json:"listing_id"`
+	ProductID string       `json:"product_id"`
+	SellerID  int64        `json:"seller_id"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
+	CreatedBy string       `json:"created_by"`
+}
+
+type ProductServicePProductDetail struct {
+	ProductID          string       `json:"product_id"`
+	ProductName        string       `json:"product_name"`
+	ProductDescription string       `json:"product_description"`
+	Highlights         string       `json:"highlights"`
+	Brand              string       `json:"brand"`
+	Variants           string       `json:"variants"`
+	ImgUrl             string       `json:"img_url"`
+	CreatedAt          sql.NullTime `json:"created_at"`
+	UpdatedAt          sql.NullTime `json:"updated_at"`
+	CreatedBy          string       `json:"created_by"`
+}
+
+// seller user id and other account details
+type SellerSystemsPSellerAccount struct {
+	SellerID            int64          `json:"seller_id"`
+	SellerName          string         `json:"seller_name"`
+	SellerImgUrl        string         `json:"seller_img_url"`
+	SellerEmailID       string         `json:"seller_email_id"`
+	SellerContactNumber string         `json:"seller_contact_number"`
+	IsVerified          bool           `json:"is_verified"`
+	GstNumber           sql.NullString `json:"gst_number"`
+	CreatedBy           string         `json:"created_by"`
+	CreatedAt           time.Time      `json:"created_at"`
+	UpdatedAt           time.Time      `json:"updated_at"`
 }
 
 type SocialhubAccount struct {

@@ -1,8 +1,6 @@
 package server
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api"
 	"socialhub-server/api/accounts"
@@ -10,7 +8,12 @@ import (
 	"socialhub-server/api/authZ"
 	"socialhub-server/api/authZ/oauth2/instagram"
 	"socialhub-server/api/landingpage"
+	"socialhub-server/api/sduiv1"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/requestid"
+	"github.com/gin-gonic/gin"
 
 	"socialhub-server/api/authZ/oauth2/linkedin"
 	"socialhub-server/api/authZ/oauth2/twitter"
@@ -23,6 +26,7 @@ import (
 
 func InitRouter() *gin.Engine {
 	router := gin.New()
+	router.Use(requestid.New())
 
 	router.NoMethod(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, gin.H{"message": "no such method found"})
@@ -39,7 +43,6 @@ func InitRouter() *gin.Engine {
 			ctx.AbortWithStatus(http.StatusOK)
 			return
 		}
-		plogger.Debug(ctx.Request.Header.Values)
 		plogger.Debug("Trying to access", ctx.Request.Method, ctx.Request.URL)
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "no such route found"})
 	})
@@ -50,6 +53,8 @@ func InitRouter() *gin.Engine {
 	public.Use(cors.Default()) // as this is public we don't need access_token header
 	public.GET("/health", api.HealthCheck)
 	public.POST("/early-access/signup", landingpage.SubmitForEarlyAccess)
+
+	public.POST("/v1/page/fetch", sduiv1.PageFetchV4)
 
 	public.POST("/v1/login", authZ.Login)
 	public.POST("/v1/signup", authZ.SignUp)

@@ -1,8 +1,7 @@
 create schema IF NOT EXISTS socialhub;
 
 
-CREATE
-EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
 CREATE TABLE IF NOT EXISTS socialhub.accounts
@@ -134,12 +133,12 @@ CREATE TABLE IF NOT EXISTS socialhub.linkedin_account_access_tokens
     user_email            varchar     NOT NULL,
     linkedin_urn          varchar     NOT NULL DEFAULT '',
     access_token          varchar     NOT NULL,
-    token_scope                 varchar     NOT NULL,
+    token_scope           varchar     NOT NULL,
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),
     PRIMARY KEY (organisation_group_id, user_email)
-    );
+);
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -163,7 +162,7 @@ CREATE TABLE IF NOT EXISTS socialhub.twitter_account_access_tokens
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null default now(),
     PRIMARY KEY (organisation_group_id, user_email)
-    );
+);
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -220,9 +219,9 @@ CREATE TABLE IF NOT EXISTS socialhub.google_signup_access_token(
     PRIMARY KEY (organisation_group_id,user_id, token)
 );
 
-
 -- not in prod yet
-CREATE TABLE IF NOT EXISTS socialhub.app_account_oauth2_access_tokens(
+CREATE TABLE IF NOT EXISTS socialhub.app_account_oauth2_access_tokens
+(
     organisation_group_id      varchar     NOT NULL,
     user_email                 varchar     NOT NULL,
     app_name                   varchar     NOT NULL,
@@ -243,7 +242,6 @@ CREATE TRIGGER set_timestamp
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
 
-
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
@@ -257,3 +255,87 @@ CREATE TABLE IF NOT EXISTS p_bibocomic.p_users_early_access_signups
     created_at timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY(email)
 );
+
+
+---------------- SDUI page service
+create schema IF NOT EXISTS page_service;
+
+CREATE TABLE IF NOT EXISTS page_service.p_page_layout_config (
+    page_id BIGSERIAL NOT NULL PRIMARY KEY,
+    config varchar NOT NULL DEFAULT '',
+    datasource_service varchar,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
+);
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON page_service.p_page_layout_config
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+---------------- SDUI product service
+create schema IF NOT EXISTS product_service;
+
+CREATE TABLE IF NOT EXISTS product_service.p_listings (
+    listing_id varchar NOT NULL PRIMARY KEY,
+    product_id varchar NOT NULL DEFAULT '',
+    seller_id bigint NOT NULL,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS product_service.p_product_details (
+    product_id varchar NOT NULL PRIMARY KEY,
+    product_name varchar NOT NULL DEFAULT '',
+    product_description varchar NOT NULL DEFAULT '',
+    highlights varchar NOT NULL DEFAULT '',
+    brand varchar NOT NULL DEFAULT '',
+    variants varchar NOT NULL DEFAULT '',
+    img_url varchar NOT NULL DEFAULT '',
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    created_by varchar NOT NULL DEFAULT ''
+);
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON product_service.p_listings
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON product_service.p_product_details
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+---------------- Seller Details : Account seller systems
+
+CREATE SCHEMA IF NOT EXISTS seller_systems;
+
+CREATE TABLE seller_systems.p_seller_account
+(
+    seller_id BIGSERIAL PRIMARY KEY,
+    seller_name varchar NOT NULL DEFAULT '',
+    seller_img_url varchar NOT NULL DEFAULT '',
+    seller_email_id varchar NOT NULL UNIQUE DEFAULT '',
+    seller_contact_number varchar NOT NULL DEFAULT '',
+    is_verified boolean NOT NULL DEFAULT false,
+    gst_number varchar,
+    created_by varchar NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE seller_systems.p_seller_account
+    IS 'seller user id and other account details';
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON seller_systems.p_seller_account
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();

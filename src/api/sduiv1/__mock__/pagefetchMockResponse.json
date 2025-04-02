@@ -1,0 +1,15 @@
+[
+  {
+    "type": "PRODUCT_IMAGE",
+    "view_type": "CAROUSEL",
+    "datasource": "PRODUCT_DETAILS_SERVICE"
+  },
+  { "type": "PRODUCT_INFO", "datasource": "PRODUCT_DETAILS_SERVICE" },
+  { "type": "PRODUCT_PRICE", "datasource": "PRICING_SERVICE" },
+  { "type": "PRODUCT_RATING", "datasource": "PRODUCT_DETAILS_SERVICE" },
+  { "type": "BANNER", "datasource": "PRODUCT_DETAILS_SERVICE" },
+  { "type": "FULFILLMENT_SELECTION", "datasource": "FULFILMENT_OPTION" },
+  { "type": "PRODUCT_HIGHLIGHTS", "datasource": "PRODUCT_HIGHLIGHTS" },
+  { "type": "SELLER_CARD", "datasource": "SELLER_DETAILS_SERVICE" },
+  { "type": "ADS_BANNER", "datasource": "ADS_SERVICE" }
+]

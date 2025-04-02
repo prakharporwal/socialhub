@@ -1,5 +1,11 @@
 package plogger
 
+var stdLog *PLogger
+
+func init() {
+	stdLog = New()
+}
+
 func Info(args ...interface{}) {
 	stdLog.Info(args...)
 }
