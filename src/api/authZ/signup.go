@@ -1,14 +1,15 @@
 package authZ
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // create a user in DB
@@ -43,7 +44,10 @@ func SignUp(ctx *gin.Context) {
 		return
 	}
 
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(request.Password), 15)
+	// keep the cost for bcrypt as 10 since it is the default and latency is acceptable
+	// increasing the cost will increase the time taken to hash the password and hence login and signup
+	// API time will increase
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(request.Password), 10)
 	if err != nil {
 		plogger.Error("Failed encrypting password", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
