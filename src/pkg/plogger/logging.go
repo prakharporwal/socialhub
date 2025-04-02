@@ -1,10 +1,13 @@
 package plogger
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 type plogging interface {
@@ -35,33 +38,45 @@ var stdLog = New()
 
 func (kl *PLogger) Info(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.InfoLevel)("Info: "))
-	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.InfoLevel)(fmt.Sprint(args...)))
+	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.InfoLevel)(SpaceSeparatedLog(" ", args...)))
 }
 
 func (kl *PLogger) Error(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.ErrorLevel)("Error: "))
-	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.ErrorLevel)(fmt.Sprint(args...)))
+	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.ErrorLevel)(SpaceSeparatedLog(" ", args...)))
 }
 
 func (kl *PLogger) Warn(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.WarnLevel)("Warning: "))
-	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.WarnLevel)(fmt.Sprint(args...)))
+	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.WarnLevel)(SpaceSeparatedLog(" ", args...)))
 }
 
 func (kl *PLogger) Debug(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.DebugLevel)("Debug: "))
-	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.DebugLevel)(fmt.Sprint(args...)))
+	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.DebugLevel)(SpaceSeparatedLog(" ", args...)))
 }
 
 func (kl *PLogger) Fatal(args ...interface{}) {
 	kl.l.SetPrefix(getColorFunc(logrus.FatalLevel)("FATAL: "))
-	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.FatalLevel)(fmt.Sprint(args...)))
+	kl.l.Output(stdLog.calldepth, getColorFunc(logrus.FatalLevel)(SpaceSeparatedLog(" ", args...)))
 	os.Exit(1)
 }
 
 func (kl *PLogger) Panic(args ...interface{}) {
 	kl.l.SetPrefix("PANIC: ")
-	s := getColorFunc(logrus.PanicLevel)(fmt.Sprint(args...))
+	s := getColorFunc(logrus.PanicLevel)(SpaceSeparatedLog(" ", args...))
 	kl.l.Output(stdLog.calldepth, s)
 	panic(s)
+}
+
+func SpaceSeparatedLog(sep string, args ...interface{}) string {
+	strArgs := make([]string, len(args))
+	for i, arg := range args {
+		strArgs[i] = fmt.Sprintf("%v", arg)
+	}
+	var buffer bytes.Buffer
+	buffer.WriteString("'")
+	buffer.WriteString(strings.Join(strArgs, sep))
+	buffer.WriteString("'")
+	return buffer.String()
 }
