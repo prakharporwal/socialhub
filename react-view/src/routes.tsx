@@ -43,6 +43,10 @@ const DashboardPage = lazy(
   () =>
     import(/* webpackChunkName: "dashboardPage" */ "./pages/AppDashboardPage")
 );
+const MyProfilePage = lazy(
+  () =>
+    import(/* webpackChunkName: "myProfilePage" */ "./pages/MyProfilePage")
+);
 const LinkedPostForm = lazy(
   () => import(/* webpackChunkName: "postForm" */ "./components/PostForm")
 );
@@ -152,6 +156,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "linkedin",
         element: <LinkedinPage />,
+      },
+      {
+        path: "profile",
+        element: <MyProfilePage />,
       },
     ],
   },

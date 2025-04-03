@@ -11,7 +11,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../EnvConstant";
 import FormContainer from "../../components/FormContainer";
-import "./signup.css";
 import { SiGoogle } from "react-icons/si";
 
 const SignUpPage: React.FunctionComponent<any> = (props) => {

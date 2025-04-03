@@ -7,9 +7,6 @@
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
     "framer-motion": "^6.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -29,7 +26,6 @@
     "start:lan": "react-scripts start",
     "deploy": "NODE_ENV=production npm run build && npm run copy",
     "deploy:lan": "npm run build && npm run copy",
-    "develop": "webpack-dev-server --mode development --hot",
     "build": "react-scripts build",
     "copy": "rm -rf ../view/* && cp -r build/ ../view",
     "test": "react-scripts test",
@@ -51,15 +47,15 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.1",
     "@types/node": "^20.2.3",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/react-virtualized": "^9.22.0",
     "@types/react-window": "^1.8.8",
-    "ts-loader": "^9.4.3",
-    "webpack": "^5.83.1",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0"
+    "ts-loader": "^9.4.3"
   }
 }
