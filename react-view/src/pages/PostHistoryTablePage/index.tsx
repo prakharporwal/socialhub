@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, Flex, Heading, ListItem, Text } from "@chakra-ui/layout";
-import withAuthenticationRequired from "../hoc/withAuthenticationRequired";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Heading,
+  Link,
+  ListItem,
+  Text,
+} from "@chakra-ui/layout";
+import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import { Card, CardBody, CardFooter, CardHeader } from "@chakra-ui/card";
 import { Button, ButtonGroup } from "@chakra-ui/button";
 import { Switch } from "@chakra-ui/switch";
 import { FormLabel } from "@chakra-ui/form-control";
 import { SiLinkedin, SiTwitter } from "react-icons/si";
-import { useAuth } from "../hooks/useAuth";
-import CONSTANTS from "../EnvConstant";
-import {
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import mockData from "./mockPosts.json";
-import LoadingShell from "./ui/LoadingShell";
-import { useNavigate } from "react-router";
+import { useAuth } from "../../hooks/useAuth";
+import CONSTANTS from "../../EnvConstant";
+import { useColorModeValue } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import mockPosts from "src/components/mockPosts.json";
+import LoadingShell from "src/components/ui/LoadingShell";
+import PostsTable from "./PostsTable";
+import { Post } from "src/apimodels/postsdetails/post";
 
 type LinkedinPost = {
   author?: string;
@@ -33,25 +34,14 @@ type LinkedinPost = {
   lifecycleState?: string;
 };
 
-type Post = {
-  scheduled_post_id: string;
-  account_id?: number;
-  post_json_string: string;
-  post_type: string;
-  status: string;
-  created_by: string;
-  created_at: string;
-};
-
 interface IProps {
   posts?: Post[];
 }
 
-const PostingHistoryList: React.FunctionComponent<IProps> = () => {
+const PostingHistoryTablePage: React.FunctionComponent<IProps> = () => {
   const auth = useAuth();
-  const navigate = useNavigate();
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
-  const [posts, setPosts] = useState<Post[]>(mockData);
+  const [posts, setPosts] = useState<Post[]>(mockPosts);
 
   useEffect(() => {
     setIsLoadingPosts(true);
@@ -65,7 +55,6 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
         if (res.ok) {
           return res.json();
         }
-
         throw new Error("failed fetching posts!");
       })
       .then((data) => {
@@ -84,54 +73,27 @@ const PostingHistoryList: React.FunctionComponent<IProps> = () => {
       <Heading color={"black"}>Your Posts</Heading>
       {isLoadingPosts ? (
         <LoadingShell />
+      ) : posts.length === 0 ? (
+        <Flex
+          justifyContent={"center"}
+          direction={"column"}
+          alignItems={"center"}
+          h={"80vh"}
+          w={"80vw"}
+          gap={8}
+        >
+          <Text fontSize={'lg'}>No posts</Text>
+          <Button
+            variant={"solid"}
+            colorScheme="blue"
+            as={RouterLink}
+            to="/app/post/new"
+          >
+            + Create New Post
+          </Button>
+        </Flex>
       ) : (
-        <TableContainer w={"100%"} px={4}>
-          <Table variant="striped" colorScheme={"gray"}>
-            <Thead>
-              <Tr>
-                <Th>Post Type</Th>
-                <Th>Post</Th>
-                <Th>Status</Th>
-                <Th>Platform</Th>
-                <Th>Created By</Th>
-                <Th>Created At</Th>
-              </Tr>
-            </Thead>
-            <Tbody fontSize={"sm"}>
-              {posts.map((item, idx) => (
-                <Tr
-                  key={item.scheduled_post_id}
-                  onClick={() => {
-                    navigate("/app/post/" + item.scheduled_post_id);
-                  }}
-                >
-                  <Td>{item.post_type}</Td>
-                  <Td
-                    maxWidth={"64"}
-                    wordBreak={"break-word"}
-                    whiteSpace={"pre-wrap"}
-                    overflowX={"hidden"}
-                  >
-                    {JSON.parse(item.post_json_string).commentary}
-                  </Td>
-                  <Td>{item.status}</Td>
-                  <Td>{""}</Td>
-                  <Td>{item.created_by}</Td>
-                  <Td>{item.created_at}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-            <Tfoot
-              fontSize={"xs"}
-              fontWeight={"bold"}
-              backgroundColor={"InfoBackground"}
-            >
-              <Tr>
-                <Td colSpan={6}>1 2 3 4</Td>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer>
+        <PostsTable posts={posts} />
       )}
     </Box>
   );
@@ -216,4 +178,4 @@ const _PostHistory: React.FunctionComponent<IPHprops> = ({ post }) => {
   );
 };
 
-export default withAuthenticationRequired(PostingHistoryList);
+export default withAuthenticationRequired(PostingHistoryTablePage);

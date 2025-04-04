@@ -51,8 +51,8 @@ const LinkedPostForm = lazy(
   () => import(/* webpackChunkName: "postForm" */ "./components/PostForm")
 );
 const PostingHistoryList = lazy(
-  /* webpackChunkName: "postingHistory" */
-  () => import("./components/PostingHistoryList")
+  /* webpackChunkName: "postingHistoryTablePage" */
+  () => import("./pages/PostHistoryTablePage")
 );
 const TwitterPage = lazy(
   () => import(/* webpackChunkName: "twitterPage" */ "./pages/TwitterPage")
