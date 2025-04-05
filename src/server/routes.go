@@ -97,10 +97,10 @@ func InitRouter() *gin.Engine {
 	protected.GET("/twitter/account/info", accounts.TwitterConnectedAccountInfo)
 
 	// posts crud operations
-	protected.POST("/v1/post", posts.CreatePost)
+	protected.POST("/v1/posts", posts.CreatePost)
 	protected.GET("/v1/posts", posts.GetPostsPaginated)
-	protected.PUT("/v1/post/:post_id", posts.UpdatePost)
-	protected.GET("/v1/post/:post_id", posts.GetPost)
+	protected.PUT("/v1/posts/:post_id", posts.UpdatePost)
+	protected.GET("/v1/posts/:post_id", posts.GetPost)
 	protected.DELETE("/v1/posts/:post_id", posts.DeletePost)
 
 	return router
