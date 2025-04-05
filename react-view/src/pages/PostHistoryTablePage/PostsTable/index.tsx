@@ -31,7 +31,6 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
   return (
     <TableContainer overflowX={"hidden"} bgColor={"white"} borderRadius={"lg"}>
       <Table size="md" variant="striped">
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
         <Thead>
           <Tr>
             <Th>Id</Th>

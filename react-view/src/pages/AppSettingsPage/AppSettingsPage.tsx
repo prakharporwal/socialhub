@@ -2,13 +2,12 @@ import { Box } from "@chakra-ui/react";
 import AppCard from "./AppCard";
 import { integratedApps } from "./integratedApps";
 
-function AppDashboardPage(props: any) {
+function AppSettingsPage(props: any) {
   return (
     <Box
       height={"full"}
       overflow={"auto"}
       width={"100%"}
-      background={"gray.100"}
       style={{
         display: "grid",
         placeItems: "center",
@@ -24,4 +23,4 @@ function AppDashboardPage(props: any) {
   );
 }
 
-export { AppDashboardPage };
+export { AppSettingsPage };

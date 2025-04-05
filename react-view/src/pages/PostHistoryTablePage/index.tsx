@@ -48,7 +48,7 @@ const PostingHistoryTablePage: React.FunctionComponent<IProps> = () => {
 
   return (
     <Box w="100%" px={4} as={"div"}>
-      <Heading color={"black"}>Your Posts</Heading>
+      <Heading fontSize={"2xl"} as={"h1"} color={"black"} mb={4}>Your Posts</Heading>
       {isLoadingPosts ? (
         <LoadingShell />
       ) : posts.length === 0 ? (
