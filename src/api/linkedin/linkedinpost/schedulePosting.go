@@ -46,7 +46,7 @@ func SchedulePost(ctx *gin.Context) {
 	}
 
 	//  bcrypt: password length exceeds 72 bytes
-	//encryptedPostJson, err := bcrypt.GenerateFromPassword(postJsonByteArr, 15)
+	//encryptedPostJson, err := bcrypt.GenerateFromPassword(postJsonByteArr, appconstants.BCRYPT_COST)
 	//if err != nil {
 	//	plogger.Error("Failed to encrypt post JSON file! ", err)
 	//}

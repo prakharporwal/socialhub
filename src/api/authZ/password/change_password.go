@@ -1,13 +1,15 @@
 package password
 
 import (
-	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"socialhub-server/api/authZ"
+	"socialhub-server/appconstants"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func ChangePassword(ctx *gin.Context) {
@@ -17,7 +19,7 @@ func ChangePassword(ctx *gin.Context) {
 
 	ctx.ShouldBindJSON(&request)
 
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(request.Password), 15)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(request.Password), appconstants.BCRYPT_COST)
 	if err != nil {
 		plogger.Error("Failed encrypting password", err)
 		return

@@ -2,15 +2,17 @@ package password
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"socialhub-server/appconstants"
 	"socialhub-server/env"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/encrypt"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type reqBody struct {
@@ -88,7 +90,7 @@ func ForgotPasswordReset(ctx *gin.Context) {
 	plogger.Debug(row.OrganisationGroupID, row.UserID)
 
 	// create password hash
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(reqObj.NewPassword), 15)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(reqObj.NewPassword), appconstants.BCRYPT_COST)
 	if err != nil {
 		plogger.Error("Failed encrypting password", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)

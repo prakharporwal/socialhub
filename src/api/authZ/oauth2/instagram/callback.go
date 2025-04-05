@@ -112,7 +112,7 @@ func OAuth2Callback(ctx *gin.Context) {
 	//
 	//// store token in database or redis
 	//// encrypt linkedin access token
-	////encryptedToken, err := bcrypt.GenerateFromPassword([]byte(tokenResp.AccessToken), 15)
+	////encryptedToken, err := bcrypt.GenerateFromPassword([]byte(tokenResp.AccessToken), appconstants.BCRYPT_COST)
 	//
 	//args := models.SaveLinkedinAccessTokenParams{
 	//	OrganisationGroupID: "org_yogveda",

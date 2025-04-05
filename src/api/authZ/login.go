@@ -2,8 +2,6 @@ package authZ
 
 import (
 	"database/sql"
-	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"socialhub-server/env"
@@ -12,6 +10,9 @@ import (
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const fiveHours = 5 * 60 * 60
