@@ -52,8 +52,7 @@ func GetPostsPaginated(ctx *gin.Context) {
 	// Convert the page number to an integer
 	if err != nil {
 		plogger.Error("Invalid page number, failed to parse page", pageNumberString, err)
-		ctx.JSON(http.StatusBadRequest, apierror.InvalidRequestBody)
-		return
+		pageNum = 1
 	}
 
 	//if pageNum less than 1, set it to 1
@@ -73,5 +72,9 @@ func GetPostsPaginated(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, posts)
+	ctx.JSON(http.StatusOK, gin.H{
+		"response":  posts,
+		"page":      pageNum,
+		"page_size": PAGE_SIZE,
+	})
 }
