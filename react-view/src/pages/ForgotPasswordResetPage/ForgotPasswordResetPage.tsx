@@ -40,7 +40,7 @@ const ForgotPasswordResetPage = () => {
 
     setIsSubmitting(true);
 
-    fetch(CONSTANTS.api_server_url + "/v1/password/forgot/reset", {
+    fetch(CONSTANTS.api_server_url + "/api/v1/password/forgot/reset", {
       method: "POST",
       body: JSON.stringify({ new_password: newPassword, token: token }),
     })
