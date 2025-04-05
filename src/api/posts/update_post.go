@@ -11,7 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Extract the request body
+// UpdatePost handles an HTTP request to update a post in the social media application.
+// It extracts a JSON payload with required fields ("post_type", "creation_status", "post_text", "post_img_url", and "post_video_url")
+// and retrieves the post ID from the URL. The handler validates the JSON, checks that the post ID is valid,
+// and ensures that the post is owned by the requesting user. On successful validation, it prepares the update parameters,
+// including handling optional image and video URLs, and updates the post in the database.
+// The handler returns a 200 OK response with the updated post data on success, or an appropriate error status otherwise.
 
 func UpdatePost(ctx *gin.Context) {
 	var reqBody struct {

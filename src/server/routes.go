@@ -25,6 +25,7 @@ import (
 	"socialhub-server/server/middleware"
 )
 
+// InitRouter initializes and returns a new Gin engine configured with middleware, error handlers, and routing groups for the web API. It sets up default handlers for unsupported HTTP methods and undefined routes—including CORS support for preflight OPTIONS requests—and organizes endpoints into a public group (/api) serving health checks, authentication, OAuth callbacks, early access signups, and static file serving, as well as a protected group (/p) secured with authentication that provides social media integrations, account information retrieval, tweet management, LinkedIn post management, and posts CRUD operations.
 func InitRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(requestid.New())

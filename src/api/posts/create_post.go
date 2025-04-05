@@ -13,7 +13,14 @@ import (
 )
 
 // CreatePost handles the creation of a new post
-// @Summary Create a new post
+// CreatePost creates a new post from the JSON request payload.
+// It binds the request body containing required details (post type, creation status, post URL, post text,
+// image URL, and video URL) and validates that all fields are provided.
+// If the JSON binding fails, it responds with a 400 Bad Request status.
+// Upon successful binding, it assembles the post parameters (including organization and user information)
+// and attempts to create the post in the database.
+// If the creation fails, it logs the error and responds with a 500 Internal Server Error status;
+// otherwise, it returns a 201 Created status along with the created post data.
 func CreatePost(ctx *gin.Context) {
 	// Extract the request body
 	var requestBody struct {

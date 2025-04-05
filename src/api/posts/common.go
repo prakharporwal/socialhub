@@ -10,6 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
+// postOwnedByUser checks whether the post identified by postId is owned by the current user.
+// It retrieves the post creator's email from the data store and compares it with the current user's email.
+// If an error occurs during retrieval or if the emails do not match, it logs the error and returns false.
 func postOwnedByUser(ctx *gin.Context, postId uuid.UUID) bool {
 	user_email, err := store.GetInstance().PostInfo_getPostCreator(ctx, postId)
 	if err != nil {
@@ -31,6 +34,9 @@ func postOwnedByUser(ctx *gin.Context, postId uuid.UUID) bool {
 	return true
 }
 
+// ParsePostId converts a string representing a post ID to a uuid.UUID.
+// It returns the parsed UUID and a boolean indicating whether the conversion was successful.
+// If the conversion fails, the function returns uuid.Nil and false.
 func parsePostId(postIDString string) (uuid.UUID, bool) {
 	postId, err := uuid.FromBytes([]byte(postIDString))
 	if err != nil {

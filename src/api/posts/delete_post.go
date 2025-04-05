@@ -10,6 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// DeletePost handles the HTTP request to delete a post identified by the "post_id" URL parameter.
+// It validates the post ID and confirms that the post is owned by the requesting user.
+// If the ID is invalid or the post does not belong to the user, it responds with a 403 Forbidden status.
+// On deletion failure (e.g., if the post is not found or another error occurs), it returns a 500 Internal Server Error.
+// Otherwise, it returns a 200 OK status with a success message.
 func DeletePost(ctx *gin.Context) {
 	postIDString := ctx.Param("post_id")
 	postId, ok := parsePostId(postIDString)
