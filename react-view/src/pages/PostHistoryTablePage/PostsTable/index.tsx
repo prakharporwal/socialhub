@@ -38,7 +38,7 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
             <Th>Type</Th>
             <Th>Post</Th>
             <Th>Status</Th>
-            <Th>Platform</Th>
+            <Th>Created By</Th>
           </Tr>
         </Thead>
         <Tbody fontSize={"sm"} minH={"40vh"}>
@@ -67,6 +67,7 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
                 <Text noOfLines={3}>{item.post_text} </Text>
               </Td>
               <Td>{item.creation_status}</Td>
+              <Td>{item.user_email}</Td>
             </Tr>
           ))}
         </Tbody>
