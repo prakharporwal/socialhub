@@ -378,7 +378,7 @@ CREATE TABLE IF NOT EXISTS socialhub.p_social_account_posting_history (
     created_by varchar NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
-    FOREIGN KEY (post_id) REFERENCES socialhub.p_post_info(post_id);
+    FOREIGN KEY (post_id) REFERENCES socialhub.p_post_info(post_id)
 );
 
 CREATE TRIGGER set_timestamp
