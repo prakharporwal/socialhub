@@ -21,6 +21,7 @@ func GetPost(ctx *gin.Context) {
 	if !ok {
 		plogger.Error("GetPost - postId is not valid", postId)
 		ctx.JSON(http.StatusForbidden, apierror.Forbidden)
+		return
 	}
 
 	if !postOwnedByUser(ctx, postId) {
@@ -42,8 +43,6 @@ func GetPost(ctx *gin.Context) {
 }
 
 func GetPostsPaginated(ctx *gin.Context) {
-	plogger.Info("---------GetPostsPaginated-------------")
-
 	// Extract the page number from the query parameters
 	pageNumberString := ctx.Query("page")
 	if pageNumberString == "" {
