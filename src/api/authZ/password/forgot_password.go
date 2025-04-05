@@ -100,7 +100,7 @@ func ForgotPasswordReset(ctx *gin.Context) {
 	// update password in db
 	args := sqlcmodels.Users_updatePasswordParams{
 		UserEmail:           row.UserID,
-		OrganisationGroupID: row.OrganisationGroupID,
+		OrganisationGroupID: "PUBLIC", // hard code OrganisationGroupID to PUBLIC for everyone
 		PasswordHash:        string(passwordHash),
 	}
 

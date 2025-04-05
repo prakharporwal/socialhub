@@ -4,6 +4,7 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Tfoot,
   Th,
   Thead,
@@ -29,26 +30,32 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
 
   return (
     <TableContainer overflowX={"hidden"} bgColor={"white"} borderRadius={"lg"}>
-      <Table size='md' variant="striped">
-      <TableCaption>Imperial to metric conversion factors</TableCaption>
+      <Table size="md" variant="striped">
         <Thead>
           <Tr>
-            <Th>Post Type</Th>
+            <Th>Id</Th>
+            <Th>Type</Th>
             <Th>Post</Th>
             <Th>Status</Th>
-            <Th>Platform</Th>
             <Th>Created By</Th>
-            <Th>Created At</Th>
           </Tr>
         </Thead>
         <Tbody fontSize={"sm"} minH={"40vh"}>
           {posts.map((item, idx) => (
             <Tr
-              key={item.scheduled_post_id}
+              key={item.post_id}
               onClick={() => {
-                navigate("/app/post/" + item.scheduled_post_id);
+                navigate("/app/post/" + item.post_id);
               }}
             >
+              <Td
+                maxWidth={"40"}
+                wordBreak={"break-word"}
+                whiteSpace={"pre-wrap"}
+                overflowX={"hidden"}
+              >
+                {item.post_id}
+              </Td>
               <Td>{item.post_type}</Td>
               <Td
                 maxWidth={"64"}
@@ -56,12 +63,10 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
                 whiteSpace={"pre-wrap"}
                 overflowX={"hidden"}
               >
-                {JSON.parse(item.post_json_string).commentary}
+                <Text noOfLines={3}>{item.post_text} </Text>
               </Td>
-              <Td>{item.status}</Td>
-              <Td>{""}</Td>
-              <Td>{item.created_by}</Td>
-              <Td>{item.created_at}</Td>
+              <Td>{item.creation_status}</Td>
+              <Td>{item.user_email}</Td>
             </Tr>
           ))}
         </Tbody>

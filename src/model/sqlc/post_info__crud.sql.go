@@ -14,7 +14,6 @@ import (
 
 const postInfo_createPost = `-- name: PostInfo_createPost :one
 INSERT INTO socialhub.p_post_info (
-    post_id,
     post_type,
     creation_status,
     post_url,
@@ -22,11 +21,10 @@ INSERT INTO socialhub.p_post_info (
     post_img_url,
     post_video_url,
     organisation_group_id,
-    is_deleted,
     user_email,
     created_by
 )
-VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
 RETURNING post_id, post_url
 `
 
@@ -38,7 +36,6 @@ type PostInfo_createPostParams struct {
 	PostImgUrl          sql.NullString `json:"post_img_url"`
 	PostVideoUrl        sql.NullString `json:"post_video_url"`
 	OrganisationGroupID string         `json:"organisation_group_id"`
-	IsDeleted           bool           `json:"is_deleted"`
 	UserEmail           string         `json:"user_email"`
 }
 
@@ -56,7 +53,6 @@ func (q *Queries) PostInfo_createPost(ctx context.Context, arg PostInfo_createPo
 		arg.PostImgUrl,
 		arg.PostVideoUrl,
 		arg.OrganisationGroupID,
-		arg.IsDeleted,
 		arg.UserEmail,
 	)
 	var i PostInfo_createPostRow

@@ -39,16 +39,20 @@ const NotFoundPage = lazy(
 const FacebookPage = lazy(
   () => import(/* webpackChunkName: "facebookPage" */ "./pages/FacebookPage")
 );
-const DashboardPage = lazy(
+const AppSettingsPage = lazy(
   () =>
-    import(/* webpackChunkName: "dashboardPage" */ "./pages/AppDashboardPage")
+    import(/* webpackChunkName: "settingsPage" */ "./pages/AppSettingsPage")
+);
+const AnalyticsDashboardPage = lazy(
+  () =>
+    import(/* webpackChunkName: "analyticsDashboardPage" */ "./pages/AnalyticsDashboardPage")
 );
 const MyProfilePage = lazy(
   () =>
     import(/* webpackChunkName: "myProfilePage" */ "./pages/MyProfilePage")
 );
 const LinkedPostForm = lazy(
-  () => import(/* webpackChunkName: "postForm" */ "./components/PostForm")
+  () => import(/* webpackChunkName: "postcreationForm" */ "./pages/PostCreationPage")
 );
 const PostingHistoryList = lazy(
   /* webpackChunkName: "postingHistoryTablePage" */
@@ -127,11 +131,16 @@ export const appRouter = createBrowserRouter([
     children: [
       {
         path: "home",
-        element: <PostingHistoryList />,
+        element: 
+        <PostingHistoryList />,
       },
       {
-        path: "dashboard",
-        element: <DashboardPage />,
+        path: "settings",
+        element: <AppSettingsPage />,
+      },
+      {
+        path: "analytics/dashboard",
+        element: <AnalyticsDashboardPage />,
       },
       {
         path: "post/new",

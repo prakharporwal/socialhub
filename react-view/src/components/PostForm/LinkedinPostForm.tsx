@@ -22,7 +22,6 @@ import {
   Switch,
   IconButton,
 } from "@chakra-ui/react";
-import { SiPeertube } from "react-icons/si";
 import { useAuth } from "../../hooks/useAuth";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
@@ -93,6 +92,8 @@ const PostForm: React.FunctionComponent<any> = () => {
     //   })
     //   .catch()
     //   .finally();
+
+
     if (isLinkedinPost) {
       await fetch(CONSTANTS.api_server_url + "/api/p/linkedin/post", {
         headers: {

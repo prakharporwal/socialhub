@@ -1,2 +1,2 @@
-import PostForm from "./PostForm";
+import PostForm from "./LinkedinPostForm";
 export default PostForm;

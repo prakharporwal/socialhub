@@ -66,6 +66,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
         console.log(data);
         window.localStorage.setItem("authenticated", "true");
         window.localStorage.setItem("current_username", data.username);
+        window.localStorage.setItem("user_email", data.email);
         window.localStorage.setItem(
           "organisation_group_id",
           data.organisation_group_id
