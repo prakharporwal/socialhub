@@ -8,6 +8,7 @@ import (
 	"socialhub-server/api/authZ"
 	"socialhub-server/api/authZ/oauth2/instagram"
 	"socialhub-server/api/landingpage"
+	"socialhub-server/api/posts"
 	"socialhub-server/api/sduiv1"
 	"socialhub-server/pkg/plogger"
 
@@ -94,6 +95,13 @@ func InitRouter() *gin.Engine {
 
 	protected.GET("/linkedin/account/info", accounts.LinkedinConnectedAccountInfo)
 	protected.GET("/twitter/account/info", accounts.TwitterConnectedAccountInfo)
+
+	// posts crud operations
+	protected.POST("/v1/posts", posts.CreatePost)
+	protected.GET("/v1/posts", posts.GetPostsPaginated)
+	protected.PUT("/v1/posts/:post_id", posts.UpdatePost)
+	protected.GET("/v1/posts/:post_id", posts.GetPostById)
+	protected.DELETE("/v1/posts/:post_id", posts.DeletePost)
 
 	return router
 }

@@ -339,3 +339,54 @@ CREATE TRIGGER set_timestamp
     ON seller_systems.p_seller_account
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+-- table for user post details when he submits first
+-- this is the source of truth for the post
+CREATE TABLE IF NOT EXISTS socialhub.p_post_info (
+    post_id uuid NOT NULL PRIMARY KEY,
+    post_type varchar NOT NULL,
+    creation_status varchar NOT NULL, -- DRAFT, COMPLETED
+    post_url varchar NOT NULL,
+    post_text varchar NOT NULL,
+    post_img_url varchar,
+    post_video_url varchar,
+    is_deleted boolean NOT NULL DEFAULT false, -- auditing fields
+    user_email varchar NOT NULL,
+    organisation_group_id varchar NOT NULL,
+    created_by varchar NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.p_post_info
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+    
+CREATE INDEX idx_user_email ON socialhub.p_post_info (user_email);
+
+-- table for user post details when he submits first
+-- this is the source of truth for the post
+CREATE TABLE IF NOT EXISTS socialhub.p_social_account_posting_history (
+    id BIGSERIAL PRIMARY KEY,
+    post_id uuid NOT NULL,
+    social_account_id varchar NOT NULL,
+    scheduled_time timestamptz NOT NULL,
+    posting_status varchar NOT NULL,
+    created_by varchar NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    FOREIGN KEY (post_id) REFERENCES socialhub.p_post_info(post_id);
+);
+
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.p_social_account_posting_history
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+-- Add indexes for performance
+CREATE INDEX idx_post_id ON socialhub.p_social_account_posting_history (post_id);
+CREATE INDEX idx_social_account_id ON socialhub.p_social_account_posting_history (social_account_id);

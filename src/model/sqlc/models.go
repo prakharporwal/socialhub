@@ -128,6 +128,33 @@ type SocialhubOrganisationGroup struct {
 	UpdatedAt           time.Time `json:"updated_at"`
 }
 
+type SocialhubPPostInfo struct {
+	PostID              uuid.UUID      `json:"post_id"`
+	PostType            string         `json:"post_type"`
+	CreationStatus      string         `json:"creation_status"`
+	PostUrl             string         `json:"post_url"`
+	PostText            string         `json:"post_text"`
+	PostImgUrl          sql.NullString `json:"post_img_url"`
+	PostVideoUrl        sql.NullString `json:"post_video_url"`
+	IsDeleted           bool           `json:"is_deleted"`
+	UserEmail           string         `json:"user_email"`
+	OrganisationGroupID string         `json:"organisation_group_id"`
+	CreatedBy           string         `json:"created_by"`
+	CreatedAt           time.Time      `json:"created_at"`
+	UpdatedAt           time.Time      `json:"updated_at"`
+}
+
+type SocialhubPSocialAccountPostingHistory struct {
+	ID              int64     `json:"id"`
+	PostID          uuid.UUID `json:"post_id"`
+	SocialAccountID string    `json:"social_account_id"`
+	ScheduledTime   time.Time `json:"scheduled_time"`
+	PostingStatus   string    `json:"posting_status"`
+	CreatedBy       string    `json:"created_by"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
 type SocialhubSession struct {
 	SessionID    uuid.UUID `json:"session_id"`
 	Email        string    `json:"email"`
