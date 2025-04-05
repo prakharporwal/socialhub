@@ -43,12 +43,16 @@ const DashboardPage = lazy(
   () =>
     import(/* webpackChunkName: "dashboardPage" */ "./pages/AppDashboardPage")
 );
+const MyProfilePage = lazy(
+  () =>
+    import(/* webpackChunkName: "myProfilePage" */ "./pages/MyProfilePage")
+);
 const LinkedPostForm = lazy(
   () => import(/* webpackChunkName: "postForm" */ "./components/PostForm")
 );
 const PostingHistoryList = lazy(
-  /* webpackChunkName: "postingHistory" */
-  () => import("./components/PostingHistoryList")
+  /* webpackChunkName: "postingHistoryTablePage" */
+  () => import("./pages/PostHistoryTablePage")
 );
 const TwitterPage = lazy(
   () => import(/* webpackChunkName: "twitterPage" */ "./pages/TwitterPage")
@@ -152,6 +156,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "linkedin",
         element: <LinkedinPage />,
+      },
+      {
+        path: "profile",
+        element: <MyProfilePage />,
       },
     ],
   },

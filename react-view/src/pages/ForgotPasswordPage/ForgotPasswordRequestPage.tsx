@@ -26,7 +26,7 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
 
     console.debug({ userEmail, organisationId });
 
-    if (userEmail === "" || organisationId === "") {
+    if (userEmail === "") {
       toast({ title: "Fields cannot be empty!", status: "error" });
       return;
     }
@@ -40,7 +40,6 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
       method: "POST",
       body: JSON.stringify({
         user_email: userEmail,
-        organisation_id: organisationId,
       }),
     })
       .then((res) => {
@@ -59,7 +58,7 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
         console.log(err);
         toast({
           status: "error",
-          title: "Failed to initiate request!",
+          title: "Failed to submit request!",
           duration: 5000,
         });
       })
@@ -72,7 +71,7 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
     <FormContainer headingText="Forgot Password">
       <Box>
         <form onSubmit={submitForgotPasswordForm}>
-          <FormControl id="organisation-id" isRequired>
+          {/* <FormControl id="organisation-id" isRequired>
             <FormLabel>Organisation Id</FormLabel>
             <Input
               type="text"
@@ -82,25 +81,19 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
                 setOrganisationId(e.currentTarget.value);
               }}
             />
-          </FormControl>
-          <Spacer h="4"></Spacer>
+          </FormControl> */}
           <FormControl id="user-email" isRequired>
-            <FormLabel>User Email</FormLabel>
+            <FormLabel>Enter your registered Email</FormLabel>
             <Input
-              type="text"
+              type="email"
               value={userEmail}
               required={true}
               onChange={(e) => {
                 setUserEmail(e.currentTarget.value);
               }}
             />
+            <Box h={4}></Box>
             <Button
-              marginTop={"4"}
-              bg={"blue.400"}
-              color={"white"}
-              _hover={{
-                bg: "blue.400",
-              }}
               type="submit"
               isLoading={isSubmitting}
             >

@@ -10,7 +10,7 @@ export default function WebHeader() {
         position={"absolute"}
         height={"14"}
         w={"full"}
-        bg={"green.200"}
+        bg={"white"}
         borderBottomRightRadius={8}
         borderBottomLeftRadius={8}
       >

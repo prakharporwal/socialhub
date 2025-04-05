@@ -6,18 +6,23 @@ import {
   Stack,
   Button,
   useToast,
+  Flex,
+  Spacer,
+  Box,
+  Link,
 } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import CONSTANTS from "../../EnvConstant";
 import FormContainer from "../../components/FormContainer";
-import "./signup.css";
 import { SiGoogle } from "react-icons/si";
 
 const SignUpPage: React.FunctionComponent<any> = (props) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
   const toast = useToast();
@@ -31,6 +36,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       username === "" ||
       email === "" ||
       password === "" ||
+      confirmPassword === "" ||
       !validateEmail(email)
     ) {
       if (!toast.isActive("signup-error")) {
@@ -39,6 +45,21 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           id: "signup-error",
           title: "Invalid data cannot be empty",
           description: "Field empty",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      setIsRegistering(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      if (!toast.isActive("password-mismatch")) {
+        toast({
+          id: "password-mismatch",
+          title: "Passwords don't match",
+          description: "Please make sure your passwords match",
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -151,9 +172,17 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
   }
 
   return (
-    <FormContainer headingText="Signup into SocialHub">
+    <FormContainer
+      headingText="Create Account"
+      description={"Create Account to start managing your posts"}
+    >
       <form onSubmit={submitSignUpForm}>
-        <Stack spacing={0}>
+        <Flex
+          direction={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          gap={2}
+        >
           {/* Will use org Id concept later when we have a org */}
           {/* <FormControl id="orgname">
             <FormLabel>Organisation Id</FormLabel>
@@ -166,7 +195,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
             />
           </FormControl> */}
           {/* // keeping it as username because chrome picks the email to save from this field id */}
-          <FormControl id="username">
+          <FormControl id="username" isRequired>
             <FormLabel>Email address</FormLabel>
             <Input
               type="email"
@@ -175,20 +204,20 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
                 setEmail(e.currentTarget.value);
               }}
             />
-            <FormControl id="name">
-              <FormLabel>Username</FormLabel>
-              <Input
-                type="text"
-                value={username}
-                onChange={(e) => {
-                  const inputText = e.currentTarget.value;
-                  setUsername(inputText.toLowerCase());
-                }}
-              />
-            </FormControl>
           </FormControl>
-          <FormControl id="password">
-            <FormLabel>Password</FormLabel>
+          <FormControl id="name" isRequired>
+            <FormLabel mt={2}>Username</FormLabel>
+            <Input
+              type="text"
+              value={username}
+              onChange={(e) => {
+                const inputText = e.currentTarget.value;
+                setUsername(inputText.toLowerCase());
+              }}
+            />
+          </FormControl>
+          <FormControl id="password" isRequired>
+            <FormLabel mt={2}>Password</FormLabel>
             <Input
               type="password"
               value={password}
@@ -197,19 +226,34 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
               }}
             />
           </FormControl>
-        </Stack>
-        <Button
-          marginTop={"4"}
-          bg={"blue.400"}
-          color={"white"}
-          _hover={{
-            bg: "blue.400",
-          }}
-          type="submit"
-          isLoading={isRegistering}
-        >
-          Sign up
-        </Button>
+          <FormControl id="confirm-password" isRequired>
+            <FormLabel mt={2}>Confirm Password</FormLabel>
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.currentTarget.value);
+              }}
+            />
+          </FormControl>
+          {/* Spacer */}
+          <Box h={4}></Box>
+          <Flex w={"full"}>
+            <Button
+              flex={1}
+              colorScheme="gray"
+              type="submit"
+              isLoading={isRegistering}
+            >
+              Sign up
+            </Button>
+          </Flex>
+          <Box py={4} w={"full"} textAlign={"end"}>
+            <Link as={RouterLink} to="/signin" color={"blue.400"}>
+              Already have an account ?
+            </Link>
+          </Box>
+        </Flex>
       </form>
       {/* <Button leftIcon={<SiGoogle />} onClick={oauthSignIn}>
         Continue With Google

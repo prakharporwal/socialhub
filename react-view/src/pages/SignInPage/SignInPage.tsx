@@ -111,7 +111,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
   }, [auth]);
 
   return (
-    <FormContainer headingText={"Signin into Organisation"}>
+    <FormContainer headingText={"Login"} description={"Sign in to start creating your posts"}>
       <form onSubmit={submitSignInForm}>
         {/* <FormControl id="organisation-id">
           <FormLabel>Organisation Id</FormLabel>
@@ -124,8 +124,8 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
           />
         </FormControl> */}
         {/* // keeping it as username because chrome picks the email to save from this field id */}
-        <FormControl id="username">
-          <FormLabel>Email address</FormLabel>
+        <FormControl id="username" mb={2} isRequired>
+          <FormLabel mb={2}>Email address</FormLabel>
           <Input
             type="email"
             value={email}
@@ -134,8 +134,8 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             }}
           />
         </FormControl>
-        <FormControl id="password">
-          <FormLabel>Password</FormLabel>
+        <FormControl id="password" mt={4} isRequired>
+          <FormLabel mb={2}>Password</FormLabel>
           <Input
             type="password"
             value={password}
@@ -144,7 +144,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             }}
           />
         </FormControl>
-        <FormControl id="submit-button">
+        <FormControl id="submit-button" mt={6}>
           <Stack spacing={6}>
             <Stack
               direction={{ base: "column", sm: "row" }}
@@ -164,14 +164,6 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
               </Link>
             </Stack>
             <Button
-              bg={"blue.400"}
-              color={"white"}
-              _hover={{
-                bg: "blue.500",
-              }}
-              _focus={{
-                bg: "blue.500",
-              }}
               type="submit"
               isLoading={isLoggingIn}
             >
