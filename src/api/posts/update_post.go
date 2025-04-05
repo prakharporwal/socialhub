@@ -13,13 +13,16 @@ import (
 
 // Extract the request body
 
+const CreationStatusDraft = "DRAFT"
+const CreationStatusReady = "READY"
+
 func UpdatePost(ctx *gin.Context) {
 	var reqBody struct {
-		PostType       string `json:"post_type" binding:"required"`
-		CreationStatus string `json:"creation_status" binding:"required"`
-		PostText       string `json:"post_text" binding:"required"`
-		PostImgURL     string `json:"post_img_url" binding:"required"`
-		PostVideoURL   string `json:"post_video_url" binding:"required"`
+		PostType     string `json:"post_type" binding:"required"`
+		PostText     string `json:"post_text" binding:"required"`
+		PostImgURL   string `json:"post_img_url"`
+		PostVideoURL string `json:"post_video_url"`
+		IsDraft      bool   `json:"is_draft,omitempty"`
 	}
 
 	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
@@ -41,11 +44,16 @@ func UpdatePost(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, apierror.Forbidden)
 		return
 	}
+	creationStatus := CreationStatusReady
+	if reqBody.IsDraft {
+		creationStatus = CreationStatusDraft
+	}
 
 	queryArgs := db.PostInfo_updatePostParams{
 		PostID:         postId,
-		CreationStatus: reqBody.CreationStatus,
+		CreationStatus: creationStatus,
 		PostType:       reqBody.PostType,
+		PostText:       reqBody.PostText,
 		PostImgUrl:     sql.NullString{String: reqBody.PostImgURL, Valid: reqBody.PostImgURL != ""},
 		PostVideoUrl:   sql.NullString{String: reqBody.PostVideoURL, Valid: reqBody.PostVideoURL != ""},
 	}
