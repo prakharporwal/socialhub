@@ -88,7 +88,7 @@ func (q *Queries) PostInfo_deletePost(ctx context.Context, postID uuid.UUID) (Po
 const postInfo_getPost = `-- name: PostInfo_getPost :one
 SELECT post_id, post_type, creation_status, post_text, post_img_url, post_video_url, user_email 
 FROM socialhub.p_post_info
-WHERE post_id=($1)
+WHERE post_id=($1) AND is_deleted = false
 `
 
 type PostInfo_getPostRow struct {
@@ -193,7 +193,7 @@ SET
     post_text = ($4),
     post_img_url = ($5), 
     post_video_url = ($6)
-WHERE post_id=($1)
+WHERE post_id=($1) and is_deleted = false
 RETURNING post_id, post_url, creation_status
 `
 

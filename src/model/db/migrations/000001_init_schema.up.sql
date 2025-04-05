@@ -364,18 +364,21 @@ CREATE TRIGGER set_timestamp
     ON socialhub.p_post_info
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
+    
+CREATE INDEX idx_user_email ON socialhub.p_post_info (user_email);
 
 -- table for user post details when he submits first
 -- this is the source of truth for the post
 CREATE TABLE IF NOT EXISTS socialhub.p_social_account_posting_history (
     id BIGSERIAL PRIMARY KEY,
-    post_id varchar NOT NULL,
+    post_id uuid NOT NULL,
     social_account_id varchar NOT NULL,
     scheduled_time timestamptz NOT NULL,
     posting_status varchar NOT NULL,
     created_by varchar NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
-    updated_at timestamptz NOT NULL DEFAULT now()
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    FOREIGN KEY (post_id) REFERENCES socialhub.p_post_info(post_id);
 );
 
 CREATE TRIGGER set_timestamp
@@ -385,6 +388,5 @@ CREATE TRIGGER set_timestamp
     EXECUTE PROCEDURE trigger_set_timestamp();
 
 -- Add indexes for performance
-CREATE INDEX idx_user_email ON socialhub.p_post_info (user_email);
 CREATE INDEX idx_post_id ON socialhub.p_social_account_posting_history (post_id);
 CREATE INDEX idx_social_account_id ON socialhub.p_social_account_posting_history (social_account_id);

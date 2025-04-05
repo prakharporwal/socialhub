@@ -146,7 +146,7 @@ type SocialhubPPostInfo struct {
 
 type SocialhubPSocialAccountPostingHistory struct {
 	ID              int64     `json:"id"`
-	PostID          string    `json:"post_id"`
+	PostID          uuid.UUID `json:"post_id"`
 	SocialAccountID string    `json:"social_account_id"`
 	ScheduledTime   time.Time `json:"scheduled_time"`
 	PostingStatus   string    `json:"posting_status"`
