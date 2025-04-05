@@ -14,7 +14,7 @@ import (
 
 const PAGE_SIZE = 10
 
-func GetPost(ctx *gin.Context) {
+func GetPostById(ctx *gin.Context) {
 	plogger.Info("---------GetPost-------------")
 	postIdString := ctx.Param("post_id")
 	postId, ok := parsePostId(postIdString)
