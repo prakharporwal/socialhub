@@ -25,6 +25,13 @@ type Querier interface {
 	LinkedinScheduledUserPosts_fetchAllPosts(ctx context.Context, arg LinkedinScheduledUserPosts_fetchAllPostsParams) ([]SocialhubLinkedinScheduledUserPost, error)
 	PageService_createPageLayoutConfig(ctx context.Context, config string) (PageService_createPageLayoutConfigRow, error)
 	PageService_getPageLayoutConfig(ctx context.Context, pageID int64) (PageService_getPageLayoutConfigRow, error)
+	PostInfo_createPost(ctx context.Context, arg PostInfo_createPostParams) (PostInfo_createPostRow, error)
+	// soft delete the post
+	PostInfo_deletePost(ctx context.Context, postID uuid.UUID) (PostInfo_deletePostRow, error)
+	PostInfo_getPost(ctx context.Context, postID uuid.UUID) (PostInfo_getPostRow, error)
+	PostInfo_getPostCreator(ctx context.Context, postID uuid.UUID) (string, error)
+	PostInfo_getPostsPaginated(ctx context.Context, arg PostInfo_getPostsPaginatedParams) ([]PostInfo_getPostsPaginatedRow, error)
+	PostInfo_updatePost(ctx context.Context, arg PostInfo_updatePostParams) (PostInfo_updatePostRow, error)
 	ProductService_fetchProductListingDetailsForProductPage(ctx context.Context, arg ProductService_fetchProductListingDetailsForProductPageParams) (ProductService_fetchProductListingDetailsForProductPageRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)
