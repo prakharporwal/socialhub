@@ -26,7 +26,7 @@ export default function MyProfilePage() {
     navigate("/");
   }
   return (
-    <div style={{ margin: "2", padding: "4" }}>
+    <Box m={2} p={4}>
       <Card width={"full"}>
         <CardHeader>
           <Text fontSize={"xl"} fontWeight={"bold"}>
@@ -44,11 +44,16 @@ export default function MyProfilePage() {
             >
               <Flex direction={"column"} flex={1} px={4}>
                 <LabelText text={"Username"} />
-                <CustomEditableText text={"Prakhar Porwal"} />
+                <CustomEditableText
+                  text={window.localStorage.getItem("current_username") || ""}
+                />
               </Flex>
               <Flex direction={"column"} flex={1} px={4}>
                 <LabelText text={"Your Email"} />
-                <CustomEditableText text={"prakharporwal99@gmail.com"} />
+                {/* TODO: connect email details here */}
+                <CustomEditableText
+                  text={window.localStorage.getItem("user_email") || ""}
+                />
               </Flex>
             </Box>
             {/* <Box my={4}>
@@ -76,7 +81,7 @@ export default function MyProfilePage() {
           </Flex>
         </CardFooter>
       </Card>
-    </div>
+    </Box>
   );
 }
 

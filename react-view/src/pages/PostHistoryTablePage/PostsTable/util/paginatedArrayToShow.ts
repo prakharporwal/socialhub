@@ -26,19 +26,16 @@ export function paginatedButtonArrayToShow({
 
   const remainingSpace =
     arrayLength - (leftTruncate ? 2 : 0) - (rightTruncate ? 2 : 0);
-  console.log("remainingSpace", displayedPages);
   if (leftTruncate && rightTruncate) {
     const rangeStart = currentPage - Math.floor(remainingSpace / 2);
     const rangeEnd =
       currentPage + remainingSpace - Math.floor(remainingSpace / 2);
-    console.log("rangeStart", rangeStart, "rangeEnd", rangeEnd);
     for (let i = rangeStart; i < rangeEnd; i++) {
       displayedPages.push(i);
     }
   } else if (leftTruncate) {
     for (let i = remainingSpace - 1; i >= 0; i--) {
       displayedPages.push(maxNum - i);
-      console.log("remainingSpace", displayedPages);
     }
   } else if (rightTruncate) {
     for (let i = 0; i < remainingSpace; i++) {
@@ -46,7 +43,6 @@ export function paginatedButtonArrayToShow({
     }
   }
 
-  console.log("remainingSpace", displayedPages);
   if (rightTruncate) {
     displayedPages.push(undefined);
     displayedPages.push(maxNum);

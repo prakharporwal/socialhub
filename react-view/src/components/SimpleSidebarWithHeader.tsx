@@ -265,7 +265,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <MenuItem as={ReactLink} to={"/app/profile"}>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               {/* <MenuItem>Billing</MenuItem> */}
               <MenuDivider />

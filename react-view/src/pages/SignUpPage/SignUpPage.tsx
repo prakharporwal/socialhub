@@ -22,6 +22,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
   const toast = useToast();
@@ -35,6 +36,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
       username === "" ||
       email === "" ||
       password === "" ||
+      confirmPassword === "" ||
       !validateEmail(email)
     ) {
       if (!toast.isActive("signup-error")) {
@@ -43,6 +45,21 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
           id: "signup-error",
           title: "Invalid data cannot be empty",
           description: "Field empty",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      setIsRegistering(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      if (!toast.isActive("password-mismatch")) {
+        toast({
+          id: "password-mismatch",
+          title: "Passwords don't match",
+          description: "Please make sure your passwords match",
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -213,9 +230,9 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
             <FormLabel mt={2}>Confirm Password</FormLabel>
             <Input
               type="password"
-              value={password}
+              value={confirmPassword}
               onChange={(e) => {
-                setPassword(e.currentTarget.value);
+                setConfirmPassword(e.currentTarget.value);
               }}
             />
           </FormControl>

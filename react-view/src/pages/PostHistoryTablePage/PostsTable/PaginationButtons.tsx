@@ -32,7 +32,7 @@ export default function PaginationButtons(
   const [currentPage, setCurrentPage] = useState(1);
   const displayedPages = paginatedButtonArrayToShow({
     minNum: 1,
-    maxNum: 10,
+    maxNum: pageCount,
     arrayLength: MAX_ARRAY_LENGTH,
     currentPage,
   });
@@ -67,7 +67,7 @@ export default function PaginationButtons(
               {page}
             </Button>
           ) : (
-            <Text>...</Text>
+            <Text key={index}>...</Text>
           )
         )}
         <IconButton
