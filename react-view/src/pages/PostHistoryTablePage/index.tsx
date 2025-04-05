@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Center,
   Divider,
   Flex,
   Heading,
-  Link,
   ListItem,
   Text,
 } from "@chakra-ui/layout";

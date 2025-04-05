@@ -429,15 +429,9 @@ const PostForm: React.FunctionComponent<any> = () => {
                     {showScheduleSection ? (
                       <Flex dir="row" gap={4}>
                         <Button
-                          // bg={"blue.400"}
-                          color={"white"}
-                          _hover={{
-                            bg: "blue.600",
-                          }}
-                          colorScheme={"linkedin"}
+                          colorScheme={"blue"}
                           w={"full"}
                           maxW={"md"}
-                          leftIcon={<SiPeertube />}
                           isLoading={isSubmitting}
                           onClick={handleSubmitPost}
                         >
