@@ -39,7 +39,7 @@ class ApiCallerUtil {
     });
   }
 
-  async post(path: string, body: Record<string, any>, options: RequestInit) {
+  async post(path: string, body: Record<string, any>, options?: RequestInit) {
     return new Promise((resolve, reject) => {
       fetch(this.apiHostname.concat(path), {
         headers: {
@@ -53,7 +53,7 @@ class ApiCallerUtil {
           if (res.ok || res.status === 201) {
             return res.json();
           }
-          let resp = res.json()
+          let resp = await res.json();
           throw new Error(JSON.stringify(resp));
         })
         .then((body) => {

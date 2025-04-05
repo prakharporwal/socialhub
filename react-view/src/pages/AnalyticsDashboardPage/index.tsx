@@ -11,6 +11,7 @@ import {
   StatNumber,
 } from "@chakra-ui/react";
 
+// TODO: This component needs API integration
 export default function AnalyticsDashboardPage() {
   return (
     <Box>

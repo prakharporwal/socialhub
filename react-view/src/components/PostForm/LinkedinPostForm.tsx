@@ -26,7 +26,6 @@ import { useAuth } from "../../hooks/useAuth";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
-import ApiCaller from "src/utils/APIUtils";
 
 const PostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
@@ -93,11 +92,6 @@ const PostForm: React.FunctionComponent<any> = () => {
     //   })
     //   .catch()
     //   .finally();
-
-
-    ApiCaller.get("/p/v1/posts").then((res) => {
-      console.log(res);
-    })
 
 
     if (isLinkedinPost) {
