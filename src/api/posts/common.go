@@ -32,7 +32,7 @@ func postOwnedByUser(ctx *gin.Context, postId uuid.UUID) bool {
 }
 
 func parsePostId(postIDString string) (uuid.UUID, bool) {
-	postId, err := uuid.FromBytes([]byte(postIDString))
+	postId, err := uuid.Parse(postIDString)
 	if err != nil {
 		plogger.Error("Failed to parse PostId", postIDString)
 		return uuid.Nil, false
