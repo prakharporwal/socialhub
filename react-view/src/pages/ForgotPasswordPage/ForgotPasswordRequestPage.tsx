@@ -33,7 +33,7 @@ const ForgotPasswordRequestPage: React.FunctionComponent<any> = (props) => {
 
     setIsSubmitting(true);
 
-    fetch(CONSTANTS.api_server_url + "/v1/password/forgot/request", {
+    fetch(CONSTANTS.api_server_url + "/api/v1/password/forgot/request", {
       headers: {
         "access-token": auth.accessToken || "",
       },

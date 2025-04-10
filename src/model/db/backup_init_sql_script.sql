@@ -344,7 +344,7 @@ CREATE TRIGGER set_timestamp
 -- table for user post details when he submits first
 -- this is the source of truth for the post
 CREATE TABLE IF NOT EXISTS socialhub.p_post_info (
-    post_id uuid NOT NULL PRIMARY KEY,
+    post_id uuid NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
     post_type varchar NOT NULL,
     creation_status varchar NOT NULL, -- DRAFT, COMPLETED
     post_url varchar NOT NULL,

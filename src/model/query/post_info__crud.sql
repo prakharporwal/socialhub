@@ -1,6 +1,5 @@
 -- name: PostInfo_createPost :one
 INSERT INTO socialhub.p_post_info (
-    post_id,
     post_type,
     creation_status,
     post_url,
@@ -8,11 +7,10 @@ INSERT INTO socialhub.p_post_info (
     post_img_url,
     post_video_url,
     organisation_group_id,
-    is_deleted,
     user_email,
     created_by
 )
-VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
 RETURNING post_id, post_url;
 
 -- name: PostInfo_updatePost :one

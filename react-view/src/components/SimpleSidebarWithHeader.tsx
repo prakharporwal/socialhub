@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import {
   IconButton,
   Avatar,
@@ -35,7 +35,7 @@ import {
 import { FiHome, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
 import { IconType } from "react-icons";
 import ColorModeToggleButton from "./buttons/ColorModeToggleButton";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaChartLine, FaPlusCircle } from "react-icons/fa";
 import {
   SiDash,
   SiInstagram,
@@ -44,6 +44,7 @@ import {
   SiYoutube,
 } from "react-icons/si";
 import { logOut } from "../utils/logoutUtils";
+import LoadingShell from "./ui/LoadingShell";
 
 interface LinkItemProps {
   name: string;
@@ -52,7 +53,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, linkTo: "/app/home" },
-  { name: "Dashboard", icon: SiDash, linkTo: "/app/dashboard" },
+  { name: "Analytics", icon: FaChartLine, linkTo: "/app/analytics/dashboard" },
   { name: "Create Post", icon: FaPlusCircle, linkTo: "/app/post/new" },
   { name: "Linkedin", icon: SiLinkedin, linkTo: "/app/linkedin" },
   { name: "Twitter", icon: SiTwitter, linkTo: "/app/twitter" },
@@ -101,8 +102,16 @@ export default function SidebarWithHeader({
             "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
         }}
       />
-      <Box m={0} p={4} ml={{ base: 0, md: 60 }} bg="#F5F5F5" height={"calc(100vh - 56px)"}>
-        <Outlet />
+      <Box
+        m={0}
+        p={4}
+        ml={{ base: 0, md: 60 }}
+        bg="#F5F5F5"
+        height={"calc(100vh - 56px)"}
+      >
+        <Suspense fallback={<LoadingShell />}>
+          <Outlet />
+        </Suspense>
       </Box>
     </Box>
   );
@@ -265,8 +274,12 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem as={ReactLink} to={"/app/profile"}>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
+              <MenuItem as={ReactLink} to={"/app/profile"}>
+                Profile
+              </MenuItem>
+              <MenuItem as={ReactLink} to={"/app/settings"}>
+                Settings
+              </MenuItem>
               {/* <MenuItem>Billing</MenuItem> */}
               <MenuDivider />
               <MenuItem

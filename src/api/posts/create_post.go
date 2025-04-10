@@ -39,7 +39,7 @@ func CreatePost(ctx *gin.Context) {
 		PostImgUrl:          sql.NullString{String: requestBody.PostImgURL, Valid: requestBody.PostImgURL != ""},
 		PostVideoUrl:        sql.NullString{String: requestBody.PostVideoURL, Valid: requestBody.PostVideoURL != ""},
 		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
-		IsDeleted:           false,
+		PostText:            requestBody.PostText,
 		UserEmail:           authZ.GetCurrentUser(),
 	}
 
