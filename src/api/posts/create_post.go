@@ -19,10 +19,9 @@ func CreatePost(ctx *gin.Context) {
 	var requestBody struct {
 		PostType       string `json:"post_type" binding:"required"`
 		CreationStatus string `json:"creation_status" binding:"required"`
-		PostURL        string `json:"post_url" binding:"required"`
 		PostText       string `json:"post_text" binding:"required"`
-		PostImgURL     string `json:"post_img_url" binding:"required"`
-		PostVideoURL   string `json:"post_video_url" binding:"required"`
+		PostImgURL     string `json:"post_img_url,omitempty"`
+		PostVideoURL   string `json:"post_video_url,omitempty"`
 	}
 
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
@@ -35,7 +34,7 @@ func CreatePost(ctx *gin.Context) {
 	queryArgs := db.PostInfo_createPostParams{
 		PostType:            requestBody.PostType,
 		CreationStatus:      requestBody.CreationStatus,
-		PostUrl:             requestBody.PostURL,
+		PostUrl:             "", // empty
 		PostImgUrl:          sql.NullString{String: requestBody.PostImgURL, Valid: requestBody.PostImgURL != ""},
 		PostVideoUrl:        sql.NullString{String: requestBody.PostVideoURL, Valid: requestBody.PostVideoURL != ""},
 		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
