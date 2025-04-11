@@ -7,8 +7,6 @@ import {
   useColorModeValue,
   Card,
   CardHeader,
-  CardBody,
-  Link,
   Text,
   Image,
 } from "@chakra-ui/react";
@@ -33,7 +31,7 @@ const FormContainer: React.FunctionComponent<IProps> = (props) => {
         <Stack
           spacing={4}
           mx={"auto"}
-          minW={{ base: "md", md: "lg", lg: "xl" }}
+          minW={{ base: "sm", md: "lg", lg: "xl" }}
           maxW={"xl"}
           py={12}
           px={6}

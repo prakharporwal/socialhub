@@ -18,3 +18,11 @@ export type Post = {
   post_video_url?: string;
   user_email: string
 };
+
+export type CreatePost = {
+  post_text: string;
+  post_type: string;
+  post_img_url?: string;
+  post_video_url?: string;
+  creation_status: string;
+}

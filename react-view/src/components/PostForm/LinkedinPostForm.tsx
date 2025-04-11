@@ -26,6 +26,8 @@ import { useAuth } from "../../hooks/useAuth";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
+import ApiCaller from "src/utils/APIUtils";
+import { CreatePost } from "src/apimodels/postsdetails/post";
 
 const PostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
@@ -63,6 +65,15 @@ const PostForm: React.FunctionComponent<any> = () => {
       return;
     }
 
+    const body: CreatePost = {
+      post_text: content,
+      post_type: "TEXT",
+      creation_status: "DRAFT",
+    };
+    ApiCaller.post("/p/v1/posts", body).then((res) => {
+      console.log(res);
+    });
+
     // debugger;
     // await fetch(CONSTANTS.api_server_url+"/app/linkedin/post", {
     //   headers: {
@@ -92,7 +103,6 @@ const PostForm: React.FunctionComponent<any> = () => {
     //   })
     //   .catch()
     //   .finally();
-
 
     if (isLinkedinPost) {
       await fetch(CONSTANTS.api_server_url + "/api/p/linkedin/post", {
@@ -284,7 +294,6 @@ const PostForm: React.FunctionComponent<any> = () => {
             bg={useColorModeValue("white", "gray.700")}
             p={8}
             m="10px auto"
-            as="form"
           >
             <SimpleGrid columns={1} spacing={6}>
               <form>
