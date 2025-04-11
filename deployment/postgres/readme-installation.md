@@ -10,7 +10,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgres
 - ` sudo -u postgres psql -c 'SHOW config_file' ` -> /etc/postgresql/16/main/postgresql.conf
 - Locate the line that starts with “listen_addresses“. 
 - Uncomment and change it to “listen_addresses = ‘*’“. This will allow connections from any IP address.
+- security group in AWS needs to be updated
 
-
-
--
+- connect from Local using SSH tunnelling - needs to be figured out
+- 

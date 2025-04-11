@@ -3,7 +3,17 @@ create schema IF NOT EXISTS socialhub;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- updated at timestamp function
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+    RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
+---
+-- table for accounts
 CREATE TABLE IF NOT EXISTS socialhub.accounts
 (
     "id"          BIGSERIAL PRIMARY KEY,
