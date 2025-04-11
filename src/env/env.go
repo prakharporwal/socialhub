@@ -1,7 +1,7 @@
 package env
 
 const (
-	DBSource     = "postgres://admin:password@localhost:5432/postgres?sslmode=disable"
+	DBSource     = "postgres://admin:password@localhost:5432/socialhub?sslmode=disable"
 	DBDriver     = "postgres"
 	SymmetricKey = "TjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8"
 	WebsiteURL   = "http://localhost:3000"
