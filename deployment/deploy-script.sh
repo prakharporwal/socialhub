@@ -1,3 +1,5 @@
+set -e -v -x
+
 echo "Deploying from bash script!"
 
 go version
