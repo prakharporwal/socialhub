@@ -42,13 +42,14 @@ export function Header() {
           display={{ base: "none", md: "block" }}
           marginLeft={"auto"}
           colorScheme={"blue"}
+          variant={"ghost"}
           rounded={"lg"}
           px={6}
           onClick={() => {
             navigate("/signup");
           }}
         >
-          Get Started
+          Register
         </Button>
         <Button
           display={"block"}

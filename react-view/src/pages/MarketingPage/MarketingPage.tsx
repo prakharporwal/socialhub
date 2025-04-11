@@ -23,6 +23,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "../../hooks/useQuery";
 import { Header } from "./Header";
 import { Body } from "./Body";
+import { FeaturesList } from "./FeaturesList";
 
 interface FeatureProps {
   text: string;
@@ -81,6 +82,7 @@ const MarketingPage: React.FunctionComponent<any> = (props) => {
     <Box overflowY="auto">
       <Header />
       <Body moreInfoRef={moreInfoRef} />
+      <FeaturesList />
       <MarketingFooter />
     </Box>
   );

@@ -1,9 +1,5 @@
-import {
-  Box,
-  Flex,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Link, Flex, Image, Text, Button } from "@chakra-ui/react";
+import { Link as ReactLink } from "react-router-dom";
 
 export function Body(props: any) {
   return (
@@ -37,6 +33,20 @@ export function Body(props: any) {
             Create, Schedule, and Analyze your posts across multiple Social
             Media platforms
           </Text>
+          <Box display={"flex"} gap={4} flexDirection={"row"}>
+            <Box>
+              <Link as={ReactLink} to={"/signin"}>
+                <Button colorScheme={"blue"} mb={4}>
+                  Get Started
+                </Button>
+              </Link>
+              <Text fontSize={"xs"}>No credit card required!</Text>
+            </Box>
+            <Box>
+              {/* Social Proof */}
+              {/* <Text color={"blue"} fontSize={"sm"}>people are engaging with this website</Text> */}
+            </Box>
+          </Box>
         </Box>
         <Image w={"96"} src={"/main_cover.jpeg"} alt="main_cover" />
       </Flex>
