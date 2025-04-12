@@ -360,6 +360,7 @@ CREATE TABLE IF NOT EXISTS socialhub.p_post_info (
     post_url varchar NOT NULL,
     post_text varchar NOT NULL,
     post_img_url varchar,
+    platforms varchar[] NOT NULL DEFAULT array[]::varchar[], -- array of platforms
     post_video_url varchar,
     is_deleted boolean NOT NULL DEFAULT false, -- auditing fields
     user_email varchar NOT NULL,
@@ -378,13 +379,14 @@ CREATE TRIGGER set_timestamp
 CREATE INDEX idx_user_email ON socialhub.p_post_info (user_email);
 
 -- table for user post details when he submits first
--- this is the source of truth for the post
+-- posting queue status on all platform and accounts
 CREATE TABLE IF NOT EXISTS socialhub.p_social_account_posting_history (
-    id BIGSERIAL PRIMARY KEY,
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     post_id uuid NOT NULL,
     social_account_id varchar NOT NULL,
     scheduled_time timestamptz NOT NULL,
     posting_status varchar NOT NULL,
+    platform varchar NOT NULL,
     created_by varchar NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),

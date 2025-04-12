@@ -4,13 +4,14 @@ INSERT INTO socialhub.p_post_info (
     creation_status,
     post_url,
     post_text,
+    platforms,
     post_img_url,
     post_video_url,
     organisation_group_id,
     user_email,
     created_by
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
 RETURNING post_id, post_url;
 
 -- name: PostInfo_updatePost :one

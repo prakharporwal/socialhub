@@ -3,26 +3,19 @@ package crons
 import (
 	"context"
 	"encoding/json"
-	"github.com/robfig/cron/v3"
 	"net/http"
 	"socialhub-server/api/authZ"
 	"socialhub-server/api/linkedin/linkedinpost"
-	"socialhub-server/model/models"
+	"socialhub-server/model/datamodels"
+	"socialhub-server/model/datamodels/postcreation/postingstatus"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/pkg/utils"
 	"socialhub-server/services/linkedinservice"
 	"strings"
-)
 
-type PostStatus string
-
-const (
-	SUBMITTED PostStatus = "SUBMITTED"
-	FAILED               = "FAILED"
-	SCHEDULED            = "SCHEDULED"
-	PUBLISHED            = "PUBLISHED"
+	"github.com/robfig/cron/v3"
 )
 
 func PublishPostsToLinkedin() {
@@ -58,7 +51,7 @@ func pickScheduledPosts() {
 		}
 		plogger.Info(row.ScheduledPostID, row.ScheduledTime, row.PostJsonString)
 
-		var post models.LinkedInFeedPostContentPoll
+		var post datamodels.LinkedInFeedPostContentPoll
 		err = json.Unmarshal([]byte(row.PostJsonString), &post)
 		if err != nil {
 			plogger.Error("error unmarshalling json post string ", err)
@@ -82,7 +75,7 @@ func pickScheduledPosts() {
 
 		args := sqlcmodels.UpdatePostStatusParams{
 			ScheduledPostID: row.ScheduledPostID,
-			Status:          PUBLISHED,
+			Status:          postingstatus.PostingStatusPending,
 		}
 		updatedRow, err := store.GetInstance().UpdatePostStatus(context.Background(), args)
 		if err != nil {

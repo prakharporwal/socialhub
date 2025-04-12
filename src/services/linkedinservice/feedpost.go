@@ -4,22 +4,23 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
 	"socialhub-server/api/authZ"
-	"socialhub-server/model/models"
-	"socialhub-server/model/models/linkedin"
+	"socialhub-server/model/datamodels"
+	"socialhub-server/model/datamodels/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type service interface {
-	CreateALinkedinPoll(accessToken string, pollContent models.LinkedInFeedPostContentPoll)
-	CreateALinkedinTextPost(accessToken string, content models.LinkedInFeedPostContent)
+	CreateALinkedinPoll(accessToken string, pollContent datamodels.LinkedInFeedPostContentPoll)
+	CreateALinkedinTextPost(accessToken string, content datamodels.LinkedInFeedPostContent)
 }
 
 type ServiceImpl struct {
@@ -32,7 +33,7 @@ type linkedInFeedPostRequest struct {
 	Data        interface{}                  `json:"data" binding:"required"`
 }
 
-func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *datamodels.LinkedInFeedPostContentPoll) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	plogger.Debug("urn fetched from", urn)
@@ -105,7 +106,7 @@ func fetchLinkedinAccountURN(accessToken string) string {
 	return out
 }
 
-func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
+func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *datamodels.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := sqlcmodels.SaveLinkedinURNParams{
@@ -113,7 +114,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		UserEmail:           authZ.GetCurrentUser(),
 		LinkedinUrn:         createURN("person", urnId),
 	}
-	out, err := store.GetInstance().SaveLinkedinURN(context.Background(), args)
+	out, _ := store.GetInstance().SaveLinkedinURN(context.Background(), args)
 	plogger.Info(out)
 
 	plogger.Debug(`account urn:`, createURN("person", urnId))

@@ -16,7 +16,7 @@ export type Post = {
   creation_status: string;
   post_img_url?: string;
   post_video_url?: string;
-  user_email: string
+  user_email: string;
 };
 
 export type CreatePost = {
@@ -25,4 +25,13 @@ export type CreatePost = {
   post_img_url?: string;
   post_video_url?: string;
   creation_status: string;
+  platforms?: Array<SocialMediaPlatform>;
+};
+
+export enum SocialMediaPlatform {
+  LINKEDIN = "LINKEDIN",
+  TWITTER = "TWITTER",
+  FACEBOOK = "FACEBOOK",
+  INSTAGRAM = "INSTAGRAM",
+  YOUTUBE = "YOUTUBE",
 }

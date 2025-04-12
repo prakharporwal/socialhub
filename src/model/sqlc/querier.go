@@ -32,6 +32,8 @@ type Querier interface {
 	PostInfo_getPostCreator(ctx context.Context, postID uuid.UUID) (string, error)
 	PostInfo_getPostsPaginated(ctx context.Context, arg PostInfo_getPostsPaginatedParams) ([]PostInfo_getPostsPaginatedRow, error)
 	PostInfo_updatePost(ctx context.Context, arg PostInfo_updatePostParams) (PostInfo_updatePostRow, error)
+	PostingHistory_addPost(ctx context.Context, arg PostingHistory_addPostParams) ([]PostingHistory_addPostRow, error)
+	PostingHistory_fetchPost(ctx context.Context, postID uuid.UUID) (PostingHistory_fetchPostRow, error)
 	ProductService_fetchProductListingDetailsForProductPage(ctx context.Context, arg ProductService_fetchProductListingDetailsForProductPageParams) (ProductService_fetchProductListingDetailsForProductPageRow, error)
 	SaveLinkedinAccessToken(ctx context.Context, arg SaveLinkedinAccessTokenParams) (SaveLinkedinAccessTokenRow, error)
 	SaveLinkedinURN(ctx context.Context, arg SaveLinkedinURNParams) (SaveLinkedinURNRow, error)

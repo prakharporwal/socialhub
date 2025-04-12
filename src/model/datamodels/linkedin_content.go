@@ -1,4 +1,4 @@
-package models
+package datamodels
 
 type LinkedInFeedPostContent struct {
 	Author                    string              `json:"author"`

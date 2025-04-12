@@ -135,6 +135,7 @@ type SocialhubPPostInfo struct {
 	PostUrl             string         `json:"post_url"`
 	PostText            string         `json:"post_text"`
 	PostImgUrl          sql.NullString `json:"post_img_url"`
+	Platforms           []string       `json:"platforms"`
 	PostVideoUrl        sql.NullString `json:"post_video_url"`
 	IsDeleted           bool           `json:"is_deleted"`
 	UserEmail           string         `json:"user_email"`
@@ -145,11 +146,12 @@ type SocialhubPPostInfo struct {
 }
 
 type SocialhubPSocialAccountPostingHistory struct {
-	ID              int64     `json:"id"`
+	ID              uuid.UUID `json:"id"`
 	PostID          uuid.UUID `json:"post_id"`
 	SocialAccountID string    `json:"social_account_id"`
 	ScheduledTime   time.Time `json:"scheduled_time"`
 	PostingStatus   string    `json:"posting_status"`
+	Platform        string    `json:"platform"`
 	CreatedBy       string    `json:"created_by"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
