@@ -81,7 +81,7 @@ func (q *Queries) PostingHistory_addPost(ctx context.Context, arg PostingHistory
 	return items, nil
 }
 
-const postingHistory_fetchPost = `-- name: PostingHistory_fetchPost :one
+const postingHistory_fetchPost = `-- name: PostingHistory_fetchPost :many
 SELECT
     a.post_id,
     post_type,
@@ -94,7 +94,9 @@ SELECT
     scheduled_time
 FROM socialhub.p_post_info a
 JOIN socialhub.p_social_account_posting_history b ON a.post_id = b.post_id
-WHERE a.post_id = ($1) AND b.is_deleted = false
+WHERE a.is_deleted = false and posting_status!='PUBLISHED'
+ORDER BY a.created_at ASC
+LIMIT ($1)
 `
 
 type PostingHistory_fetchPostRow struct {
@@ -109,19 +111,35 @@ type PostingHistory_fetchPostRow struct {
 	ScheduledTime   time.Time      `json:"scheduled_time"`
 }
 
-func (q *Queries) PostingHistory_fetchPost(ctx context.Context, postID uuid.UUID) (PostingHistory_fetchPostRow, error) {
-	row := q.db.QueryRowContext(ctx, postingHistory_fetchPost, postID)
-	var i PostingHistory_fetchPostRow
-	err := row.Scan(
-		&i.PostID,
-		&i.PostType,
-		&i.PostText,
-		&i.PostImgUrl,
-		&i.PostVideoUrl,
-		&i.PostingStatus,
-		&i.SocialAccountID,
-		&i.Platform,
-		&i.ScheduledTime,
-	)
-	return i, err
+func (q *Queries) PostingHistory_fetchPost(ctx context.Context, limit int32) ([]PostingHistory_fetchPostRow, error) {
+	rows, err := q.db.QueryContext(ctx, postingHistory_fetchPost, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []PostingHistory_fetchPostRow{}
+	for rows.Next() {
+		var i PostingHistory_fetchPostRow
+		if err := rows.Scan(
+			&i.PostID,
+			&i.PostType,
+			&i.PostText,
+			&i.PostImgUrl,
+			&i.PostVideoUrl,
+			&i.PostingStatus,
+			&i.SocialAccountID,
+			&i.Platform,
+			&i.ScheduledTime,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,6 @@ import {
   FormHelperText,
   useToast,
   useColorModeValue,
-  Stack,
   Spacer,
   Text,
   Center,
@@ -27,7 +26,10 @@ import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
 import ApiCaller from "src/utils/APIUtils";
-import { CreatePost } from "src/apimodels/postsdetails/post";
+import {
+  CreatePost,
+  SocialMediaPlatform,
+} from "src/apimodels/postsdetails/post";
 
 const PostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
@@ -35,8 +37,8 @@ const PostForm: React.FunctionComponent<any> = () => {
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isTwitterPost, setIsTwitterPost] = useState(false);
-  const [isLinkedinPost, setIsLinkedinPost] = useState(false);
+  const [platforms, setPlatforms] = useState(new Map());
+
   const [isSubmittingScheduled, setIsSubmittingScheduled] = useState(false);
   const [scheduledTime, setScheduledTime] = useState(
     convertToLocalTimeString(new Date())
@@ -49,8 +51,15 @@ const PostForm: React.FunctionComponent<any> = () => {
     { value: "tuesday", id: 2 },
   ]);
 
-  const handleSubmitPost = async () => {
+  const handlePlatformListChange = (e: ChangeEvent<HTMLInputElement>) => {
+    platforms.set(e.currentTarget.id, e.currentTarget.checked);
+    setPlatforms(new Map(platforms));
+  };
+
+  const handleSubmitPost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsSubmitting(true);
+
     if (content === "" || type === "") {
       setIsSubmitting(false);
       if (!toast.isActive("post-submit-error")) {
@@ -64,155 +73,36 @@ const PostForm: React.FunctionComponent<any> = () => {
 
       return;
     }
+    const X = Array.from(platforms, ([name, value]) => {
+      if (value) {
+        console.log(name);
+        return name;
+      }
+    }) as Array<SocialMediaPlatform>;
 
     const body: CreatePost = {
       post_text: content,
       post_type: "TEXT",
-      creation_status: "DRAFT",
+      creation_status: "COMPLETED",
+      platforms: X,
     };
-    ApiCaller.post("/p/v1/posts", body).then((res) => {
-      console.log(res);
-    });
 
-    // debugger;
-    // await fetch(CONSTANTS.api_server_url+"/app/linkedin/post", {
-    //   headers: {
-    //     "access-token": window.localStorage.getItem("access_token") || "",
-    //   },
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     content_type: type,
-    //     text: "Hello",
-    //     data: {
-    //       author: "",
-    //       commentary: "",
-    //       visibility: "PUBLIC",
-    //       distribution: {
-    //         feedDistribution: "MAIN_FEED",
-    //         targetEntities: [],
-    //         thirdPartyDistributionChannels: [],
-    //       },
-    //       lifecycleState: "PUBLISHED",
-    //       isReshareDisabledByAuthor: false,
-    //     },
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-    //   .catch()
-    //   .finally();
-
-    if (isLinkedinPost) {
-      await fetch(CONSTANTS.api_server_url + "/api/p/linkedin/post", {
-        headers: {
-          "access-token": auth.accessToken || "",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          content_type: type,
-          text: content,
-          data: {
-            author: "",
-            commentary: content,
-            visibility: "PUBLIC",
-            distribution: {
-              feedDistribution: "MAIN_FEED",
-              targetEntities: [],
-              thirdPartyDistributionChannels: [],
-            },
-            lifecycleState: "PUBLISHED",
-            isReshareDisabledByAuthor: false,
-          },
-        }),
-      })
-        .then(async (res) => {
-          if (res.ok || res.status === 201) {
-            return res.json();
-          }
-
-          let resp = {};
-          await res.json().then((body) => {
-            resp = body;
+    ApiCaller.post("/p/v1/posts", body)
+      .then((res) => {
+        if (!toast.isActive("post-submit-success")) {
+          toast({
+            id: "post-submit-success",
+            status: "success",
+            title: "Post submitted successfully",
           });
-
-          throw new Error(JSON.stringify(resp));
-        })
-        .then((data) => {
-          if (!toast.isActive("post-submit-api-success")) {
-            toast({
-              id: "post-submit-api-success",
-              status: "success",
-              title: "Submitted Post to Linkedin",
-              description: "Posting now depends on linkedin",
-            });
-          }
-        })
-        .catch((err) => {
-          console.log("error", JSON.parse(err?.message).error);
-          if (!toast.isActive("post-submit-api-error")) {
-            toast({
-              id: "post-submit-api-error",
-              status: "error",
-              title: "Posting Failed for Linkedin",
-              description: JSON.parse(err?.message).error,
-            });
-          }
-        })
-        .finally(() => {
-          console.log(content, type);
-          setIsSubmitting(false);
-        });
-    }
-
-    // POST ON TWITTER API ALSO
-    if (isTwitterPost) {
-      await fetch(CONSTANTS.api_server_url + "/api/p/twitter/tweets/create", {
-        headers: {
-          "access-token": auth.accessToken || "",
-        },
-        method: "POST",
-        body: JSON.stringify({ text: content }),
+        }
       })
-        .then(async (res) => {
-          const body = res.json();
-          if (res.ok || res.status === 201) {
-            return body;
-          }
-
-          throw new Error(JSON.stringify({ body }));
-        })
-        .then((data) => {
-          if (!toast.isActive("post-submit-api-success")) {
-            toast({
-              id: "twitter-submit-api-success",
-              status: "success",
-              title: "Submitted Post to Twitter",
-              description: "Posting now depends on twitter",
-            });
-          }
-        })
-        .catch((err) => {
-          console.log("error", JSON.parse(err?.message).error);
-          if (!toast.isActive("post-submit-api-error")) {
-            toast({
-              id: "twitter-submit-api-error",
-              status: "error",
-              title: "Posting Failed For Twitter!",
-              description: JSON.parse(err?.message).error,
-            });
-          }
-        })
-        .finally(() => {
-          console.log(content, type);
-          setIsSubmitting(false);
-        });
-    } else {
-      setIsSubmitting(false);
-    }
-
-    return;
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   function handleSubmitSchedulePost() {
@@ -280,25 +170,25 @@ const PostForm: React.FunctionComponent<any> = () => {
   return (
     <Box>
       <Flex
-        minH={"80vh"}
         align={"center"}
         justify={"center"}
         direction={"column"}
       >
-        <Stack spacing={4} mx={"auto"} width={"full"} py={4} px={4}>
+        <Flex gap={4} mx={"auto"} width={"full"} py={4} px={4}>
           <Box
             borderWidth="2px"
             rounded="lg"
             shadow="2px 2px 3px rgba(0,0,0,0.3)"
-            minWidth={{ base: "full", sm: "96" }}
+            minWidth={{ base: "full", sm: "50%" }}
             bg={useColorModeValue("white", "gray.700")}
             p={8}
-            m="10px auto"
+            m="4"
           >
             <SimpleGrid columns={1} spacing={6}>
-              <form>
+              <form onSubmit={handleSubmitPost}>
                 <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
                   <FormLabel
+                    htmlFor="post_type"
                     fontSize="sm"
                     fontWeight="md"
                     color="gray.700"
@@ -309,6 +199,7 @@ const PostForm: React.FunctionComponent<any> = () => {
                     Post Type
                   </FormLabel>
                   <Select
+                    id="post_type"
                     placeholder="Select post type"
                     value={type}
                     variant="outline"
@@ -360,7 +251,7 @@ const PostForm: React.FunctionComponent<any> = () => {
                     </FormControl>
                     <FormControl mt={2} as={GridItem} colSpan={[3, 2]}>
                       <RadioGroup value={"1"} onChange={() => {}}>
-                        <Stack direction="column">
+                        <Flex direction="column">
                           {pollOptions.map((item) => (
                             <Radio
                               key={item.id}
@@ -370,7 +261,7 @@ const PostForm: React.FunctionComponent<any> = () => {
                               {item.value}
                             </Radio>
                           ))}
-                        </Stack>
+                        </Flex>
                       </RadioGroup>
                       <FormHelperText>
                         Brief description for your profile. URLs are
@@ -380,16 +271,6 @@ const PostForm: React.FunctionComponent<any> = () => {
                   </>
                 ) : (
                   <FormControl mt={2} as={GridItem} colSpan={[3, 2]} isRequired>
-                    {/* <FormLabel
-                    fontSize="sm"
-                    fontWeight="md"
-                    color="gray.700"
-                    _dark={{
-                      color: "white",
-                    }}
-                  >
-                    Content
-                  </FormLabel> */}
                     <Textarea
                       p={2}
                       placeholder="Hey guys I just started using Socialhub"
@@ -409,44 +290,51 @@ const PostForm: React.FunctionComponent<any> = () => {
                   </FormControl>
                 )}
                 <FormControl as={SimpleGrid} columns={{ base: 2, lg: 4 }}>
-                  <FormLabel htmlFor="isChecked">Twitter</FormLabel>
+                  <FormLabel htmlFor="TWITTER">Twitter</FormLabel>
                   <Switch
-                    id="isChecked"
+                    id="TWITTER"
                     marginRight={"auto"}
-                    onChange={(e) => {
-                      console.log(e.currentTarget.checked);
-                      setIsTwitterPost(e.currentTarget.checked);
-                    }}
+                    isChecked={platforms.get("TWITTER")}
+                    onChange={handlePlatformListChange}
                   />
 
-                  <FormLabel htmlFor="isDisabled">Linkedin</FormLabel>
+                  <FormLabel htmlFor="LINKEDIN">Linkedin</FormLabel>
                   <Switch
-                    id="isDisabled"
+                    id="LINKEDIN"
                     marginRight={"auto"}
-                    onChange={(e) => {
-                      console.log(e.currentTarget.checked);
-                      setIsLinkedinPost(e.currentTarget.checked);
-                    }}
+                    isChecked={platforms.get("LINKEDIN")}
+                    onChange={handlePlatformListChange}
                   />
-                  <FormLabel htmlFor="isFocusable">Instagram</FormLabel>
-                  <Switch id="isFocusable" marginRight={"auto"} isDisabled />
-                  <FormLabel htmlFor="isInvalid">Facebook</FormLabel>
-                  <Switch id="isInvalid" marginRight={"auto"} isDisabled />
+                  <FormLabel htmlFor="INSTAGRAM">Instagram</FormLabel>
+                  <Switch
+                    id="INSTAGRAM"
+                    marginRight={"auto"}
+                    isChecked={platforms.get("INSTAGRAM")}
+                    onChange={handlePlatformListChange}
+                  />
+                  <FormLabel htmlFor="FACEBOOK">Facebook</FormLabel>
+                  <Switch
+                    id="FACEBOOK"
+                    marginRight={"auto"}
+                    isChecked={platforms.get("FACEBOOK")}
+                    onChange={handlePlatformListChange}
+                  />
                 </FormControl>
                 <FormControl>
-                  <Stack spacing={8}>
+                  <Flex gap={8}>
                     <Spacer />
                     {showScheduleSection ? (
                       <Flex dir="row" gap={4}>
                         <Button
+                          type="submit"
                           colorScheme={"blue"}
                           w={"full"}
                           maxW={"md"}
                           isLoading={isSubmitting}
-                          onClick={handleSubmitPost}
+                          onClick={() => {}}
                         >
                           <Center>
-                            <Text>{"Post on Socials"}</Text>
+                            <Text>{"Post"}</Text>
                           </Center>
                         </Button>
                         <IconButton
@@ -464,7 +352,7 @@ const PostForm: React.FunctionComponent<any> = () => {
                       //   <option value={"1hr"}>1 hour</option>
                       //   <option value={"Tomorrow"}>Tomorrow</option>
                       // </Select>
-                      <Stack spacing={8}>
+                      <Flex gap={8}>
                         <Flex dir="row" gap={4}>
                           <Button
                             _hover={{
@@ -492,6 +380,7 @@ const PostForm: React.FunctionComponent<any> = () => {
                           />
                         </Flex>
                         <Input
+                          colorScheme="blue"
                           type={"datetime-local"}
                           value={scheduledTime.substring(0, 16)}
                           onChange={(e) => {
@@ -502,14 +391,14 @@ const PostForm: React.FunctionComponent<any> = () => {
                             setScheduledTime(dateTimeLocalValueDisplay);
                           }}
                         ></Input>
-                      </Stack>
+                      </Flex>
                     )}
-                  </Stack>
+                  </Flex>
                 </FormControl>
               </form>
             </SimpleGrid>
           </Box>
-        </Stack>
+        </Flex>
       </Flex>
     </Box>
   );
