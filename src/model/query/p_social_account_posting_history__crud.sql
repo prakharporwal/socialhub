@@ -23,6 +23,14 @@ SELECT
     scheduled_time
 FROM socialhub.p_post_info a
 JOIN socialhub.p_social_account_posting_history b ON a.post_id = b.post_id
-WHERE a.is_deleted = false and posting_status!='PUBLISHED'
+WHERE a.is_deleted = false 
+and posting_status!='PUBLISHED'
+and scheduled_time <= now()
 ORDER BY a.created_at ASC
 LIMIT ($1);
+
+-- name: PostingHistory_updatePostingStatus :exec
+UPDATE socialhub.p_social_account_posting_history
+SET posting_status = ($2),
+    platform_post_id = ($3)
+WHERE post_id = ($1);

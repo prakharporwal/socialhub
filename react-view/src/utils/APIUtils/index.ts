@@ -1,29 +1,24 @@
 import CONSTANTS from "src/EnvConstant";
-import { useAuth } from "src/hooks/useAuth";
-
-const apiHostname =   CONSTANTS.api_server_url.concat(CONSTANTS.path_prefix ?? "");
-const commonHeaders = {
-  "content-type": "application/json",
-  "access-token": useAuth().accessToken || "no token found!",
-};
+import { getCookie } from "../cookieUtils";
 
 class ApiCallerUtil {
   private apiHostname: string;
-  private commonHeaders: Record<string, string>;
-
   constructor() {
     this.apiHostname = CONSTANTS.api_server_url.concat(CONSTANTS.path_prefix ?? "");
-    this.commonHeaders = {
-      "content-type": "application/json",
-      "access-token": useAuth().accessToken || "no token found!",
-    };
   }
+  
+  getCommonHeaders() {
+    return {
+    "content-type": "application/json",
+    "access-token": getCookie('access_token') || "no token found!",
+    }
+  };
 
   async get(path: string, options?: RequestInit): Promise<any> {
     return new Promise((resolve, reject) => {
       fetch(this.apiHostname.concat(path), {
         headers: {
-          ...this.commonHeaders,
+          ...this.getCommonHeaders(),
           ...(options && options.headers),
         },
         method: "GET",
@@ -49,7 +44,7 @@ class ApiCallerUtil {
     return new Promise((resolve, reject) => {
       fetch(this.apiHostname.concat(path), {
         headers: {
-          ...this.commonHeaders,
+          ...this.getCommonHeaders(),
           ...(options && options.headers),
         },
         method: "POST",
@@ -75,7 +70,7 @@ class ApiCallerUtil {
     return new Promise((resolve, reject) => {
       fetch(this.apiHostname.concat(path), {
         headers: {
-          ...this.commonHeaders,
+          ...this.getCommonHeaders(),
           ...(options && options.headers),
         },
         method: "PUT",
@@ -106,7 +101,7 @@ class ApiCallerUtil {
     return new Promise((resolve, reject) => {
       fetch(this.apiHostname.concat(path), {
         headers: {
-          ...this.commonHeaders,
+          ...this.getCommonHeaders(),
           ...(options && options.headers),
         },
         method: "DELETE",

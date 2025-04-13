@@ -148,13 +148,29 @@ type SocialhubPPostInfo struct {
 type SocialhubPSocialAccountPostingHistory struct {
 	ID              uuid.UUID `json:"id"`
 	PostID          uuid.UUID `json:"post_id"`
+	Platform        string    `json:"platform"`
 	SocialAccountID string    `json:"social_account_id"`
 	ScheduledTime   time.Time `json:"scheduled_time"`
 	PostingStatus   string    `json:"posting_status"`
-	Platform        string    `json:"platform"`
+	PlatformPostID  string    `json:"platform_post_id"`
 	CreatedBy       string    `json:"created_by"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
+}
+
+type SocialhubPSocialmediaAccountAccessToken struct {
+	Platform            string    `json:"platform"`
+	SocialAccountID     string    `json:"social_account_id"`
+	PlatformUsername    string    `json:"platform_username"`
+	AccessToken         string    `json:"access_token"`
+	RefreshToken        string    `json:"refresh_token"`
+	TokenScope          string    `json:"token_scope"`
+	TokenType           string    `json:"token_type"`
+	UserEmail           string    `json:"user_email"`
+	OrganisationGroupID string    `json:"organisation_group_id"`
+	ExpiresAt           time.Time `json:"expires_at"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
 }
 
 type SocialhubSession struct {

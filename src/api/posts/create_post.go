@@ -10,6 +10,7 @@ import (
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -63,7 +64,6 @@ func CreatePost(ctx *gin.Context) {
 	// Drafts are not added to the queue
 	if requestBody.CreationStatus == postcreationstatus.PostCreationStatusCompleted {
 		for _, platform := range requestBody.Platforms {
-
 			// create n separate entries in the schedule table with status PENDING, SCHEDULED
 			// this will be picked by the posting job in 1 minute
 			// there can be multiple reason for failure of the posting in this synchronous call
@@ -75,6 +75,7 @@ func CreatePost(ctx *gin.Context) {
 				SocialAccountID: platform + ":",
 				Platform:        platform,
 				CreatedBy:       authZ.GetCurrentUser(),
+				ScheduledTime:   time.Now(),
 			}
 			plogger.Info("----------CreatePost created----------", queryArgs)
 			_, err := store.GetInstance().PostingHistory_addPost(ctx, args)

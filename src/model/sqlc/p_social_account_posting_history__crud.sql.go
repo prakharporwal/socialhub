@@ -94,7 +94,9 @@ SELECT
     scheduled_time
 FROM socialhub.p_post_info a
 JOIN socialhub.p_social_account_posting_history b ON a.post_id = b.post_id
-WHERE a.is_deleted = false and posting_status!='PUBLISHED'
+WHERE a.is_deleted = false 
+and posting_status!='PUBLISHED'
+and scheduled_time <= now()
 ORDER BY a.created_at ASC
 LIMIT ($1)
 `
@@ -142,4 +144,22 @@ func (q *Queries) PostingHistory_fetchPost(ctx context.Context, limit int32) ([]
 		return nil, err
 	}
 	return items, nil
+}
+
+const postingHistory_updatePostingStatus = `-- name: PostingHistory_updatePostingStatus :exec
+UPDATE socialhub.p_social_account_posting_history
+SET posting_status = ($2),
+    platform_post_id = ($3)
+WHERE post_id = ($1)
+`
+
+type PostingHistory_updatePostingStatusParams struct {
+	PostID         uuid.UUID `json:"post_id"`
+	PostingStatus  string    `json:"posting_status"`
+	PlatformPostID string    `json:"platform_post_id"`
+}
+
+func (q *Queries) PostingHistory_updatePostingStatus(ctx context.Context, arg PostingHistory_updatePostingStatusParams) error {
+	_, err := q.db.ExecContext(ctx, postingHistory_updatePostingStatus, arg.PostID, arg.PostingStatus, arg.PlatformPostID)
+	return err
 }

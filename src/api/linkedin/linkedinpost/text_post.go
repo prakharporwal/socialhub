@@ -75,7 +75,7 @@ func CreatePostForFeed(ctx *gin.Context) {
 		out, err = serviceLinkedin.CreateALinkedinTextPost(token, &content)
 		break
 	case linkedin.POLL:
-		var content datamodels.LinkedInFeedPostContentPoll
+		var content datamodels.LinkedInFeedPostContent
 		_ = utils.JsonToStruct(reqBody.Data, &content)
 		content.Commentary = reqBody.Text
 		out, err = serviceLinkedin.CreateALinkedinPoll(token, &content)

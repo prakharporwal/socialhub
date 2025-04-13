@@ -7,11 +7,7 @@ type LinkedInFeedPostContent struct {
 	Distribution              ContentDistribution `json:"distribution"`
 	LifecycleState            string              `json:"lifecycleState"`
 	IsReshareDisabledByAuthor bool                `json:"isReshareDisabledByAuthor"`
-}
-
-type LinkedInFeedPostContentPoll struct {
-	LinkedInFeedPostContent
-	Content PostContent `json:"content"`
+	Content                   PostContent         `json:"content,omitempty"`
 }
 
 type ContentDistribution struct {
