@@ -419,7 +419,7 @@ CREATE TABLE IF NOT EXISTS socialhub.p_socialmedia_account_access_tokens
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null DEFAULT now(),
-    PRIMARY KEY (platform_account_id, user_email)
+    PRIMARY KEY (platform,social_account_id,organisation_group_id user_email)
 );
 
 -- setting trigger to update timestamp socialmedia_account_access_tokens table
@@ -429,4 +429,4 @@ CREATE TRIGGER set_timestamp
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
 
-CREATE INDEX platform_account_id ON socialhub.p_socialmedia_account_access_tokens (platform_account_id);
+CREATE INDEX platform_account_id ON socialhub.p_socialmedia_account_access_tokens (social_account_id);

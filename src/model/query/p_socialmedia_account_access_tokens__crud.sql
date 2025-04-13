@@ -23,4 +23,4 @@ VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
 ON CONFLICT (organisation_group_id,user_email,platform,social_account_id)
 DO
 UPDATE SET access_token=($1), refresh_token=($2),token_scope=($3), token_type=($4), expires_at=($5)
-    RETURNING platform,token_scope,token_type organisation_group_id,user_email;
+    RETURNING platform, token_scope, token_type, organisation_group_id,user_email;

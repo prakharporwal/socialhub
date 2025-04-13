@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"socialhub-server/api/authZ"
 	"socialhub-server/model/datamodels"
-	"socialhub-server/model/datamodels/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
@@ -28,11 +27,6 @@ type ServiceImpl struct {
 }
 
 const postOnFeedURN = "https://api.linkedin.com/rest/posts"
-
-type linkedInFeedPostRequest struct {
-	ContentType linkedin.LinkedinContentType `json:"content_type" binding:"required,oneof=text poll"`
-	Data        interface{}                  `json:"data" binding:"required"`
-}
 
 func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *datamodels.LinkedInFeedPostContent) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"

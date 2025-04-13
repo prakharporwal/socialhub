@@ -93,18 +93,7 @@ ALTER TABLE socialhub.user_role
 ALTER TABLE socialhub.user_role
     ADD FOREIGN KEY ("organisation_group_id") REFERENCES socialhub.organisation_group ("organisation_group_id");
 
--- updated at timestamp function
-CREATE
-OR REPLACE FUNCTION trigger_set_timestamp()
-    RETURNS TRIGGER AS
-$$
-BEGIN
-    NEW.updated_at
-= NOW();
-RETURN NEW;
-END;
-$$
-LANGUAGE plpgsql;
+
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
