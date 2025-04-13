@@ -74,8 +74,8 @@ const AppOverView = () => {
       borderRadius={20}
       px={8}
     >
-      <Heading as={"h1"}>Sociohub</Heading>
-      <h2>Control across all your socials</h2>
+      <Text fontSize={"lg"} fontWeight={"medium"}>Control across all your socials on</Text>
+      <Text fontSize={"lg"} fontWeight={"medium"} bg={"teal.100"} rounded={"lg"} p={2}>one platform</Text>
       <Image
         src="/onboarding-poster.webp"
         alt="helper"

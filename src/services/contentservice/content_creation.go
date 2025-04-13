@@ -4,17 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
 	"socialhub-server/api/authZ"
-	"socialhub-server/model/models"
-	"socialhub-server/model/models/linkedin"
+	"socialhub-server/model/datamodels"
+	"socialhub-server/model/datamodels/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type service interface {
@@ -32,7 +33,7 @@ type linkedInFeedPostRequest struct {
 	Data        interface{}                  `json:"data" binding:"required"`
 }
 
-func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *datamodels.LinkedInFeedPostContent) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	plogger.Debug("urn fetched from", urn)
@@ -102,7 +103,7 @@ var responseBody struct {
 	LocalisedFirstName string      `json:"localizedFirstName"`
 }
 
-func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
+func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *datamodels.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := sqlcmodels.SaveLinkedinURNParams{

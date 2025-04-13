@@ -54,6 +54,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
       body: JSON.stringify({
         user_id: email,
         password,
+        remember_me: rememberMe
       }),
     })
       .then((res) => {

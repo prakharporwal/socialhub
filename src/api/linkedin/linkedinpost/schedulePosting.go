@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"socialhub-server/api/authZ"
-	"socialhub-server/model/models"
+	"socialhub-server/model/datamodels"
 	db "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -16,7 +16,7 @@ import (
 
 type schedulePostRequest struct {
 	PostType    string                         `json:"post_type" binding:"required"`
-	PostJson    models.LinkedInFeedPostContent `json:"post_json" binding:"required"`
+	PostJson    datamodels.LinkedInFeedPostContent `json:"post_json" binding:"required"`
 	ScheduledAt string                         `json:"scheduled_at" binding:"required"`
 }
 

@@ -360,6 +360,7 @@ CREATE TABLE IF NOT EXISTS socialhub.p_post_info (
     post_url varchar NOT NULL,
     post_text varchar NOT NULL,
     post_img_url varchar,
+    platforms varchar[] NOT NULL DEFAULT array[]::varchar[], -- array of platforms
     post_video_url varchar,
     is_deleted boolean NOT NULL DEFAULT false, -- auditing fields
     user_email varchar NOT NULL,
@@ -378,13 +379,15 @@ CREATE TRIGGER set_timestamp
 CREATE INDEX idx_user_email ON socialhub.p_post_info (user_email);
 
 -- table for user post details when he submits first
--- this is the source of truth for the post
+-- posting queue status on all platform and accounts
 CREATE TABLE IF NOT EXISTS socialhub.p_social_account_posting_history (
-    id BIGSERIAL PRIMARY KEY,
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     post_id uuid NOT NULL,
+    platform varchar NOT NULL,
     social_account_id varchar NOT NULL,
     scheduled_time timestamptz NOT NULL,
     posting_status varchar NOT NULL,
+    platform_post_id varchar NOT NULL DEFAULT '',
     created_by varchar NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
@@ -400,3 +403,30 @@ CREATE TRIGGER set_timestamp
 -- Add indexes for performance
 CREATE INDEX idx_post_id ON socialhub.p_social_account_posting_history (post_id);
 CREATE INDEX idx_social_account_id ON socialhub.p_social_account_posting_history (social_account_id);
+
+-- Table for user social media account access tokens
+CREATE TABLE IF NOT EXISTS socialhub.p_socialmedia_account_access_tokens
+(
+    platform              varchar     NOT NULL,
+    social_account_id     varchar     NOT NULL DEFAULT '',
+    platform_username     varchar     NOT NULL DEFAULT '',
+    access_token          varchar     NOT NULL,
+    refresh_token         varchar     NOT NULL,
+    token_scope           varchar     NOT NULL,
+    token_type            varchar     NOT NULL,
+    user_email            varchar     NOT NULL,
+    organisation_group_id varchar     NOT NULL,
+    expires_at            timestamptz NOT NULL,
+    created_at            timestamptz NOT NULL DEFAULT now(),
+    updated_at            timestamptz not null DEFAULT now(),
+    PRIMARY KEY (platform_account_id, user_email)
+);
+
+-- setting trigger to update timestamp socialmedia_account_access_tokens table
+CREATE TRIGGER set_timestamp
+    BEFORE UPDATE
+    ON socialhub.p_socialmedia_account_access_tokens
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE INDEX platform_account_id ON socialhub.p_socialmedia_account_access_tokens (platform_account_id);

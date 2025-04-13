@@ -21,8 +21,9 @@ const PUBLIC = "PUBLIC"
 
 type loginRequest struct {
 	UserId              string `json:"user_id" binding:"required,email"` // userId can be username or userEmail
-	OrganisationGroupId string `json:"organisation_group_id"`
+	OrganisationGroupId string `json:"organisation_group_id,omitempty"`
 	Password            string `json:"password" binding:"required"`
+	RememberMe          bool   `json:"remember_me,omitempty"`
 }
 
 type loginResponse struct {

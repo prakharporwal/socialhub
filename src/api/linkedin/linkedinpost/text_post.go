@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"socialhub-server/api/authZ"
-	"socialhub-server/model/models"
-	"socialhub-server/model/models/linkedin"
+	"socialhub-server/model/datamodels"
+	"socialhub-server/model/datamodels/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -69,13 +69,13 @@ func CreatePostForFeed(ctx *gin.Context) {
 	out := ""
 	switch reqBody.ContentType {
 	case linkedin.TEXT:
-		var content models.LinkedInFeedPostContent
+		var content datamodels.LinkedInFeedPostContent
 		_ = utils.JsonToStruct(reqBody.Data, &content)
 		content.Commentary = reqBody.Text
 		out, err = serviceLinkedin.CreateALinkedinTextPost(token, &content)
 		break
 	case linkedin.POLL:
-		var content models.LinkedInFeedPostContentPoll
+		var content datamodels.LinkedInFeedPostContent
 		_ = utils.JsonToStruct(reqBody.Data, &content)
 		content.Commentary = reqBody.Text
 		out, err = serviceLinkedin.CreateALinkedinPoll(token, &content)

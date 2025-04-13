@@ -134,7 +134,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx={8} justifyContent="space-between">
         <Link as={ReactLink} to="/">
-          <Image src="/logo.png" alt="Logo" w={36} />
+          <Image src="/sociohub.png" alt="Logo" w={36} />
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -233,7 +233,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
       />
       <Image
         display={{ base: "flex", md: "none" }}
-        src="/logo.png"
+        src="/sociohub.png"
         alt="Logo"
         w={32}
       />

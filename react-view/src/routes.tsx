@@ -51,8 +51,11 @@ const MyProfilePage = lazy(
   () =>
     import(/* webpackChunkName: "myProfilePage" */ "./pages/MyProfilePage")
 );
-const LinkedPostForm = lazy(
-  () => import(/* webpackChunkName: "postcreationForm" */ "./pages/PostCreationPage")
+const PostCreationPage = lazy(
+  () => import(/* webpackChunkName: "postcreationPage" */ "./pages/PostCreationPage")
+);
+const PostViewPage = lazy(
+  () => import(/* webpackChunkName: "postViewPage" */ "./pages/PostViewPage")
 );
 const PostingHistoryList = lazy(
   /* webpackChunkName: "postingHistoryTablePage" */
@@ -144,7 +147,11 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: "post/new",
-        element: <LinkedPostForm />,
+        element: <PostCreationPage />,
+      },
+      {
+        path: "post/:postId",
+        element: <PostViewPage />,
       },
       {
         path: "twitter",

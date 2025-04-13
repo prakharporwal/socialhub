@@ -15,7 +15,9 @@ export default function WebHeader() {
         borderBottomLeftRadius={8}
       >
         <Link as={ReactLink} href="/">
-          <Image src="/logo.png" alt="Logo" w={"32"} h={"10"} m={2} />
+          <Box mx={{ base: 2, md: 4 }} my={4}>
+            <Image src="/sociohub.png" alt="Logo" w={{ base: 36, md: 40 }} />
+          </Box>
         </Link>
       </Flex>
       <Outlet />

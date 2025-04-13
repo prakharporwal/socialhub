@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { useState } from "react";
 import LinkedinPostForm from "src/components/PostForm/LinkedinPostForm";
 import ApiCaller from "src/utils/APIUtils";
@@ -11,8 +12,8 @@ function handleSubmit(body: any) {
 export default function PostCreationPage() {
     const [data, setData] = useState([]);
     return (
-        <div>
-        <LinkedinPostForm/>
-        </div>
+        <Box>
+            <LinkedinPostForm />
+        </Box>
     );
 }

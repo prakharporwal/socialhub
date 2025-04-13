@@ -4,22 +4,24 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/google/uuid"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"socialhub-server/api/authZ"
-	"socialhub-server/model/models"
-	"socialhub-server/model/models/linkedin"
+	"socialhub-server/model/datamodels"
+	"socialhub-server/model/datamodels/linkedin"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type service interface {
-	CreateALinkedinPoll(accessToken string, pollContent models.LinkedInFeedPostContentPoll)
-	CreateALinkedinTextPost(accessToken string, content models.LinkedInFeedPostContent)
+	CreateALinkedinPoll(accessToken string, pollContent datamodels.LinkedInFeedPostContent)
+	CreateALinkedinTextPost(accessToken string, content datamodels.LinkedInFeedPostContent)
 }
 
 type ServiceImpl struct {
@@ -32,7 +34,7 @@ type linkedInFeedPostRequest struct {
 	Data        interface{}                  `json:"data" binding:"required"`
 }
 
-func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *models.LinkedInFeedPostContentPoll) (string, error) {
+func (ServiceImpl) CreateALinkedinPoll(accessToken string, pollContent *datamodels.LinkedInFeedPostContent) (string, error) {
 	urn := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	plogger.Debug("urn fetched from", urn)
@@ -64,7 +66,7 @@ const accountLinkedinURNEndpoint = "https://api.linkedin.com/v2/userinfo"
 // from uri: accountLinkedinURNEndpoint -> https://api.linkedin.com/v2/me
 func fetchLinkedinAccountURN(accessToken string) string {
 	// get user id from the endpoint and
-	req, err := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
+	req, _ := http.NewRequest(http.MethodGet, accountLinkedinURNEndpoint, nil)
 	req.Header.Set("X-RestLi-Protocol-Version", "2.0.0")
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
@@ -105,7 +107,7 @@ func fetchLinkedinAccountURN(accessToken string) string {
 	return out
 }
 
-func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.LinkedInFeedPostContent) (string, error) {
+func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *datamodels.LinkedInFeedPostContent) (string, error) {
 	urnId := fetchLinkedinAccountURN(accessToken) // "urn:li:person:m55DJ0ZigA"
 
 	args := sqlcmodels.SaveLinkedinURNParams{
@@ -113,18 +115,13 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		UserEmail:           authZ.GetCurrentUser(),
 		LinkedinUrn:         createURN("person", urnId),
 	}
-	out, err := store.GetInstance().SaveLinkedinURN(context.Background(), args)
+	out, _ := store.GetInstance().SaveLinkedinURN(context.Background(), args)
 	plogger.Info(out)
 
-	plogger.Debug(`account urn:`, createURN("person", urnId))
 	plogger.Info(`account urn:`, urnId)
+	// content.Author = createURN("person", urnId)
 
-	content.Author = createURN("person", urnId)
-	requestBody := content
-	body, _ := json.Marshal(requestBody)
-	plogger.Debug("post request body ", string(body))
-
-	postId, err := SendPostToLinkedin(string(body), accessToken)
+	postId, err := SendPostToLinkedin(*content, accessToken)
 
 	// todo: write query to update the postId in the database for delete and other actions across linkedin
 	plogger.Debug(postId)
@@ -140,7 +137,7 @@ func (ServiceImpl) CreateALinkedinTextPost(accessToken string, content *models.L
 		AuthorUrn:        content.Author,
 		PostType:         "text",
 		PostIDOnLinkedin: "lol",
-		PostJsonString:   string(body),
+		PostJsonString:   "{}",
 		Status:           "SUBMITTED",
 		CreatedBy:        authZ.GetCurrentOrganisationId() + " | " + authZ.GetCurrentUser(),
 		ScheduledTime:    time.Now().UTC().Add(10 * time.Minute),
@@ -168,9 +165,8 @@ func createURN(resourceType string, urnId string) string {
 	}
 }
 
-func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (string, error) {
-	req, err := http.NewRequest(http.MethodPost, postOnFeedURN, strings.NewReader(bodyJsonString))
-
+func SendPostToLinkedin(bodyJsonString datamodels.LinkedInFeedPostContent, linkedinAccessToken string) (string, error) {
+	req, err := http.NewRequest(http.MethodPost, postOnFeedURN, strings.NewReader(utils.Stringify(bodyJsonString)))
 	if err != nil {
 		plogger.Error("Creating Request Object for Linkedin post API failed! ", err)
 		return "", err
@@ -190,8 +186,7 @@ func SendPostToLinkedin(bodyJsonString string, linkedinAccessToken string) (stri
 		return "", errors.New("post creation Failed")
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
-
+	body, _ := io.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
 	plogger.Debug("Header:", resp.Header.Clone())
