@@ -88,7 +88,7 @@ const PostForm: React.FunctionComponent<any> = () => {
     };
 
     ApiCaller.post("/p/v1/posts", body)
-      .then((res) => {
+      .then(() => {
         if (!toast.isActive("post-submit-success")) {
           toast({
             id: "post-submit-success",
@@ -98,11 +98,15 @@ const PostForm: React.FunctionComponent<any> = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (!toast.isActive("post-submit-error")) {  
+              toast({  
+                 id: "post-submit-error",  
+                  title: "Failed to submit post",  
+                  description: err.response?.data?.message || "An unexpected error occurred",  
+                });  
+              }  
+              console.error("Post submission error:", err);  
       })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
   };
 
   function handleSubmitSchedulePost() {
