@@ -101,16 +101,12 @@ const PostForm: React.FunctionComponent<any> = () => {
         if (!toast.isActive("post-submit-error")) {  
               toast({  
                  id: "post-submit-error",  
-                  status: "error",  
                   title: "Failed to submit post",  
                   description: err.response?.data?.message || "An unexpected error occurred",  
                 });  
               }  
               console.error("Post submission error:", err);  
       })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
   };
 
   function handleSubmitSchedulePost() {
