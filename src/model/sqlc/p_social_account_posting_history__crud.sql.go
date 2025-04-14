@@ -148,18 +148,24 @@ func (q *Queries) PostingHistory_fetchPost(ctx context.Context, limit int32) ([]
 
 const postingHistory_updatePostingStatus = `-- name: PostingHistory_updatePostingStatus :exec
 UPDATE socialhub.p_social_account_posting_history
-SET posting_status = ($2),
-    platform_post_id = ($3)
-WHERE post_id = ($1)
+SET posting_status = ($3),
+    platform_post_id = ($4)
+WHERE post_id = ($1) and platform = ($2)
 `
 
 type PostingHistory_updatePostingStatusParams struct {
 	PostID         uuid.UUID `json:"post_id"`
+	Platform       string    `json:"platform"`
 	PostingStatus  string    `json:"posting_status"`
 	PlatformPostID string    `json:"platform_post_id"`
 }
 
 func (q *Queries) PostingHistory_updatePostingStatus(ctx context.Context, arg PostingHistory_updatePostingStatusParams) error {
-	_, err := q.db.ExecContext(ctx, postingHistory_updatePostingStatus, arg.PostID, arg.PostingStatus, arg.PlatformPostID)
+	_, err := q.db.ExecContext(ctx, postingHistory_updatePostingStatus,
+		arg.PostID,
+		arg.Platform,
+		arg.PostingStatus,
+		arg.PlatformPostID,
+	)
 	return err
 }

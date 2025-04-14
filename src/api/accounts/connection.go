@@ -4,13 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"socialhub-server/api/authZ"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
 	"socialhub-server/pkg/plogger"
+
+	"github.com/gin-gonic/gin"
 )
 
 type LinkedinAccountInfo struct {
@@ -68,10 +69,17 @@ func TwitterConnectedAccountInfo(ctx *gin.Context) {
 		return
 	}
 
+	// else fetch from twitter
+	twUsername, _ := FetchAccountInfoFromTwitter(row.AccessToken)
+
+	ctx.JSON(http.StatusOK, gin.H{"account": map[string]interface{}{"username": twUsername}})
+}
+
+func FetchAccountInfoFromTwitter(accessToken string) (string, string) {
 	twitterMeAPI := "https://api.twitter.com/2/users/me"
 	meInfoRequest, _ := http.NewRequest("GET", twitterMeAPI, nil)
 
-	meInfoRequest.Header.Add("Authorization", "Bearer "+row.AccessToken)
+	meInfoRequest.Header.Add("Authorization", "Bearer "+accessToken)
 
 	resp, err := http.DefaultClient.Do(meInfoRequest)
 	if err != nil {
@@ -93,7 +101,6 @@ func TwitterConnectedAccountInfo(ctx *gin.Context) {
 		plogger.Error(err)
 	}
 
-	plogger.Info("Hello")
 	plogger.Info(respObj.Data.Username)
 
 	upsertArgs := sqlcmodels.TwitterAccountAccessTokens_updateUsernameAndIdParams{
@@ -106,8 +113,8 @@ func TwitterConnectedAccountInfo(ctx *gin.Context) {
 	accInfo, err := store.GetInstance().TwitterAccountAccessTokens_updateUsernameAndId(context.Background(), upsertArgs)
 	if err != nil {
 		plogger.Error("Error updating twitter account info ", err)
-		return
+		return "", ""
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"account": map[string]interface{}{"username": accInfo.TwitterUsername}})
+	return accInfo.TwitterUsername, accInfo.TwitterID
 }
