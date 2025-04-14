@@ -116,5 +116,5 @@ func FetchAccountInfoFromTwitter(accessToken string) (string, string) {
 		return "", ""
 	}
 
-	return accInfo.TwitterUsername, accInfo.TwitterID
+	return accInfo.TwitterUsername, respObj.Data.Id
 }
