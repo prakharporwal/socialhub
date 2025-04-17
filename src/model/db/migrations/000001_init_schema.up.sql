@@ -93,7 +93,18 @@ ALTER TABLE socialhub.user_role
 ALTER TABLE socialhub.user_role
     ADD FOREIGN KEY ("organisation_group_id") REFERENCES socialhub.organisation_group ("organisation_group_id");
 
-
+-- updated at timestamp function
+CREATE
+OR REPLACE FUNCTION trigger_set_timestamp()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    NEW.updated_at
+= NOW();
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
 
 -- setting trigger to update timestamp accounts table
 CREATE TRIGGER set_timestamp
@@ -408,14 +419,14 @@ CREATE TABLE IF NOT EXISTS socialhub.p_socialmedia_account_access_tokens
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null DEFAULT now(),
-    PRIMARY KEY (platform_account_id, user_email)
+    PRIMARY KEY (platform,social_account_id,organisation_group_id, user_email)
 );
 
--- setting trigger to update timestamp socialmedia_account_access_tokens table
+-- setting trigger to update timestamp p_socialmedia_account_access_tokens table
 CREATE TRIGGER set_timestamp
     BEFORE UPDATE
     ON socialhub.p_socialmedia_account_access_tokens
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();
 
-CREATE INDEX platform_account_id ON socialhub.p_socialmedia_account_access_tokens (platform_account_id);
+CREATE INDEX platform_account_id ON socialhub.p_socialmedia_account_access_tokens (social_account_id);

@@ -419,10 +419,10 @@ CREATE TABLE IF NOT EXISTS socialhub.p_socialmedia_account_access_tokens
     expires_at            timestamptz NOT NULL,
     created_at            timestamptz NOT NULL DEFAULT now(),
     updated_at            timestamptz not null DEFAULT now(),
-    PRIMARY KEY (platform,social_account_id,organisation_group_id user_email)
+    PRIMARY KEY (platform,social_account_id,organisation_group_id, user_email)
 );
 
--- setting trigger to update timestamp socialmedia_account_access_tokens table
+-- setting trigger to update timestamp p_socialmedia_account_access_tokens table
 CREATE TRIGGER set_timestamp
     BEFORE UPDATE
     ON socialhub.p_socialmedia_account_access_tokens

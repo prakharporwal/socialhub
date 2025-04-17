@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"socialhub-server/api/accounts"
 	"socialhub-server/api/authZ"
 	"socialhub-server/env"
+	"socialhub-server/model/datamodels/enums"
 	sqlcmodels "socialhub-server/model/sqlc"
 	"socialhub-server/model/store"
 	"socialhub-server/pkg/apierror"
@@ -73,22 +75,35 @@ func OAuthCallbackController(ctx *gin.Context) {
 		return
 	}
 
-	args := sqlcmodels.TwitterAccountAccessTokens_saveAccessTokenParams{
+	args := sqlcmodels.SocialMediaAccount_upsertAccessTokenParams{
 		AccessToken:         respBody.AccessToken,
 		RefreshToken:        respBody.RefreshToken,
-		UserEmail:           authZ.GetCurrentUser(),
-		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 		TokenScope:          respBody.Scope,
 		TokenType:           respBody.TokenType,
+		Platform:            string(enums.TWITTER),
+		UserEmail:           authZ.GetCurrentUser(),
+		OrganisationGroupID: authZ.GetCurrentOrganisationId(),
 		ExpiresAt:           time.Now().Add(respBody.ExpiresInMicroseconds * time.Second),
 	}
 
-	row, err := store.GetInstance().TwitterAccountAccessTokens_saveAccessToken(ctx, args)
+	row, err := store.GetInstance().SocialMediaAccount_upsertAccessToken(ctx, args)
 	if err != nil {
 		plogger.Error("Error saving the token to database ", err)
 		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
 		return
 	}
+
+	// Fetch User details as we get the access_token and refresh token
+	// and save the user details in the database
+	twUsername, accID := accounts.FetchAccountInfoFromTwitter(respBody.AccessToken)
+	args.PlatformUsername = twUsername
+	args.SocialAccountID = accID
+	row, err = store.GetInstance().SocialMediaAccount_upsertAccessToken(ctx, args)
+	if err != nil {
+		// log and fail silently
+		plogger.Error("Error saving twUsername, accID to database ", err)
+	}
+
 	plogger.Info(row.UserEmail)
 	plogger.Info("scope from db response ", row.TokenScope)
 

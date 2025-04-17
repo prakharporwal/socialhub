@@ -106,6 +106,8 @@ const PostForm: React.FunctionComponent<any> = () => {
                 });  
               }  
               console.error("Post submission error:", err);  
+      }).finally(()=>{
+        setIsSubmitting(false);
       })
   };
 
