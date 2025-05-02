@@ -161,7 +161,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
               >
                 Remember me
               </Checkbox>
-              <Link as={RouterLink} to="/app/forgot-password" color={"blue.400"}>
+              <Link as={RouterLink} to="/forgot-password" color={"blue.400"}>
                 Forgot password?
               </Link>
             </Stack>
@@ -173,7 +173,7 @@ const SignInPage: React.FunctionComponent<any> = (props) => {
             </Button>
             <div className="g-signin2" data-onsuccess="onSignIn"></div>
           </Stack>
-          <Link as={RouterLink} to="/app/signup" color={"blue.400"}>
+          <Link as={RouterLink} to="/signup" color={"blue.400"}>
             Create Account
           </Link>
         </FormControl>

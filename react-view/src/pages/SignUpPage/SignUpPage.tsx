@@ -249,7 +249,7 @@ const SignUpPage: React.FunctionComponent<any> = (props) => {
             </Button>
           </Flex>
           <Box py={4} w={"full"} textAlign={"end"}>
-            <Link as={RouterLink} to="/app/signin" color={"blue.400"}>
+            <Link as={RouterLink} to="/signin" color={"blue.400"}>
               Already have an account ?
             </Link>
           </Box>
