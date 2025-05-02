@@ -6,6 +6,7 @@ import (
 	"socialhub-server/api/accounts"
 	"socialhub-server/api/authN/sso/google/googleoauth2"
 	"socialhub-server/api/authZ"
+	"socialhub-server/api/authZ/oauth2"
 	"socialhub-server/api/authZ/oauth2/instagram"
 	"socialhub-server/api/landingpage"
 	"socialhub-server/api/posts"
@@ -75,6 +76,9 @@ func InitRouter() *gin.Engine {
 
 	protected.GET("/instagram/oauth2/access/initiate", instagram.OAuth2Initiate)
 	public.GET("/instagram/oauth2/access/callback", instagram.OAuth2Callback)
+
+	public.GET("/oauth2/access/:provider/initiate", oauth2.OAuth2Initiate)
+	public.GET("/oauth2/access/:provider/callback", oauth2.OAuth2Callback)
 
 	protected.GET("/youtube/oauth2/access/initiate", youtube.OAuth2Initiate)
 	public.GET("/youtube/oauth2/access/callback", youtube.OAuth2Callback)

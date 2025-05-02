@@ -1,6 +1,13 @@
-package twitter
+package oauth2
 
 import (
+	"net/http"
+	"net/url"
+	"socialhub-server/env"
+	"socialhub-server/model/datamodels/enums"
+	"socialhub-server/pkg/apierror"
+	"socialhub-server/pkg/plogger"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,48 +19,56 @@ import (
 // 6. redirect to frontend with success message to home page ?
 
 func OAuth2Callback(ctx *gin.Context) {
-	// WIP
-	// twitterOAuthToken := ctx.Query("code")
-	// oauthVerifier := ctx.Query("state")
-	// clientId := env.TwitterAppClientId
-	// clientSecret := env.TwitterAppClientSecret
+	provider, ok := ctx.Params.Get("provider")
+	if !ok {
+		plogger.Error("Provider param not valid", provider)
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "bad request: invalid provider key"})
+		return
+	}
 
-	// plogger.Debug(twitterOAuthToken)
-	// plogger.Debug(oauthVerifier)
+	platform, ok := enums.ParseSocialMediaPlatforms(provider)
+	if !ok {
+		plogger.Error("No valid OAuth2 Provider configured for:", provider)
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "error: provider not found"})
+		return
+	}
 
-	// // todo: add a validation to check if same as
-	// // 1. verify the state variable
-	// // 2. store token in db
+	config := OAuth2AppConfig[platform]
+	code, ok := ctx.GetQuery("code")
+	if !ok {
+		plogger.Info(code)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Auth Code Param is not valid!"})
+		return
+	}
 
-	// queryData := url.Values{}
-	// queryData.Add("code", twitterOAuthToken)
-	// queryData.Add("grant_type", "authorization_code")
-	// queryData.Add("client_id", clientId)
-	// queryData.Add("redirect_uri", env.TwitterOAuth2Callback)
-	// // todo: use a complex code_verifier
-	// queryData.Add("code_verifier", "challenge")
+	// generate query params
+	queryData := url.Values{}
 
-	// reqUrl := env.TwitterAccessTokenUrl + "?" + queryData.Encode()
+	queryData.Add("code", code)
+	queryData.Add("grant_type", "authorization_code")
+	queryData.Add("client_id", config["client_id"])
+	queryData.Add("redirect_uri", config["oauth2_redirect_url"])
+	// todo: use a complex code_verifier
+	queryData.Add("code_verifier", config["challenge"])
 
-	// req, _ := http.NewRequest("POST", reqUrl, nil)
-	// req.Header.Add("content-type", "application/x-www-form-urlencoded")
-	// req.SetBasicAuth(clientId, clientSecret)
+	reqUrl := config["access_token_url"] + "?" + queryData.Encode()
 
-	// resp, err := http.DefaultClient.Do(req)
-	// if err != nil {
-	// 	plogger.Info("error getting tweets from twitter ", err)
-	// 	ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
-	// 	return
-	// }
+	req, _ := http.NewRequest("POST", reqUrl, nil)
+	req.Header.Add("content-type", "application/x-www-form-urlencoded")
+	req.SetBasicAuth(config["client_id"], config["client_secret"])
 
-	// defer resp.Body.Close()
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		plogger.Info("error getting tweets from twitter ", err)
+		ctx.JSON(http.StatusInternalServerError, apierror.UnexpectedError)
+		return
+	}
 
-	// if resp.StatusCode != http.StatusOK {
-	// 	plogger.Error(" Getting Access Token API call failed ! ")
-	// 	plogger.Debug(resp.StatusCode)
-	// 	plogger.Debug(resp.Status)
-	// 	plogger.Debug(resp.Header)
-	// }
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		plogger.Error(" Getting Access Token API call failed ! ")
+		plogger.Debug(resp.StatusCode, resp.Status, resp.Header)
+	}
 
 	// var respBody struct {
 	// 	AccessToken           string        `json:"access_token"`
@@ -89,5 +104,5 @@ func OAuth2Callback(ctx *gin.Context) {
 	// plogger.Info(row.UserEmail)
 	// plogger.Info("scope from db response ", row.TokenScope)
 
-	// ctx.Redirect(http.StatusFound, env.WebsiteURL+"?twitter=success")
+	ctx.Redirect(http.StatusFound, env.WebsiteURL+"?twitter=success")
 }

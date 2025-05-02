@@ -1,33 +1,43 @@
-package twitter
+package oauth2
 
 import (
+	"net/http"
+	"net/url"
+	"socialhub-server/model/datamodels/enums"
+	"socialhub-server/pkg/plogger"
+	"socialhub-server/pkg/utils"
+
 	"github.com/gin-gonic/gin"
 )
 
 func OAuth2Initiate(ctx *gin.Context) {
-	// WIP
-	// responseType := "code"
-	// clientId := env.TwitterAppClientId
+	provider, ok := ctx.Params.Get("provider")
+	if !ok {
+		plogger.Error("Provider param not valid", provider)
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "bad request: invalid provider key"})
+		return
+	}
 
-	// state := utils.GenerateRandomString(30)
-	// // todo: to be generate in a safer way code challenge
-	// codeChallenge := "challenge"
-	// codeChallengeMethod := "plain"
+	platform, ok := enums.ParseSocialMediaPlatforms(provider)
+	if !ok {
+		plogger.Error("No valid OAuth2 Provider configured for:", provider)
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "error: provider not found"})
+		return
+	}
+	// get app config
+	config := OAuth2AppConfig[platform]
 
-	// requestedScope := "tweet.read tweet.write users.read offline.access"
-	// dataParams := url.Values{}
+	// generate query params
+	dataParams := url.Values{}
+	for key, value := range config {
+		if value != "" {
+			dataParams.Add(key, value)
+		}
+	}
 
-	// dataParams.Add("response_type", responseType)
-	// dataParams.Add("client_id", clientId)
-	// dataParams.Add("redirect_uri", env.TwitterOAuth2Callback)
-	// dataParams.Add("scope", requestedScope)
-	// dataParams.Add("state", state)
-	// dataParams.Add("code_challenge", codeChallenge)
-	// dataParams.Add("code_challenge_method", codeChallengeMethod)
+	state := utils.GenerateRandomString(32)
+	dataParams.Add("state", state)
 
-	// redirectURL := env.TwitterOAuth2AuthorizeUrl + "?" + dataParams.Encode()
-
-	// // ctx.Redirect(http.StatusFound, redirectURL)
-
-	// ctx.JSON(http.StatusOK, gin.H{"redirect_url": redirectURL})
+	redirectURL := config["oauth2_authorize_url"] + "?" + dataParams.Encode()
+	ctx.JSON(http.StatusOK, gin.H{"redirect_url": redirectURL})
 }
