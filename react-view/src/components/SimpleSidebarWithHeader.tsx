@@ -133,7 +133,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx={8} justifyContent="space-between">
-        <Link as={ReactLink} to="/">
+        <Link as={ReactLink} to="/app">
           <Image src="/sociohub.png" alt="Logo" w={36} />
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -209,7 +209,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
 
   function handleLogout() {
     logOut();
-    navigate("/signin");
+    navigate("/app/signin");
   }
 
   return (

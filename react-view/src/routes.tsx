@@ -85,15 +85,11 @@ const ShortsFeedPage = lazy(
 );
 
 export const routeNames = {
-  rootPath: "/app",
+  rootPath: "/appw",
   protectedPath: "/admin",
 };
 
 export const appRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <MarketingPage />,
-  },
   {
     path: "/:slug/p/:itemId",
     element:<MultiWidgetPage/>
@@ -103,27 +99,27 @@ export const appRouter = createBrowserRouter([
   //   element: <ShortsFeedPage />,
   // },
   {
-    path: "/",
+    path: "/app",
     element: <WebHeader />,
     children: [
       {
-        path: "/forgot-password",
+        path: "forgot-password",
         element: <ForgotPasswordRequestPage />,
       },
       {
-        path: "/forgot-password-reset",
+        path: "forgot-password-reset",
         element: <ForgotPasswordResetPage />,
       },
       {
-        path: "/signin",
+        path: "signin",
         element: <SignInPage />,
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignUpPage />,
       },
       {
-        path: "/*",
+        path: "*",
         element: <NotFoundPage />,
       },
     ],

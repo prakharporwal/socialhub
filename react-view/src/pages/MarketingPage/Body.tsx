@@ -35,7 +35,7 @@ export function Body(props: any) {
           </Text>
           <Box display={"flex"} gap={4} flexDirection={"row"}>
             <Box>
-              <Link as={ReactLink} to={"/signin"}>
+              <Link as={ReactLink} to={"/app/signin"}>
                 <Button colorScheme={"blue"} mb={4}>
                   Get Started
                 </Button>
