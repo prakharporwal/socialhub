@@ -43,5 +43,7 @@ func (s *SocialMediaPlatformStrategy) FetchSocialMediaAccessToken(platform enums
 		plogger.Error("Error fetching access token!", err)
 		return ""
 	}
+
+	plogger.Info("FetchSocialMediaAccessToken success", platform)
 	return row.AccessToken
 }

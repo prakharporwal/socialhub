@@ -12,8 +12,6 @@ function getCookie(name: string): string | null {
       return decodeURIComponent(cookie.substring(nameLenPlus));
     })[0];
 
-  console.log(cookieData);
-
   return cookieData || null;
 }
 

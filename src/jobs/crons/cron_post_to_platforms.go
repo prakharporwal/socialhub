@@ -16,7 +16,7 @@ func PublishPostsToAllPlatforms() {
 	plogger.Info("Reading from db cron job")
 
 	c := cron.New()
-	// cron job runs every 2 minutes
+	// cron job runs every 30 seconds
 	entryId, err := c.AddFunc("@every 30s", postToPlatforms)
 	if err != nil {
 		plogger.Error("Scheduling Cron Job failed! ", err)
@@ -41,13 +41,18 @@ func postToPlatforms() {
 	for _, row := range rows {
 		postingstrategy := postingservice.SocialMediaPlatformStrategy{}
 		service := postingstrategy.GetStrategy(enums.SocialMediaPlatforms(row.Platform))
+		if service == nil {
+			plogger.Error("No Posting Strategy defined from GetStrategy", row.Platform)
+			return
+		}
+
 		postIdOnSocialPlatform, err := service.CreatePost(postingservice.TextContentModel{Text: row.PostText})
 		if err != nil {
 			plogger.Error("Error CreatePost on", row.Platform, err)
 			return
 		}
 
-		args := db.PostingHistory_updatePostingStatusParams{PostID: row.PostID, PlatformPostID: postIdOnSocialPlatform, PostingStatus: postingstatus.PostingStatusCompleted}
+		args := db.PostingHistory_updatePostingStatusParams{PostID: row.PostID, Platform: row.Platform, PlatformPostID: postIdOnSocialPlatform, PostingStatus: postingstatus.PostingStatusCompleted}
 		err = store.GetInstance().PostingHistory_updatePostingStatus(context.Background(), args)
 		if err != nil {
 			plogger.Error("Error from PostingHistory_updatePostingStatus query", err)

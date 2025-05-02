@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunksocial_duck_home=self.webpackChunksocial_duck_home||[]).push([[49],{2766:function(e,l,t){t.r(l),t.d(l,{Head:function(){return u}});var n=t(7294);l.default=()=>n.createElement("main",null,n.createElement("div",null,"Hello guys"));const u=()=>n.createElement("title",null,"About Page")}}]);
+//# sourceMappingURL=component---src-pages-about-tsx-6a27762092b676feb400.js.map

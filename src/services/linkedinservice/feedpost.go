@@ -177,7 +177,7 @@ func SendPostToLinkedin(bodyJsonString datamodels.LinkedInFeedPostContent, linke
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		plogger.Error("Error getting the account URN! ", err)
-		return "", errors.New("post creation Failed")
+		return "", err
 	}
 
 	body, _ := io.ReadAll(resp.Body)

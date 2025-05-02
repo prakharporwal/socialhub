@@ -12,10 +12,11 @@ cd ~/github/socialhub/deployment
 #chmod u+x ~/github/socialhub/src/build/socialhub
 
 sudo cp -ar ../view/. /var/www/sociohub.live/html
+sudo cp -ar ../marketing/. /var/www/sociohub.live/marketing
 sudo cp nginx/default /etc/nginx/sites-enabled/default
 sudo cp ../socialhub.service /etc/systemd/system/
 sudo systemctl daemon-reload # only needed when socialhub.service file changes
 sudo systemctl restart socialhub.service
 
 sudo nginx -t # test nginx conf
-sudo systemctl restart nginx
+sudo nginx -s reload # reload nginx conf

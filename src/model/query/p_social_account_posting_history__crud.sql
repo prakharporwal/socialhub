@@ -31,6 +31,6 @@ LIMIT ($1);
 
 -- name: PostingHistory_updatePostingStatus :exec
 UPDATE socialhub.p_social_account_posting_history
-SET posting_status = ($2),
-    platform_post_id = ($3)
-WHERE post_id = ($1);
+SET posting_status = ($3),
+    platform_post_id = ($4)
+WHERE post_id = ($1) and platform = ($2);

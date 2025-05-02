@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"socialhub-server/env"
 	"socialhub-server/jobs/crons"
 	"socialhub-server/pkg/plogger"
 	"socialhub-server/server"
+
+	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -14,6 +15,7 @@ func init() {
 
 	plogger.Info("Setting Up Cron")
 	crons.PublishPostsToLinkedin()
+	crons.PublishPostsToAllPlatforms()
 	crons.RefreshJob()
 }
 
