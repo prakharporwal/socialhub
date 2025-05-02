@@ -10,7 +10,6 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
-import posterImg from "../../images/onboarding-poster.webp";
 
 type IProps = {
   headingText: string;
@@ -78,7 +77,7 @@ const AppOverView = () => {
       <Text fontSize={"lg"} fontWeight={"medium"}>Control across all your socials on</Text>
       <Text fontSize={"lg"} fontWeight={"medium"} bg={"teal.100"} rounded={"lg"} p={2}>one platform</Text>
       <Image
-        src={posterImg}
+        src="/onboarding-poster.webp"
         alt="helper"
         maxH={"lg"}
         borderRadius={12}

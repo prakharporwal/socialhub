@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 import { hydrate } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
@@ -16,8 +15,6 @@ if (rootElement.hasChildNodes()) {
   const root = createRoot(rootElement);
   root.render(<App />);
 }
-const htmlString = ReactDOMServer.renderToString(<App />);
-console.log(htmlString);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

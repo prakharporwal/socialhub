@@ -23,7 +23,7 @@ export default function MyProfilePage() {
 
   function logoutHandler() {
     logOut();
-    navigate("/app");
+    navigate("/");
   }
   return (
     <Box m={2} p={4}>

@@ -11,7 +11,7 @@ const withAuthenticationRequired = (Ele: React.FunctionComponent<any>) => {
         {authValue.isAuthenticated ? (
           <Ele {...props} />
         ) : (
-          <Navigate to="/app/signin" replace />
+          <Navigate to="/signin" replace />
         )}
       </Box>
     );

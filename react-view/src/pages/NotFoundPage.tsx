@@ -3,18 +3,13 @@ import { Link as ReactLink } from "react-router-dom";
 import { Box, Button, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import notFoundRelaxation from "../images/notfound/notfound_relaxation.svg";
-import notFoundPageTravelling from "../images/notfound/notfound_page_travelling.svg";
-import notFoundWriter from "../images/notfound/notfound_writer.svg";
-import notFoundCoffee from "../images/notfound/notfound_coffee.svg";
-import notFoundCampfire from "../images/notfound/notfound_campfire.svg";
 
 const images = [
-  notFoundRelaxation,
-  notFoundPageTravelling,
-  notFoundWriter,
-  notFoundCoffee,
-  notFoundCampfire,
+  "/images/notfound_relaxation.svg",
+  "/images/notfound_page_travelling.svg",
+  "/images/notfound_writer.svg",
+  "/images/notfound_coffee.svg",
+  "/images/notfound_campfire.svg",
 ];
 const NotFoundPage: React.FunctionComponent<any> = () => {
   const index = Math.round(Math.random() * 4);
@@ -38,7 +33,7 @@ const NotFoundPage: React.FunctionComponent<any> = () => {
         >
           Go Back
         </Button>
-        <Link as={ReactLink} to="/app" color={"blue"}>
+        <Link as={ReactLink} to="/" color={"blue"}>
           Head over to homepage
         </Link>
       </Box>

@@ -46,7 +46,7 @@ export function Header() {
           rounded={"lg"}
           px={6}
           onClick={() => {
-            navigate("/app/signup");
+            navigate("/signup");
           }}
         >
           Register
@@ -58,7 +58,7 @@ export function Header() {
           rounded={"lg"}
           px={6}
           onClick={() => {
-            navigate("/app/signin");
+            navigate("/signin");
           }}
         >
           Sign In

@@ -2,7 +2,6 @@ import { Link as ReactLink } from "react-router-dom";
 import { Box, Flex, Image, Link } from "@chakra-ui/react";
 
 import { Outlet } from "react-router";
-import logoImg from "../../images/sociohub.png";
 
 export default function WebHeader() {
   return (
@@ -15,9 +14,9 @@ export default function WebHeader() {
         borderBottomRightRadius={8}
         borderBottomLeftRadius={8}
       >
-        <Link as={ReactLink} href="/ap">
+        <Link as={ReactLink} href="/">
           <Box mx={{ base: 2, md: 4 }} my={4}>
-            <Image src={logoImg} alt="Logo" w={{ base: 36, md: 40 }} />
+            <Image src="/sociohub.png" alt="Logo" w={{ base: 36, md: 40 }} />
           </Box>
         </Link>
       </Flex>
