@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/static/css/main.36f65783.css",
-    "main.js": "/static/js/main.68994144.js",
+    "main.js": "/static/js/main.8e92e80d.js",
     "webHeader.js": "/static/js/webHeader.995206b1.chunk.js",
     "multiWidgetPage.css": "/static/css/multiWidgetPage.95ea1e8b.chunk.css",
     "multiWidgetPage.js": "/static/js/multiWidgetPage.aefbb300.chunk.js",
     "SidebarWithHeader.js": "/static/js/SidebarWithHeader.58a13395.chunk.js",
-    "forgotPasswordResetPage.js": "/static/js/forgotPasswordResetPage.a42b7f64.chunk.js",
+    "forgotPasswordResetPage.js": "/static/js/forgotPasswordResetPage.e53715f2.chunk.js",
     "forgotPasswordRequest.js": "/static/js/forgotPasswordRequest.06d08a8e.chunk.js",
     "marketing.css": "/static/css/marketing.fb42be9a.chunk.css",
     "marketing.js": "/static/js/marketing.c035d993.chunk.js",
@@ -15,9 +15,9 @@
     "settingsPage.js": "/static/js/settingsPage.a6b8f171.chunk.js",
     "analyticsDashboardPage.js": "/static/js/analyticsDashboardPage.c691c965.chunk.js",
     "myProfilePage.js": "/static/js/myProfilePage.8794153f.chunk.js",
-    "postcreationPage.js": "/static/js/postcreationPage.5b3ab69b.chunk.js",
+    "postcreationPage.js": "/static/js/postcreationPage.40abf4b8.chunk.js",
     "postViewPage.js": "/static/js/postViewPage.9e931774.chunk.js",
-    "static/js/480.84a61ae2.chunk.js": "/static/js/480.84a61ae2.chunk.js",
+    "static/js/480.67a980eb.chunk.js": "/static/js/480.67a980eb.chunk.js",
     "twitterPage.js": "/static/js/twitterPage.219872e7.chunk.js",
     "linkedinPage.js": "/static/js/linkedinPage.d6313fa2.chunk.js",
     "signinPage.css": "/static/css/signinPage.31d6cfe0.chunk.css",
@@ -33,15 +33,15 @@
     "static/js/992.8def5623.chunk.js": "/static/js/992.8def5623.chunk.js",
     "static/js/903.cab9a009.chunk.js": "/static/js/903.cab9a009.chunk.js",
     "static/js/923.5aff5ec2.chunk.js": "/static/js/923.5aff5ec2.chunk.js",
-    "static/js/753.e9d8b300.chunk.js": "/static/js/753.e9d8b300.chunk.js",
+    "static/js/133.9a393e29.chunk.js": "/static/js/133.9a393e29.chunk.js",
     "index.html": "/index.html",
     "main.36f65783.css.map": "/static/css/main.36f65783.css.map",
-    "main.68994144.js.map": "/static/js/main.68994144.js.map",
+    "main.8e92e80d.js.map": "/static/js/main.8e92e80d.js.map",
     "webHeader.995206b1.chunk.js.map": "/static/js/webHeader.995206b1.chunk.js.map",
     "multiWidgetPage.95ea1e8b.chunk.css.map": "/static/css/multiWidgetPage.95ea1e8b.chunk.css.map",
     "multiWidgetPage.aefbb300.chunk.js.map": "/static/js/multiWidgetPage.aefbb300.chunk.js.map",
     "SidebarWithHeader.58a13395.chunk.js.map": "/static/js/SidebarWithHeader.58a13395.chunk.js.map",
-    "forgotPasswordResetPage.a42b7f64.chunk.js.map": "/static/js/forgotPasswordResetPage.a42b7f64.chunk.js.map",
+    "forgotPasswordResetPage.e53715f2.chunk.js.map": "/static/js/forgotPasswordResetPage.e53715f2.chunk.js.map",
     "forgotPasswordRequest.06d08a8e.chunk.js.map": "/static/js/forgotPasswordRequest.06d08a8e.chunk.js.map",
     "marketing.fb42be9a.chunk.css.map": "/static/css/marketing.fb42be9a.chunk.css.map",
     "marketing.c035d993.chunk.js.map": "/static/js/marketing.c035d993.chunk.js.map",
@@ -50,9 +50,9 @@
     "settingsPage.a6b8f171.chunk.js.map": "/static/js/settingsPage.a6b8f171.chunk.js.map",
     "analyticsDashboardPage.c691c965.chunk.js.map": "/static/js/analyticsDashboardPage.c691c965.chunk.js.map",
     "myProfilePage.8794153f.chunk.js.map": "/static/js/myProfilePage.8794153f.chunk.js.map",
-    "postcreationPage.5b3ab69b.chunk.js.map": "/static/js/postcreationPage.5b3ab69b.chunk.js.map",
+    "postcreationPage.40abf4b8.chunk.js.map": "/static/js/postcreationPage.40abf4b8.chunk.js.map",
     "postViewPage.9e931774.chunk.js.map": "/static/js/postViewPage.9e931774.chunk.js.map",
-    "480.84a61ae2.chunk.js.map": "/static/js/480.84a61ae2.chunk.js.map",
+    "480.67a980eb.chunk.js.map": "/static/js/480.67a980eb.chunk.js.map",
     "twitterPage.219872e7.chunk.js.map": "/static/js/twitterPage.219872e7.chunk.js.map",
     "linkedinPage.d6313fa2.chunk.js.map": "/static/js/linkedinPage.d6313fa2.chunk.js.map",
     "signinPage.536bf6fa.chunk.js.map": "/static/js/signinPage.536bf6fa.chunk.js.map",
@@ -67,10 +67,10 @@
     "992.8def5623.chunk.js.map": "/static/js/992.8def5623.chunk.js.map",
     "903.cab9a009.chunk.js.map": "/static/js/903.cab9a009.chunk.js.map",
     "923.5aff5ec2.chunk.js.map": "/static/js/923.5aff5ec2.chunk.js.map",
-    "753.e9d8b300.chunk.js.map": "/static/js/753.e9d8b300.chunk.js.map"
+    "133.9a393e29.chunk.js.map": "/static/js/133.9a393e29.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.36f65783.css",
-    "static/js/main.68994144.js"
+    "static/js/main.8e92e80d.js"
   ]
 }
