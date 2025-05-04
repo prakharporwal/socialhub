@@ -30,7 +30,7 @@ export function PostViewPage() {
   useEffect(() => {
     setIsLoading(true);
     const controller = new AbortController();
-    ApiCaller.get(`/p/v1/posts/${postId}`)
+    ApiCaller.get(`/p/v1/posts/${postId}`, { signal: controller.signal })
       .then((res) => {
         setData(res);
         setIsLoading(false);
