@@ -38,6 +38,7 @@ func InitRouter() *gin.Engine {
 		ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		ctx.Writer.Header().Set("Access-Control-Allow-Headers", middleware.GetAccessAllowedControlHeaders())
+		ctx.Writer.Header().Set("Access-Control-Allow-Methods", middleware.GetAccessAllowedControlMethods())
 		ctx.Writer.Header().Set("Access-Control-Max-Age", "86400") // one day
 
 		// to avoid preflight not found => resulting in cors error

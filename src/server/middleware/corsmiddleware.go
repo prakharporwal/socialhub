@@ -10,7 +10,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		ctx.Writer.Header().Set("Access-Control-Allow-Headers", GetAccessAllowedControlHeaders())
-		ctx.Writer.Header().Set("Access-Control-Allow-Methods", "POST,OPTIONS,GET,HEAD,PUT,PATCH,DELETE")
+		ctx.Writer.Header().Set("Access-Control-Allow-Methods", GetAccessAllowedControlMethods())
 		ctx.Writer.Header().Set("Access-Control-Max-Age", "86400") // one day
 
 		if ctx.Request.Method == "OPTIONS" {
@@ -39,6 +39,10 @@ func GetAccessAllowedControlHeaders() string {
 		"Host",
 		"X-Forwarded-For",
 	}
-
 	return strings.Join(accessControlAllowedHeadersList, ",")
+}
+
+func GetAccessAllowedControlMethods() string {
+	accessControlAllowedMethodsList := []string{"POST", "OPTIONS", "GET", "HEAD", "PUT", "PATCH", "DELETE"}
+	return strings.Join(accessControlAllowedMethodsList, ",")
 }
