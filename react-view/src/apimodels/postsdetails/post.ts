@@ -35,3 +35,7 @@ export enum SocialMediaPlatform {
   INSTAGRAM = "INSTAGRAM",
   YOUTUBE = "YOUTUBE",
 }
+
+export interface PostResponse {
+  post: Post;
+}

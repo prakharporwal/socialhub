@@ -19,14 +19,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import ApiCaller from "src/utils/APIUtils";
 import AddAImageInput from "./AddAImageInput";
+import { Post } from "src/apimodels/postsdetails/post";
 
 type IEditModeCardProps = {
   postId: string;
-  postData: {
-    post_text: string;
-    post_type: string;
-    is_draft?: boolean;
-  };
+  postData: Post;
   setData: (data: any) => void;
   setIsEditing: (isEditing: boolean) => void;
 };
@@ -38,6 +35,7 @@ export function EditModeCard(props: IEditModeCardProps) {
   const [text, setText] = useState<string>(post_text);
   const toast = useToast();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   function submitUpdate(complete: boolean = false) {
     const body = {
@@ -45,20 +43,37 @@ export function EditModeCard(props: IEditModeCardProps) {
       post_text: text,
       is_draft: !complete,
     };
-    console.log(body);
+    setIsSubmitting(true);
+
     ApiCaller.put(`/p/v1/posts/${postId}`, body)
       .then(() => {
         setIsEditing(false);
         setData({ post: { ...postData, post_text: text } });
+        toast({
+          status: "success",
+          title: complete ? "Post Published" : "Draft Saved",
+          description: complete
+            ? "Your post has been published successfully"
+            : "Your draft has been saved",
+          duration: 3000,
+        });
       })
       .catch((err) => {
-        console.error(err);
+        const errorMessage =
+          err?.response?.data?.message || "An error occurred";
         toast({
           status: "error",
-          title: "Post Not Found",
-          description: "The post you are looking for does not exist",
+          title: "Update Failed",
+          description: errorMessage,
+          duration: 3000,
         });
-        navigate("/app/home");
+        // Only navigate away if the post doesn't exist
+        if (err?.response?.status === 404) {
+          navigate("/app/home");
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
 
@@ -106,6 +121,8 @@ export function EditModeCard(props: IEditModeCardProps) {
                 <Button
                   variant={"ghost"}
                   colorScheme={"blue"}
+                  isLoading={isSubmitting}
+                  isDisabled={isSubmitting}
                   onClick={() => {
                     submitUpdate(false);
                   }}
@@ -115,6 +132,8 @@ export function EditModeCard(props: IEditModeCardProps) {
                 <Button
                   variant={"solid"}
                   colorScheme={"blue"}
+                  isLoading={isSubmitting}
+                  isDisabled={isSubmitting}
                   onClick={() => {
                     submitUpdate(true);
                   }}

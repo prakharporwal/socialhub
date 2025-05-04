@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   CardFooter,
+  CircularProgress,
   Image,
   Text,
   useToast,
@@ -13,20 +14,26 @@ import { lazy, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import ApiCaller from "src/utils/APIUtils";
 import { EditModeCard } from "./EditModeCard";
+import { PostResponse } from "src/apimodels/postsdetails/post";
 const AlertPopUp = lazy(() => import("src/components/AlertPopUp"));
 
 export function PostViewPage() {
   const { postId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<PostResponse | null>(null);
   const toast = useToast();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
+    setIsLoading(true);
+    const controller = new AbortController();
     ApiCaller.get(`/p/v1/posts/${postId}`)
       .then((res) => {
         setData(res);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -37,10 +44,27 @@ export function PostViewPage() {
         });
         navigate("/app/home");
       });
+
+    return () => {
+      controller.abort();
+    };
   }, [postId]);
 
-  if (!data || !postId) {
-    return <></>;
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress isIndeterminate color="blue.300" />
+      </Box>
+    );
+  }
+
+  if (!data?.post || !postId) {
+    return <Box>No post data available</Box>;
   }
   const { post_text, post_id, creation_status } = data.post;
 
