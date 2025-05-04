@@ -26,10 +26,11 @@ interface IProps {
 const PostingHistoryTablePage: React.FunctionComponent<IProps> = () => {
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>([]);
-  
+
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const pageUrlParam = params.get("page") ? "?page=" + params.get("page") : "" ;
+  const pageUrlParam = params.get("page") ? "?page=" + params.get("page") : "";
+  const [filter, setFilter] = useState<string>("All");
 
   useEffect(() => {
     setIsLoadingPosts(true);
@@ -48,7 +49,30 @@ const PostingHistoryTablePage: React.FunctionComponent<IProps> = () => {
 
   return (
     <Box w="100%" px={4} as={"div"}>
-      <Heading fontSize={"2xl"} as={"h1"} color={"black"} mb={4}>Your Posts</Heading>
+      <Flex gap={4}>
+        <Heading fontSize={"2xl"} as={"h1"} color={"black"} mb={4}>
+          Your Posts
+        </Heading>
+        <Flex gap={4} mb={4} justifyContent={"flex-start"}>
+          {['All',"Draft", 'Ready', 'Scheduled'].map((item, index) => (
+            <Button
+              key={index}
+              variant={"ghost"}
+              colorScheme={filter === item ? "blue" : "gray"}
+              borderWidth={2}
+              borderColor={filter === item ? "blue.400" : "gray"}
+              borderRadius={"16px"}
+              px={4}
+              py={1}
+              onClick={() => {
+                setFilter(item);
+              }}
+            >
+              <Text fontWeight={"semibold"}>{item}</Text>
+            </Button>
+          ))}
+          </Flex>
+      </Flex>
       {isLoadingPosts ? (
         <LoadingShell />
       ) : posts.length === 0 ? (
@@ -71,7 +95,7 @@ const PostingHistoryTablePage: React.FunctionComponent<IProps> = () => {
           </Button>
         </Flex>
       ) : (
-        <PostsTable posts={posts}/>
+        <PostsTable posts={posts} filter={filter}/>
       )}
     </Box>
   );
