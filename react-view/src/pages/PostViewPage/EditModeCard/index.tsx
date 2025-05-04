@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   Card,
   CardBody,
   CardFooter,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -16,10 +18,15 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import ApiCaller from "src/utils/APIUtils";
+import AddAImageInput from "./AddAImageInput";
 
 type IEditModeCardProps = {
   postId: string;
-  postData: any;
+  postData: {
+    post_text: string;
+    post_type: string;
+    is_draft?: boolean;
+  };
   setData: (data: any) => void;
   setIsEditing: (isEditing: boolean) => void;
 };
@@ -34,15 +41,15 @@ export function EditModeCard(props: IEditModeCardProps) {
 
   function submitUpdate(complete: boolean = false) {
     const body = {
-        post_type: "TEXT",
-        post_text: text,
-        is_draft: !complete,
-    }
+      post_type: "TEXT",
+      post_text: text,
+      is_draft: !complete,
+    };
     console.log(body);
     ApiCaller.put(`/p/v1/posts/${postId}`, body)
       .then(() => {
         setIsEditing(false);
-        setData({post: {...postData, post_text: text }});
+        setData({ post: { ...postData, post_text: text } });
       })
       .catch((err) => {
         console.error(err);
@@ -69,13 +76,16 @@ export function EditModeCard(props: IEditModeCardProps) {
         <ModalBody>
           <Card>
             <CardBody>
-              <Input value={text} onInput={(e)=>{
-                if(e.currentTarget){
+              <Input
+                value={text}
+                onInput={(e) => {
+                  if (e.currentTarget) {
                     console.log(e.currentTarget.value);
                     setText(e.currentTarget.value);
-                }
-              }}/>
-              {/* <Box display={"flex"} flexDirection={"row"}>
+                  }
+                }}
+              />
+              <Box display={"flex"} flexDirection={"row"}>
                 <Image
                   src={"/main_cover.jpeg"}
                   alt="post-img"
@@ -85,7 +95,7 @@ export function EditModeCard(props: IEditModeCardProps) {
                   my={4}
                 ></Image>
                 <AddAImageInput />
-              </Box> */}
+              </Box>
             </CardBody>
             <CardFooter
               display={"flex"}
