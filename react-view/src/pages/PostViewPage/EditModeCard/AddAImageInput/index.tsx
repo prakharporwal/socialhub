@@ -1,5 +1,6 @@
-import { Box, Image, Input, Text, useToast } from "@chakra-ui/react";
+import { Box, Input, Text, useToast } from "@chakra-ui/react";
 import { DragEventHandler, useRef, useState } from "react";
+import MediaPreviewBox from "./MediaPreviewBox";
 
 interface IAddAImageInputProps {
   onImageSelect?: (file: File) => void;
@@ -82,57 +83,54 @@ export default function AddAImageInput({
     }
   };
   return (
-    <Box>
-      <Text fontSize={"lg"}>Add an image</Text>
-      <Box
-        border={"2px"}
-        borderColor={isDragging ? "blue.300" : "gray.200"}
-        bg={isDragging ? "blue.50" : "transparent"}
-        h={"40"}
-        w={"40"}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        borderRadius={"lg"}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleBoxClick}
-        cursor="pointer"
-        position="relative"
-      >
-        <Input
-          type="file"
-          accept="image/jpeg,image/png,image/gif,video/mp4,video/webm"
-          display="none"
-          ref={fileInputRef}
-          onChange={handleFileSelect}
-        />
-        {selectedFile ? (
-          <Box>
-            {/* render the image in a image tag for preview */}
-            <Image
-              src={URL.createObjectURL(selectedFile)}
-              alt="preview"
-              boxSize="full"
-              objectFit="cover"
-              borderRadius="lg"
-            />
-            <Text fontSize="sm" mb={2}>
-              Selected file:
-            </Text>
-            <Text fontWeight="bold">{selectedFile.name}</Text>
-          </Box>
-        ) : (
-          <Text>Drag and drop your image here</Text>
-        )}
+    <Box display={"flex"} flexDirection={"row"} gap={2} p={4}>
+      <Box h={48}>{selectedFile && <MediaPreviewBox file={selectedFile} />}</Box>
+      <Box display={"flex"} flexDirection={"column"} gap={2} w={"full"}>
+        <Text fontSize={"md"}>Add an image</Text>
+        <Box
+          border={"2px"}
+          borderColor={isDragging ? "blue.300" : "gray.200"}
+          bg={isDragging ? "blue.50" : "transparent"}
+          h={"40"}
+          w={"40"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          borderRadius={"lg"}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={handleBoxClick}
+          cursor="pointer"
+          position="relative"
+        >
+          <Input
+            type="file"
+            accept="image/jpeg,image/png,image/gif,video/mp4,video/webm"
+            display="none"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+          />
+          {selectedFile ? (
+            <Box>
+              {/* render the image in a image tag for preview */}
+              {/* TODO: Swap based on whether the element is video or image */}
+              <Text fontSize="sm" mb={2}>
+                Selected file:
+              </Text>
+              <Text fontWeight="semibold" noOfLines={2}>{selectedFile.name}</Text>
+            </Box>
+          ) : (
+            <Text m={4} >Drag and drop your image here</Text>
+          )}
+        </Box>
+        <Text fontSize={"sm"} color={"gray.500"}>
+          Supported formats: JPEG, PNG, GIF, MP4, WEBM
+        </Text>
+        <Text fontSize={"sm"} color={"gray.500"}>
+          Max file size: 10MB
+        </Text>
       </Box>
-      <Text fontSize={"sm"} color={"gray.500"}>
-        Supported formats: JPEG, PNG, GIF, MP4, WEBM
-      </Text>
-      <Text fontSize={"sm"} color={"gray.500"}>
-        Max file size: 10MB
-      </Text>
     </Box>
   );
 }

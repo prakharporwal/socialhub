@@ -11,11 +11,11 @@ import {
 import { useRef } from "react";
 
 type IAlertPopUpProps = {
-    title: string;
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
-    successButtonAction: () => void;
-    variant?: "warning" | "confirm" ; 
+  title: string;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  successButtonAction: () => void;
+  variant?: "warning" | "confirm";
   description?: string;
   successBtnText?: string;
   cancelButtonText?: string;
@@ -27,11 +27,11 @@ export default function AlertPopUp(props: IAlertPopUpProps): JSX.Element {
   const {
     title,
     description,
-    successBtnText,
-    cancelButtonText,
+    successBtnText = "Confirm",
+    cancelButtonText = "Cancel",
     successButtonAction,
     cancelButtonAction,
-    variant
+    variant,
   } = props;
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -58,7 +58,7 @@ export default function AlertPopUp(props: IAlertPopUpProps): JSX.Element {
               {cancelButtonText}
             </Button>
             <Button
-              colorScheme={variant && variant==='warning'? "red": "blue"}
+              colorScheme={variant && variant === "warning" ? "red" : "blue"}
               onClick={() => successButtonAction()}
               ml={3}
             >

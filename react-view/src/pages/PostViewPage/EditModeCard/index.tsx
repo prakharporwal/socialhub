@@ -5,7 +5,7 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Image,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -89,8 +89,9 @@ export function EditModeCard(props: IEditModeCardProps) {
           <ModalCloseButton />
         </ModalHeader>
         <ModalBody>
-          <Card>
+          <Card h={'xl'}>
             <CardBody>
+            <FormLabel>Text</FormLabel>
               <Input
                 value={text}
                 onInput={(e) => {
@@ -100,17 +101,7 @@ export function EditModeCard(props: IEditModeCardProps) {
                   }
                 }}
               />
-              <Box display={"flex"} flexDirection={"row"}>
-                <Image
-                  src={"/main_cover.jpeg"}
-                  alt="post-img"
-                  h={"sm"}
-                  border={"2px"}
-                  borderColor={"gray.200"}
-                  my={4}
-                ></Image>
                 <AddAImageInput />
-              </Box>
             </CardBody>
             <CardFooter
               display={"flex"}
