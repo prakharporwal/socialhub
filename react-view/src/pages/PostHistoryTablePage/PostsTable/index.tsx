@@ -44,7 +44,7 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
           {posts.map((item, idx) => (
             <Tr
               key={item.post_id}
-              onClick={() => {
+              onDoubleClick={() => {
                 navigate("/app/post/" + item.post_id);
               }}
             >

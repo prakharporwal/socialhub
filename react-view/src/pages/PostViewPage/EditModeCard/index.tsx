@@ -32,11 +32,11 @@ export function EditModeCard(props: IEditModeCardProps) {
   const toast = useToast();
   const navigate = useNavigate();
 
-  function submitUpdate() {
+  function submitUpdate(complete: boolean = false) {
     const body = {
         post_type: "TEXT",
         post_text: text,
-        is_draft: true,
+        is_draft: !complete,
     }
     console.log(body);
     ApiCaller.put(`/p/v1/posts/${postId}`, body)
@@ -97,10 +97,19 @@ export function EditModeCard(props: IEditModeCardProps) {
                   variant={"ghost"}
                   colorScheme={"blue"}
                   onClick={() => {
-                    submitUpdate();
+                    submitUpdate(false);
                   }}
                 >
-                  Save
+                  Save Draft
+                </Button>
+                <Button
+                  variant={"solid"}
+                  colorScheme={"blue"}
+                  onClick={() => {
+                    submitUpdate(true);
+                  }}
+                >
+                  Submit To Post
                 </Button>
               </ButtonGroup>
             </CardFooter>
