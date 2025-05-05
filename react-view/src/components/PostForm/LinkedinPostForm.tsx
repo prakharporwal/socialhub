@@ -22,6 +22,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
@@ -34,6 +35,7 @@ import {
 const PostForm: React.FunctionComponent<any> = () => {
   const toast = useToast();
   const auth = useAuth();
+  const navigate = useNavigate();
   const [type, setType] = useState<string>("text");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,7 +58,7 @@ const PostForm: React.FunctionComponent<any> = () => {
     setPlatforms(new Map(platforms));
   };
 
-  const handleSubmitPost = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitPost = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, status?: string) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -83,7 +85,7 @@ const PostForm: React.FunctionComponent<any> = () => {
     const body: CreatePost = {
       post_text: content,
       post_type: "TEXT",
-      creation_status: "COMPLETED",
+      creation_status: status ? status : "READY",
       platforms: X,
     };
 
@@ -96,6 +98,7 @@ const PostForm: React.FunctionComponent<any> = () => {
             title: "Post submitted successfully",
           });
         }
+        navigate("/app/home");
       })
       .catch((err) => {
         if (!toast.isActive("post-submit-error")) {  
@@ -191,7 +194,7 @@ const PostForm: React.FunctionComponent<any> = () => {
             m="4"
           >
             <SimpleGrid columns={1} spacing={6}>
-              <form onSubmit={handleSubmitPost}>
+              <form>
                 <FormControl as={GridItem} colSpan={[3, 2]} isRequired>
                   <FormLabel
                     htmlFor="post_type"
@@ -327,21 +330,22 @@ const PostForm: React.FunctionComponent<any> = () => {
                   />
                 </FormControl>
                 <FormControl>
-                  <Flex gap={8}>
-                    <Spacer />
+                  <Flex justifyContent={"flex-end"}>
                     {showScheduleSection ? (
-                      <Flex dir="row" gap={4}>
+                      <Flex dir="row" gap={4} mt={4}>
                         <Button
-                          type="submit"
-                          colorScheme={"blue"}
-                          w={"full"}
-                          maxW={"md"}
                           isLoading={isSubmitting}
-                          onClick={() => {}}
-                        >
-                          <Center>
-                            <Text>{"Post"}</Text>
-                          </Center>
+                          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                            handleSubmitPost(e, "DRAFT");
+                          }}
+                        >Save Draft</Button>
+                        <Button
+                          colorScheme={"blue"}
+                          isLoading={isSubmitting}
+                          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                            handleSubmitPost(e, "READY");
+                          }}
+                        >Post
                         </Button>
                         <IconButton
                           icon={<FaClock />}

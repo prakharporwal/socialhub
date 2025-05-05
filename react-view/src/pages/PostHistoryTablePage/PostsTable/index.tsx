@@ -1,6 +1,5 @@
 import {
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -17,6 +16,7 @@ import PaginationButtons from "./PaginationButtons";
 
 type IPostsTableProps = {
   posts: Post[];
+  filter?: string;
 };
 
 export default function PostsTable(props: IPostsTableProps): JSX.Element {
@@ -41,7 +41,11 @@ export default function PostsTable(props: IPostsTableProps): JSX.Element {
           </Tr>
         </Thead>
         <Tbody fontSize={"sm"} minH={"40vh"}>
-          {posts.map((item, idx) => (
+          {posts.filter((item)=>{
+            if(props.filter===undefined) return true;
+            if(props.filter==="All") return true;
+            return !item.creation_status.localeCompare(props.filter.toUpperCase());
+          }).map((item) => (
             <Tr
               key={item.post_id}
               onDoubleClick={() => {
