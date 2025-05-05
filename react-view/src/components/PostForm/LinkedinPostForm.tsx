@@ -22,7 +22,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import withAuthenticationRequired from "../../hoc/withAuthenticationRequired";
 import CONSTANTS from "../../EnvConstant";
 import { FaClock } from "react-icons/fa";
